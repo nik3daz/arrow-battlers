@@ -46,8 +46,6 @@ function start_game() {
     }
 
     function initLayers() {
-
-        initMenu();
     }
     
     // Key Constants
@@ -89,13 +87,15 @@ function start_game() {
 
     keyFocus = game;
 
+    menu = new Menu();
+    menu.init();
+
     debugLayer.draw();
     bgLayer.draw();
     playerLayer.draw();
     hudLayer.draw();
     menuLayer.draw();
     
-    showMenu();
 
     // Attach event listeners
     window.addEventListener('keydown', doKeyDown, false);
