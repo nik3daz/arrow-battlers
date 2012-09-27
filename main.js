@@ -53,10 +53,11 @@ function start_game() {
 
         initMenu();
     }
+    
 
-    // UI Constants
-    var menuButtonCol = 18;
-    var resetButtonCol = 14;
+   
+
+  
 
     // Globals
     var moveSquares = [];
@@ -79,6 +80,22 @@ function start_game() {
 
     var messages = [];
     
+    // Game Constants
+    NUM_CHARACTERS = 6;
+
+    // Menu UI Constants
+    MONEY_MARGIN_ABOVE_BELOW = 10;   
+    MONEY_TEXT_HEIGHT = 20;
+
+    CHAR_BOX_MARGIN_TOP = MONEY_MARGIN_ABOVE_BELOW * 2 + MONEY_TEXT_HEIGHT;
+    CHAR_BOX_ROWS = 2;
+    CHAR_BOX_MARGIN_SIDE = 40;
+    CHAR_BOX_SIZE = (stage.getWidth()/2 - 2 * CHAR_BOX_MARGIN_SIDE) / 
+        (NUM_CHARACTERS/CHAR_BOX_ROWS);
+
+    
+
+
     // Main
     initLayers();
     initGame();
