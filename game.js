@@ -17,7 +17,6 @@ function Player(dir, udlr) {
     this.udlr = udlr;
     
     this.money = 0;
-    this.boughtSkills = [];
 
     this.reset = function() {
         this.hp = 100;
@@ -29,7 +28,7 @@ function Player(dir, udlr) {
         this.activeSkills = this.skills.slice();
     };
 
-    this.pressKey(key) {
+    this.pressKey = function(key) {
         var d = -1;
         if (keys[this.udlr[0]]) {
             d = 0;

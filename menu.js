@@ -48,7 +48,11 @@ function initMenu() {
     	p1Chars[i] = new Kinetic.Rect({
     		width: CHAR_BOX_SIZE,
     		height: CHAR_BOX_SIZE,
-    		fill: "#CCC",
+    		fill: {
+                image: images.vader,
+                offset: [-170, -50],
+            },
+                //"#CCC",
     		stroke:"black",
     		x:CHAR_BOX_MARGIN_SIDE + (horizontalOffset * CHAR_BOX_SIZE),   		
     		y:(CHAR_BOX_MARGIN_TOP + ((verticalOffset-1) * CHAR_BOX_SIZE)),

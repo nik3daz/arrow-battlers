@@ -34,7 +34,6 @@ function start_game() {
     var keys = [];
     function doKeyDown(evt) {
         keys[evt.keyCode] = true;
-        console.log(evt.keyCode);
     }
     
     function doKeyUp(evt){
@@ -42,15 +41,6 @@ function start_game() {
     }
 
     function initLayers() {
-        // Fade Layer
-        var r = new Kinetic.Rect({
-                width : stage.getWidth(),
-                height : stage.getHeight(),
-                strokeWidth : 0,
-                fill : "#F4F7F7",
-                alpha: 1,
-            });
-        fadeLayer.add(r);
 
         initGame();
         initMenu();
@@ -59,17 +49,6 @@ function start_game() {
     // Globals
     var moveSquares = [];
     var movePlayer = null;
-    stage = new Kinetic.Stage({
-            container : "container",
-            width : 800,
-            height : 550,
-        });
-    debugLayer = new Kinetic.Layer();
-    hudLayer = new Kinetic.Layer();
-    menuLayer = new Kinetic.Layer({id: "menuLayer"});
-    playerLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
-    bgLayer = new Kinetic.Layer();
-    fadeLayer = new Kinetic.Layer();
 
     needsDrawing = [];
 
@@ -79,6 +58,7 @@ function start_game() {
     
     // Game Constants
     NUM_CHARACTERS = 6;
+    NUM_SKILLS = 4;
 
     // Menu UI Constants
     MONEY_MARGIN_ABOVE_BELOW = 15;   
@@ -100,12 +80,11 @@ function start_game() {
     initLayers();
     initGame();
 
-    stage.add(debugLayer);
-    stage.add(fadeLayer);
-    stage.add(bgLayer);
-    stage.add(playerLayer);
-    stage.add(hudLayer);
-    stage.add(menuLayer);
+    debugLayer.draw();
+    bgLayer.draw();
+    playerLayer.draw();
+    hudLayer.draw();
+    menuLayer.draw();
     
     showMenu();
 
@@ -113,3 +92,101 @@ function start_game() {
     window.addEventListener('keydown', doKeyDown, false);
     window.addEventListener('keyup',doKeyUp, false);
 };
+
+function makeLayers() {
+    debugLayer = new Kinetic.Layer();
+    hudLayer = new Kinetic.Layer();
+    menuLayer = new Kinetic.Layer({id: "menuLayer"});
+    playerLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
+    bgLayer = new Kinetic.Layer();
+    fadeLayer = new Kinetic.Layer();
+
+    stage.add(debugLayer);
+    stage.add(bgLayer);
+    stage.add(playerLayer);
+    stage.add(hudLayer);
+    stage.add(menuLayer);
+    stage.add(fadeLayer);
+}
+
+function load_assets() {
+    stage = new Kinetic.Stage({
+            container : "container",
+            width : 800,
+            height : 550,
+        });
+
+    makeLayers();
+    initFadeLayer();
+
+    var BAR_WIDTH = 200;
+    var BAR_HEIGHT = 20;
+    var BAR_Y = 500;
+    var loadLayer = new Kinetic.Layer();
+    loadLayer.add(centerOffset(new Kinetic.Rect({
+        width: BAR_WIDTH,
+        height: BAR_HEIGHT,
+        x: stage.getWidth() / 2,
+        y: BAR_Y,
+        stroke:"black",
+        strokeWidth: 4,
+        cornerRadius: 5,
+    })));
+    var loadBar = new Kinetic.Rect({
+        width: 0,
+        height: BAR_HEIGHT,
+        x: (stage.getWidth() - BAR_WIDTH) / 2,
+        y: BAR_Y - BAR_HEIGHT / 2,
+        fill:"black",
+    });
+    loadLayer.add(loadBar);
+    stage.add(loadLayer);
+
+    var loader = new PxLoader();
+    //TODO remove
+    // preloader test
+    /*
+    var baseUrl = 'http://thinkpixellab.com/pxloader' + 
+            '/slowImage.php?delay=1time=' + new Date;
+    for(var i=0; i < 10; i++) { 
+        // this time we'll create a PxLoaderImage instance instead of just 
+        // giving the loader the image url 
+        var pxImage = new PxLoaderImage(baseUrl + '&i=' + i); 
+     
+        // we can add our own properties for later use 
+        pxImage.imageNumber = i + 1; 
+     
+        loader.add(pxImage); 
+    }*/
+    //TODO end remove
+
+    //TODO call loader.addImage("url") to load images
+    // Image cache
+    images = [];
+    images["vader"] = loader.addImage("http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg");
+    loader.addProgressListener(function(e) {
+        loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);
+        loadLayer.draw();
+    });
+    loader.addCompletionListener(function() {
+        console.log("GO");
+        fadeIn(function() {
+            stage.remove(loadLayer);
+            start_game();
+            fadeOut();
+        })
+    });
+    loader.start();
+}
+
+function initFadeLayer() {
+    // Fade Layer
+    var r = new Kinetic.Rect({
+            width : stage.getWidth(),
+            height : stage.getHeight(),
+            strokeWidth : 0,
+            fill : "white",
+            alpha: 1,
+    });
+    fadeLayer.add(r);
+}
