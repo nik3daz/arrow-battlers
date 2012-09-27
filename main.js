@@ -81,17 +81,20 @@ function start_game() {
     NUM_CHARACTERS = 6;
 
     // Menu UI Constants
-    MONEY_MARGIN_ABOVE_BELOW = 10;   
-    MONEY_TEXT_HEIGHT = 20;
+    MONEY_MARGIN_ABOVE_BELOW = 15;   
+    MONEY_TEXT_HEIGHT = 10;
 
     CHAR_BOX_MARGIN_TOP = MONEY_MARGIN_ABOVE_BELOW * 2 + MONEY_TEXT_HEIGHT;
     CHAR_BOX_ROWS = 2;
-    CHAR_BOX_MARGIN_SIDE = 40;
+    CHAR_BOX_MARGIN_SIDE = 50;
     CHAR_BOX_SIZE = (stage.getWidth()/2 - 2 * CHAR_BOX_MARGIN_SIDE) / 
         (NUM_CHARACTERS/CHAR_BOX_ROWS);
 
-    
+    NUM_SKILLS = 6;
 
+    READY_MARGIN_BOTTOM = 10;
+    READY_WIDTH = 100;
+    READY_HEIGHT = 40;
 
     // Main
     initLayers();
