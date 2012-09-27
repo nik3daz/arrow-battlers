@@ -41,9 +41,6 @@ function start_game() {
     }
 
     function initLayers() {
-
-        initGame();
-        initMenu();
     }
     
     // Globals
@@ -80,13 +77,15 @@ function start_game() {
     initLayers();
     initGame();
 
+    menu = new Menu();
+    menu.init();
+
     debugLayer.draw();
     bgLayer.draw();
     playerLayer.draw();
     hudLayer.draw();
     menuLayer.draw();
     
-    showMenu();
 
     // Attach event listeners
     window.addEventListener('keydown', doKeyDown, false);
