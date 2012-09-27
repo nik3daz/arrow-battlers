@@ -3,7 +3,11 @@ function centerOffset(shape) {
     return shape;
 }
 
-// Sprite sheet should be horizontal
+/** 
+ * Makes an animation object for Kinetic.Sprite.
+ * Makes frames from start positon to end position.
+ * Sprite sheet should be horizontal
+ */
 function makeSpriteAnimation(width, height, start, end) {
     var anims = [];
     for (var x = start; x < end; x += width) {
@@ -16,7 +20,10 @@ function makeSpriteAnimation(width, height, start, end) {
     }
 }
 
-// Fade layer functions
+/**
+ * Fades the fadeLayer in and calls cb when done
+ * cb is optional.
+ */
 function fadeIn(cb, alpha) {
     if (!cb)
         cb = function() {};
@@ -30,6 +37,10 @@ function fadeIn(cb, alpha) {
     });
 }
 
+/**
+ * Fades the fadeLayer out and calls cb when done
+ * cb is optional.
+ */
 function fadeOut(cb) {
     if (!cb)
         cb = function() {};
@@ -42,3 +53,15 @@ function fadeOut(cb) {
         },
     });
 }
+
+/**
+ * Creates an array filled with numbers from a to b-1
+ */
+function range(a, b) {
+    var r = [];
+    for (var i = a; i < b; i++) {
+        r.push(i);
+    }
+    return r;
+}
+        

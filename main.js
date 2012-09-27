@@ -31,34 +31,38 @@ GAME_FONT = "Calibri";
 function start_game() {
     
     // Keypress
-    var keys = [];
     function doKeyDown(evt) {
-        keys[evt.keyCode] = true;
+        var key = -1;
+        var i;
+        for (i = 0; i < 2; i++) {
+            key = players[i].getUdlre(evt);
+            if (key != -1) break;
+        }
+        if (key != -1)
+            keyFocus.onKeyDown(player[i], key);
     }
     
     function doKeyUp(evt){
-        keys[evt.keyCode] = false;
     }
 
     function initLayers() {
 
-        initGame();
         initMenu();
     }
     
-    // Globals
-    var moveSquares = [];
-    var movePlayer = null;
+    // Key Constants
+    KEY_U = 0;
+    KEY_D = 1;
+    KEY_R = 2;
+    KEY_L = 3;
+    KEY_E = 4;
 
-    needsDrawing = [];
+    // Battle Constants
+    SKILL_QUEUE_SIZE = 4;
 
-    players = [];
-
-    var messages = [];
-    
     // Game Constants
     NUM_CHARACTERS = 6;
-    NUM_SKILLS = 4;
+    NUM_SKILLS = 6;
 
     // Menu UI Constants
     MONEY_MARGIN_ABOVE_BELOW = 15;   
@@ -70,15 +74,20 @@ function start_game() {
     CHAR_BOX_SIZE = (stage.getWidth()/2 - 2 * CHAR_BOX_MARGIN_SIDE) / 
         (NUM_CHARACTERS/CHAR_BOX_ROWS);
 
-    NUM_SKILLS = 6;
 
     READY_MARGIN_BOTTOM = 10;
     READY_WIDTH = 100;
     READY_HEIGHT = 40;
 
+    // Globals
+    SkillList = getSkillList();
+    players = [];
+    
     // Main
+    game = new Game();
     initLayers();
-    initGame();
+
+    keyFocus = game;
 
     debugLayer.draw();
     bgLayer.draw();
@@ -93,6 +102,7 @@ function start_game() {
     window.addEventListener('keyup',doKeyUp, false);
 };
 
+/** Create and add all layers to the stage */
 function makeLayers() {
     debugLayer = new Kinetic.Layer();
     hudLayer = new Kinetic.Layer();
@@ -109,6 +119,7 @@ function makeLayers() {
     stage.add(fadeLayer);
 }
 
+/** Preload all images and call start_game() when done */
 function load_assets() {
     stage = new Kinetic.Stage({
             container : "container",
@@ -130,7 +141,6 @@ function load_assets() {
         y: BAR_Y,
         stroke:"black",
         strokeWidth: 4,
-        cornerRadius: 5,
     })));
     var loadBar = new Kinetic.Rect({
         width: 0,
@@ -179,6 +189,7 @@ function load_assets() {
     loader.start();
 }
 
+/** Set up the fade layer */
 function initFadeLayer() {
     // Fade Layer
     var r = new Kinetic.Rect({

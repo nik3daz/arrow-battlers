@@ -104,27 +104,27 @@ function initMenu() {
     var readyButtons = [];
 
    
-    	readyButtons[0] = new Kinetic.Rect({
-    		width:READY_WIDTH,
-    		height:READY_HEIGHT,
-    		fill:"#444",
-    		stroke:"black",
-    		x:stage.getWidth()/2/2 - READY_WIDTH/2,
-    		y:stage.getHeight() - READY_MARGIN_BOTTOM - READY_HEIGHT,
-    	});
+   	readyButtons[0] = new Kinetic.Rect({
+   		width:READY_WIDTH,
+   		height:READY_HEIGHT,
+   		fill:"#444",
+   		stroke:"black",
+   		x:stage.getWidth()/2/2 - READY_WIDTH/2,
+   		y:stage.getHeight() - READY_MARGIN_BOTTOM - READY_HEIGHT,
+   	});
 
-    	menuLayer.add(readyButtons[0]);
+   	menuLayer.add(readyButtons[0]);
 
-    	readyButtons[1] = new Kinetic.Rect({
-    		width:READY_WIDTH,
-    		height:READY_HEIGHT,
-    		fill:"#444",
-    		stroke:"black",
-    		x:stage.getWidth()/2 + stage.getWidth()/2/2 - READY_WIDTH/2,
-    		y:stage.getHeight() - READY_MARGIN_BOTTOM - READY_HEIGHT,
-    	});
+   	readyButtons[1] = new Kinetic.Rect({
+   		width:READY_WIDTH,
+   		height:READY_HEIGHT,
+   		fill:"#444",
+   		stroke:"black",
+   		x:stage.getWidth()/2 + stage.getWidth()/2/2 - READY_WIDTH/2,
+   		y:stage.getHeight() - READY_MARGIN_BOTTOM - READY_HEIGHT,
+   	});
 
-    	menuLayer.add(readyButtons[1]);
+   	menuLayer.add(readyButtons[1]);
     
 
 }
