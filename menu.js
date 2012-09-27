@@ -12,9 +12,10 @@ function initMenu() {
     //=================== PLAYER MONEY ========================
     var p1Money = new Kinetic.Text({
     	text: "$" + players[0].money,
-    	align : center,
+    	align : "center",
     	x: stage.getWidth() / 2 / 2,
     	y: MONEY_MARGIN_ABOVE_BELOW,
+    	textFill:"black"
     });
 
     menuLayer.add(p1Money);

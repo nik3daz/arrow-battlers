@@ -51,14 +51,10 @@ function start_game() {
             });
         fadeLayer.add(r);
 
+        initGame();
         initMenu();
     }
     
-
-   
-
-  
-
     // Globals
     var moveSquares = [];
     var movePlayer = null;
@@ -105,7 +101,7 @@ function start_game() {
     stage.add(bgLayer);
     stage.add(playerLayer);
     stage.add(hudLayer);
-//    stage.add(menuLayer);
+    stage.add(menuLayer);
     
     showMenu();
 
