@@ -33,12 +33,10 @@ function start_game() {
     // Keypress
     var keys = [];
     function doKeyDown(evt) {
-        evt.preventDefault();
         keys[evt.keyCode] = true;
     }
     
     function doKeyUp(evt){
-        evt.preventDefault();
         keys[evt.keyCode] = false;
     }
 
@@ -49,7 +47,7 @@ function start_game() {
                 height : stage.getHeight(),
                 strokeWidth : 0,
                 fill : "#F4F7F7",
-		alpha: 1,
+                alpha: 1,
             });
         fadeLayer.add(r);
 
@@ -71,23 +69,26 @@ function start_game() {
     debugLayer = new Kinetic.Layer();
     hudLayer = new Kinetic.Layer();
     menuLayer = new Kinetic.Layer({id: "menuLayer"});
-    playerLayer = new Kinetic.Layer();
+    playerLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
     bgLayer = new Kinetic.Layer();
     fadeLayer = new Kinetic.Layer();
 
     needsDrawing = [];
 
+    players = [];
+
     var messages = [];
     
     // Main
     initLayers();
+    initGame();
 
     stage.add(debugLayer);
     stage.add(fadeLayer);
     stage.add(bgLayer);
     stage.add(playerLayer);
     stage.add(hudLayer);
-    stage.add(menuLayer);
+//    stage.add(menuLayer);
     
     showMenu();
 

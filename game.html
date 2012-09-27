@@ -10,10 +10,14 @@
         border: 1px solid #9C9898;
       }
     </style>
+    <script src="html5Preloader.0.61.js"></script>
     <script src="kinetic-v4.0.1.js"></script>
+    <script src="utils.js"></script>
+    <script src="game.js"></script>
     <script src="menu.js"></script>
     <script src="main.js"></script>
     <script type="text/javascript">
+
       WebFontConfig = {
         google: { families: [ 'Press+Start+2P::latin' ] },
         active: function() {
@@ -34,7 +38,9 @@
         s.parentNode.insertBefore(wf, s);
         })(); 
         /*
-        */
+var myLoader = html5Preloader("menu.js");
+myLoader.on('finish', function(){ console.log('All assets loaded.'); });
+       */
     </script>
 
 
