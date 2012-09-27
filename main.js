@@ -34,6 +34,7 @@ function start_game() {
     var keys = [];
     function doKeyDown(evt) {
         keys[evt.keyCode] = true;
+        console.log(evt.keyCode);
     }
     
     function doKeyUp(evt){
