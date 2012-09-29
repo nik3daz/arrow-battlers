@@ -110,23 +110,22 @@ function Menu() {
         var p1Skills = [];
         var p2Skills = [];
 
-        var skillBoxSize = CHAR_BOX_SIZE * (NUM_CHARACTERS/CHAR_BOX_ROWS) / NUM_SKILLS;
         for (var i = 0; i < NUM_SKILLS; i++) {
             p1Skills[i] = new Kinetic.Rect({
-                width: skillBoxSize,
-                height: skillBoxSize,
+                width: SKILL_BOX_SIZE,
+                height: SKILL_BOX_SIZE,
                 fill: "#444",
                 stroke:"black",
-                x:CHAR_BOX_MARGIN_SIDE + i * skillBoxSize,
+                x:CHAR_BOX_MARGIN_SIDE + i * SKILL_BOX_SIZE,
                 y:this.p1Chars[NUM_CHARACTERS-1].getY() + this.p2Chars[NUM_CHARACTERS-1].getHeight(),
             });
 
             p2Skills[i] = new Kinetic.Rect({
-                width: skillBoxSize,
-                height: skillBoxSize,
+                width: SKILL_BOX_SIZE,
+                height: SKILL_BOX_SIZE,
                 fill: "#444",
                 stroke:"black",
-                x:stage.getWidth()/2 + CHAR_BOX_MARGIN_SIDE + i * skillBoxSize,
+                x:stage.getWidth()/2 + CHAR_BOX_MARGIN_SIDE + i * SKILL_BOX_SIZE,
                 y:this.p2Chars[NUM_CHARACTERS-1].getY() + 
                     this.p2Chars[NUM_CHARACTERS-1].getHeight(),
             });
@@ -134,6 +133,66 @@ function Menu() {
             menuLayer.add(p1Skills[i]);
             menuLayer.add(p2Skills[i]);
         }
+        //================== SKIN ARROWS ======================
+
+        this.skinArrows = [];
+        this.p1SkinArrows = [];
+        this.p2SkinArrows = [];
+
+        this.p1SkinArrowsLeft = [];
+        this.p1SkinArrowsRight = [];
+        this.p2SkinArrowsLeft = [];
+        this.p2SkinArrowsRight = [];
+
+        for (var i = 0; i < NUM_SKIN_ARROWS; i++) {
+            this.p1SkinArrowsLeft[i] = new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_SIZE,
+                fill:"#000",
+                x:CHAR_BOX_MARGIN_SIDE + SKIN_ARROW_MARGIN_SIDE,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+            });
+
+            this.p1SkinArrowsRight[i] = new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_SIZE,
+                fill:"#000",
+                x:CHAR_BOX_SIZE * (NUM_CHARACTERS / CHAR_BOX_ROWS) - SKIN_ARROW_MARGIN_SIDE,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+            });
+
+            this.p2SkinArrowsLeft[i] = new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_SIZE,
+                fill:"#000",
+                x:stage.getWidth()/2 + CHAR_BOX_MARGIN_SIDE + SKIN_ARROW_MARGIN_SIDE,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i*SKIN_GAP,
+            });
+
+            this.p2SkinArrowsRight[i] = new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_SIZE,
+                fill:"#000",
+                x:stage.getWidth()/2 + CHAR_BOX_SIZE * (NUM_CHARACTERS / CHAR_BOX_ROWS) - SKIN_ARROW_MARGIN_SIDE,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+            });
+        
+
+            menuLayer.add(this.p1SkinArrowsLeft[i]);
+            menuLayer.add(this.p1SkinArrowsRight[i]);
+
+            menuLayer.add(this.p2SkinArrowsLeft[i]);
+            menuLayer.add(this.p2SkinArrowsRight[i]);
+        }
+
+        this.p1SkinArrows[0] = this.p1SkinArrowsLeft;
+        this.p1SkinArrows[1] = this.p1SkinArrowsRight;
+        this.p2SkinArrows[0] = this.p2SkinArrowsLeft;
+        this.p2SkinArrows[1] = this.p2SkinArrowsRight;
+
+        this.skinArrows[0] = this.p1SkinArrows;
+        this.skinArrows[1] = this.p2SkinArrows;
+
 
         //================== READY BUTTONS ======================
         var readyButtons = [];
