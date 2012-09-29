@@ -20,18 +20,44 @@ function Menu() {
         this.initMenuForPlayer(0, -MENU_CENTER_DISTANCE);
         this.initMenuForPlayer(1, MENU_CENTER_DISTANCE);
 
-        var headText = new Kinetic.Text({
-            text: "HEAD",
-            align : "center",
-            x: 0,
-            y: 0,
-            width: 50,
-            height: 100,
-            textFill:"black",
-            fontFamily:GAME_FONT,
-        });
-        centerOffset(headText)
-        menuLayer.add(headText);
+       var headText = new Kinetic.Text({
+           text: "HEAD",
+           align : "center",
+           x: 0,
+           y: SKIN_ARROW_Y_ANCHOR + 2,
+           width: 50,
+           height: 15,
+           textFill:"black",
+           fontFamily:GAME_FONT,
+       });
+       centerOffset(headText)
+       menuLayer.add(headText);
+
+       var bodyText = new Kinetic.Text({
+           text: "BODY",
+           align : "center",
+           x: 0,
+           y: SKIN_ARROW_Y_ANCHOR + 1*SKIN_ARROW_SIZE + 1 *SKIN_GAP + 2,
+           width: 50,
+           height: 15,
+           textFill:"black",
+           fontFamily:GAME_FONT,
+       });
+       centerOffset(bodyText)
+       menuLayer.add(bodyText);
+
+        var shoesText = new Kinetic.Text({
+           text: "SHOES",
+           align : "center",
+           x: 0,
+           y: SKIN_ARROW_Y_ANCHOR + 2*SKIN_ARROW_SIZE + 2 *SKIN_GAP + 2,
+           width: 50,
+           height: 15,
+           textFill:"black",
+           fontFamily:GAME_FONT,
+       });
+       centerOffset(shoesText)
+       menuLayer.add(shoesText);
     }
 
     this.initMenuForPlayer = function(playerId, centerX) {
@@ -109,7 +135,10 @@ function Menu() {
             skinArrowsLeft[i] = centerOffset(new Kinetic.Rect({
                 width:SKIN_ARROW_SIZE,
                 height:SKIN_ARROW_SIZE,
-                fill:"#000",
+                fill: {
+                    image: images.arrow_left,
+                    offset: [30, 0],
+                },
                 x: centerX - SKIN_ARROW_CENTER_DIST,
                 y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
             }));
@@ -117,7 +146,10 @@ function Menu() {
             skinArrowsRight[i] = centerOffset(new Kinetic.Rect({
                 width:SKIN_ARROW_SIZE,
                 height:SKIN_ARROW_SIZE,
-                fill:"#000",
+                fill: {
+                    image: images.arrow_right,
+                    offset: [30, 0],
+                },
                 x: centerX + SKIN_ARROW_CENTER_DIST,
                 y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
             }));
