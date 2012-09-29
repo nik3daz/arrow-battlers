@@ -269,8 +269,14 @@ var onCharacterHover = function(playerId, charId) {
 function Selector(playerId) {
     /** Update shape changes */
     this.update = function() {
-        this.shape.setX(menu.charBoxes[playerId][menu.currentSelection[playerId]].getX());
-        this.shape.setY(menu.charBoxes[playerId][menu.currentSelection[playerId]].getY());
+        if (!isCharSelected) {
+            this.shape.setX(menu.charBoxes[playerId][menu.currentSelection[playerId]].getX());
+            this.shape.setY(menu.charBoxes[playerId][menu.currentSelection[playerId]].getY());
+        } else {
+            // skins
+            this.shape.setX(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getX());
+            this.shape.setY(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getY());
+        } 
     }
 
     /** */
@@ -338,8 +344,6 @@ function Selector(playerId) {
                 width: SKIN_ARROW_SIZE,
                 height: SKIN_ARROW_SIZE,
                 stroke:"#E83333",
-                x: menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getX(),
-                y: menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getY(),
             });
 
             players[playerId].selectedChar = menu.currentSelection[playerId];
