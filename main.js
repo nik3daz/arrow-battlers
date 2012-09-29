@@ -59,6 +59,7 @@ function start_game() {
     chars = [
         {
             // CHAR 1
+            
         },
         {
             // CHAR 2
@@ -112,7 +113,11 @@ function start_game() {
     SKIN_GAP = 15;
 
     // TODO: make an array of characters or something that I can access by number
-    
+    CLASS_SPRITE_SHEET_PAGE_BORDER_SIZE = 2;
+    CLASS_SPRITE_SHEET_FRAME_PADDING = 1;
+    CLASS_SPRITE_SHEET_FRAME_HEIGHT = 120;
+    CLASS_SPRITE_SHEET_FRAME_WIDTH = 70;
+
     // Globals
     SkillList = getSkillList();
     players = [];
@@ -136,6 +141,19 @@ function start_game() {
     window.addEventListener('keydown', doKeyDown, false);
     window.addEventListener('keyup',doKeyUp, false);
 };
+
+/** Uses config input
+    id: id of class
+    name: written name of class
+    spritesheet: image file for the sprite sheet */
+function Class(config) {
+    this.id = config.id;
+    this.name = config.name;
+    this.spritesheet = config.spritesheet;
+    this.sprite = new Kinetic.Sprite({
+
+    })
+}
 
 /** Create and add all layers to the stage */
 function makeLayers() {

@@ -147,9 +147,15 @@ function Menu() {
         var flash = function(selector) {
             setTimeout(function() {
                 selector.shape.setStroke("#FF7777");
+                if (selector.isCharSelected) {
+                    selector.secondShape.setStroke("#FF7777");
+                }
                 menuLayer.draw();
                 setTimeout(function() {
                     selector.shape.setStroke("#E83333");
+                    if (selector.isCharSelected) {
+                        selector.secondShape.setStroke("#E83333");
+                    }
                     menuLayer.draw();
                     flash(selector);
                 }, 500);
@@ -207,7 +213,7 @@ var onCharacterHover = function(playerId, charId) {
 function Selector(playerId) {
     /** Update shape changes */
     this.update = function() {
-        if (!isCharSelected) {
+        if (!this.isCharSelected) {
             this.shape.setWidth(CHAR_BOX_SIZE);
             this.shape.setHeight(CHAR_BOX_SIZE);
             centerOffset(this.shape);
@@ -216,14 +222,18 @@ function Selector(playerId) {
             // skins
             this.shape.setWidth(SKIN_ARROW_SIZE);
             this.shape.setHeight(SKIN_ARROW_SIZE);
+            this.secondShape.setWidth(SKIN_ARROW_SIZE);
+            this.secondShape.setHeight(SKIN_ARROW_SIZE);
             centerOffset(this.shape);
+            centerOffset(this.secondShape);
             this.shape.setPosition(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getPosition());
+            this.secondShape.setPosition(menu.skinArrows[playerId][1][menu.currentSkinSelection[playerId]].getPosition());
         } 
     }
 
     /** */
     this.onArrowDown = function() {
-         if (!isCharSelected) {
+         if (!this.isCharSelected) {
             // browse characters
             if (menu.currentSelection[playerId] + (NUM_CHARACTERS/CHAR_BOX_ROWS) < NUM_CHARACTERS) {
                 menu.currentSelection[playerId] += (NUM_CHARACTERS/CHAR_BOX_ROWS);
@@ -239,7 +249,7 @@ function Selector(playerId) {
 
     /** */
     this.onArrowUp = function() {
-        if (!isCharSelected) {
+        if (!this.isCharSelected) {
             // browse characters
              if (menu.currentSelection[playerId] - (NUM_CHARACTERS/CHAR_BOX_ROWS) >= 0) {
                 menu.currentSelection[playerId] -= (NUM_CHARACTERS/CHAR_BOX_ROWS);
@@ -254,7 +264,7 @@ function Selector(playerId) {
 
     /** */
     this.onArrowLeft = function() {
-        if (!isCharSelected) {
+        if (!this.isCharSelected) {
             // browse characters
             if (menu.currentSelection[playerId] - 1 >= 0) {
                 menu.currentSelection[playerId]--;    
@@ -267,7 +277,7 @@ function Selector(playerId) {
 
     /** */
     this.onArrowRight = function() {
-        if (!isCharSelected) {
+        if (!this.isCharSelected) {
             // browse characters
             if (menu.currentSelection[playerId] + 1 < NUM_CHARACTERS) {
                 menu.currentSelection[playerId]++;    
@@ -279,10 +289,17 @@ function Selector(playerId) {
 
     /** */
     this.onEnter = function() {
-        if (!isCharSelected) {
-            isCharSelected = true;
-
+        if (!this.isCharSelected) {
+            this.isCharSelected = true;
             players[playerId].selectedChar = menu.currentSelection[playerId];
+            // make another shape for the thing
+            this.secondShape = new Kinetic.Rect({
+                width: CHAR_BOX_SIZE,
+                height: CHAR_BOX_SIZE,
+                stroke:"#E83333",
+            });
+            centerOffset(this.secondShape);
+            menuLayer.add(this.secondShape);
         } else {
             // TODO: do player ready
         } 
@@ -295,7 +312,7 @@ function Selector(playerId) {
             });
     centerOffset(this.shape);
 
-    var isCharSelected = false;
+    this.isCharSelected = false;
     this.update();
 }
 
