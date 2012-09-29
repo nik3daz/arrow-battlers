@@ -55,11 +55,32 @@ function start_game() {
     KEY_L = 3;
     KEY_E = 4;
 
+    chars = [
+        {
+            // CHAR 1
+        },
+        {
+            // CHAR 2
+        },
+        {
+            // CHAR 3
+        },
+        {
+            // CHAR 4
+        },
+        {
+            // CHAR 5
+        },
+        {
+            // CHAR 6
+        },
+    ];
+
     // Battle Constants
     SKILL_QUEUE_SIZE = 4;
 
     // Game Constants
-    NUM_CHARACTERS = 6;
+    NUM_CHARACTERS = chars.length;
     NUM_SKILLS = 6;
 
     // Menu UI Constants
@@ -89,7 +110,7 @@ function start_game() {
     SKIN_GAP = (stage.getHeight() - (SKIN_ARROW_Y_ANCHOR_BOTTOM + SKIN_ARROW_Y_ANCHOR) - (SKIN_ARROW_SIZE * NUM_SKIN_ARROWS)) / (NUM_SKIN_ARROWS - 1);
 
     // TODO: make an array of characters or something that I can access by number
-
+    
     // Globals
     SkillList = getSkillList();
     players = [];

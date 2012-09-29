@@ -336,8 +336,10 @@ function Selector(playerId) {
                 y: menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getY(),
             });
 
-            // TODO: set the characters player
-        }
+            players[playerId].selectedChar = menu.currentSelection[playerId];
+        } else {
+            // TODO: do player ready
+        } 
     }
 }
 

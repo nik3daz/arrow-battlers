@@ -10,6 +10,7 @@ function Game() {
 /** Players are on a layer where 0 is the center of screen */
 function Player(dir, udlre) {
     this.id = dir;
+    this.selectedChar = 0;
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
     this.reset = function() {
