@@ -233,7 +233,18 @@ function Menu() {
 
     this.onKeyDown = function(player, key) {
         // check if the player is still selecting a character
-
+        if (key == KEY_U) {
+            menu.selectors[player.dir].onArrowUp();
+        } else if (key == KEY_D) {
+            menu.selectors[player.dir].onArrowDown();
+        } else if (key == KEY_L) {
+            menu.selectors[player.dir].onArrowLeft();
+        } else if (key == KEY_R) {
+            menu.selectors[player.dir].onArrowRight();
+        } else if (key == KEY_E) {
+            menu.selectors[player.dir].onEnter();
+        }
+        menuLayer.draw();
     }
 
 }
@@ -284,8 +295,8 @@ function Selector(playerId) {
             }
         } else {
             // browse different skins
-        }
 
+        }
     }
 
     /** */
@@ -304,6 +315,7 @@ function Selector(playerId) {
     this.onEnter = function() {
         if (!isCharSelected) {
             isCharSelected = true;
+
         }
     }
 }

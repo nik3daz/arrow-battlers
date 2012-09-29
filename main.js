@@ -100,11 +100,11 @@ function start_game() {
     game = new Game();
     initLayers();
 
-    keyFocus = game;
+   
 
     menu = new Menu();
     menu.init();
-
+    keyFocus = menu;
     debugLayer.draw();
     bgLayer.draw();
     playerLayer.draw();
