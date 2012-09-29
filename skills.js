@@ -12,8 +12,3 @@ function getSkillList() {
     }
     return a;
 }
-
-function Skill(sequenceFunc, anim) {
-    this.getSequence = sequenceFunc;
-    this.anim = anim;
-}

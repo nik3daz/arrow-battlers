@@ -229,19 +229,20 @@ function Menu() {
 
     }
 
-    onKeyDown = function(player, key) {
+    this.onKeyDown = function(player, key) {
         // check if the player is still selecting a character
         if (key == KEY_U) {
-            menu.selectors[player.dir].onArrowUp();
+            menu.selectors[player.id].onArrowUp();
         } else if (key == KEY_D) {
-            menu.selectors[player.dir].onArrowDown();
+            menu.selectors[player.id].onArrowDown();
         } else if (key == KEY_L) {
-            menu.selectors[player.dir].onArrowLeft();
+            menu.selectors[player.id].onArrowLeft();
         } else if (key == KEY_R) {
-            menu.selectors[player.dir].onArrowRight();
+            menu.selectors[player.id].onArrowRight();
         } else if (key == KEY_E) {
-            menu.selectors[player.dir].onEnter();
+            menu.selectors[player.id].onEnter();
         }
+        menu.selectors[player.id].update();
         menuLayer.draw();
     }
 
@@ -257,15 +258,11 @@ var getNextSkin = function(direction, playerId) {
 
 /** Selector Class */
 function Selector(playerId) {
-    this.shape = new Kinetic.Rect({
-                width: CHAR_BOX_SIZE,
-                height: CHAR_BOX_SIZE,
-                stroke:"#E83333",
-                x: menu.charBoxes[playerId][menu.currentSelection[playerId]].getX(),
-                y: menu.charBoxes[playerId][menu.currentSelection[playerId]].getY(),
-            });
-
-    var isCharSelected = false;
+    /** Update shape changes */
+    this.update = function() {
+        this.shape.setX(menu.charBoxes[playerId][menu.currentSelection[playerId]].getX());
+        this.shape.setY(menu.charBoxes[playerId][menu.currentSelection[playerId]].getY());
+    }
 
     /** */
     this.onArrowDown = function() {
@@ -341,6 +338,15 @@ function Selector(playerId) {
             // TODO: do player ready
         } 
     }
+
+    this.shape = new Kinetic.Rect({
+                width: CHAR_BOX_SIZE,
+                height: CHAR_BOX_SIZE,
+                stroke:"#E83333",
+            });
+
+    var isCharSelected = false;
+    this.update();
 }
 
 

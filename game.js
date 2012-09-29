@@ -1,6 +1,8 @@
 function Game() {
-    players[0] = new Player(1, [87, 83, 65, 68, 32]);
-    players[1] = new Player(-1, [38, 40, 37, 39, 13]);
+    // Left Player
+    players[0] = new Player(0, 1, [87, 83, 65, 68, 32]);
+    // Right Player
+    players[1] = new Player(1, -1, [38, 40, 37, 39, 13]);
     this.onKeyDown = function(key) {
         players[0].onKeyDown(key);
         players[1].onKeyDown(key);
@@ -8,9 +10,7 @@ function Game() {
 }
 
 /** Players are on a layer where 0 is the center of screen */
-function Player(dir, udlre) {
-    this.id = dir;
-    this.selectedChar = 0;
+function Player(id, dir, udlre) {
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
     this.reset = function() {
@@ -31,18 +31,18 @@ function Player(dir, udlre) {
     this.getUdlre = function(evt) {
         var keyCode = evt.keyCode;
         var key = -1;
-        if (ukeylre[0] == keyCode) {
+        if (udlre[0] == keyCode) {
             key = KEY_U;
-        } else if (ukeylre[1] == keyCode) {
+        } else if (udlre[1] == keyCode) {
             key = KEY_D;
-        } else if (ukeylre[2] == keyCode) {
+        } else if (udlre[2] == keyCode) {
             key = KEY_L;
-        } else if (ukeylre[3] == keyCode) {
+        } else if (udlre[3] == keyCode) {
             key = KEY_R;
-        } else if (ukeylre[4] == keyCode) {
+        } else if (udlre[4] == keyCode) {
             key = KEY_E
         }
-        return d;
+        return key;
     }
 
     /** Takes player keystroke, matches against skill lists */
@@ -82,6 +82,9 @@ function Player(dir, udlre) {
     }
 
     //================== PLAYER SETUP ======================
+    this.id = id;
+    this.dir = dir;
+    this.selectedChar = 0;
     this.money = 0;
     this.shape = new Kinetic.Rect({
             x: 100 * dir,

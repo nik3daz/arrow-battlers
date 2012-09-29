@@ -39,7 +39,7 @@ function start_game() {
             if (key != -1) break;
         }
         if (key != -1)
-            keyFocus.onKeyDown(player[i], key);
+            keyFocus.onKeyDown(players[i], key);
     }
     
     function doKeyUp(evt){
