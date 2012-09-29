@@ -31,8 +31,14 @@ function Menu() {
 
         menuLayer.add(p2Money);
         //================== CHARACTER BOXES ======================
+        this.charBoxes = [];
+
         this.p1Chars = [];
         this.p2Chars = [];
+        
+        this.charBoxes[0] = this.p1Chars;
+        this.charBoxes[1] = this.p2Chars;
+
         var verticalOffset = 0;
         var horizontalOffset = 0;
 
@@ -71,8 +77,9 @@ function Menu() {
         }
 
         //================== CHARACTER BOXES ======================
-        this.p1CurrentSelectPosition = 0;
-        this.p2CurrentSelectPosition = 0;
+        this.currentSelection = [];
+        this.currentSelection[0] = 0;
+        this.currentSelection[1] = 0;
 
         this.selectors = [];
         this.selectors[0] = new Selector(0);
@@ -174,45 +181,70 @@ function Menu() {
 
 /** Selector Class */
 function Selector(playerId) {
-    var x = menu.p1Chars[menu.p1CurrentSelectPosition].getX();
-    var y = menu.p1Chars[menu.p1CurrentSelectPosition].getY();
-    
-    if (playerId == 1) {
-        x = menu.p2Chars[menu.p2CurrentSelectPosition].getX();
-        y = menu.p2Chars[menu.p2CurrentSelectPosition].getY(); 
-    } 
-
     this.shape = new Kinetic.Rect({
                 width: CHAR_BOX_SIZE,
                 height: CHAR_BOX_SIZE,
                 stroke:"#E83333",
-                x: x,
-                y: y,
+                x: menu.charBoxes[playerId][menu.currentSelection[playerId]].getX(),
+                y: menu.charBoxes[playerId][menu.currentSelection[playerId]].getY(),
             });
+
+    var isCharSelected = false;
 
     /** */
     this.onArrowDown = function() {
-        
+         if (!isCharSelected) {
+            // browse characters
+            if (menu.currentSelection[playerId] + (NUM_CHARACTERS/CHAR_BOX_ROWS) < NUM_CHARACTERS) {
+                menu.currentSelection[playerId] += (NUM_CHARACTERS/CHAR_BOX_ROWS);
+            }
+        } else {
+            // browse different skins
+        }
     }
 
     /** */
     this.onArrowUp = function() {
-
+        if (!isCharSelected) {
+            // browse characters
+             if (menu.currentSelection[playerId] - (NUM_CHARACTERS/CHAR_BOX_ROWS) >= 0) {
+                menu.currentSelection[playerId] -= (NUM_CHARACTERS/CHAR_BOX_ROWS);
+            }
+        } else {
+            // browse different skins
+        }
     }
 
     /** */
     this.onArrowLeft = function() {
+        if (!isCharSelected) {
+            // browse characters
+            if (menu.currentSelection[playerId] - 1 >= 0) {
+                menu.currentSelection[playerId]--;    
+            }
+        } else {
+            // browse different skins
+        }
 
     }
 
     /** */
     this.onArrowRight = function() {
-
+        if (!isCharSelected) {
+            // browse characters
+            if (menu.currentSelection[playerId] + 1 < NUM_CHARACTERS) {
+                menu.currentSelection[playerId]++;    
+            }
+        } else {
+            // TODO browse different skins
+        }
     }
 
     /** */
     this.onEnter = function() {
-
+        if (!isCharSelected) {
+            isCharSelected = true;
+        }
     }
 }
 
