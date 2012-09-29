@@ -144,6 +144,12 @@ function Menu() {
         this.p2SkinArrowsLeft = [];
         this.p2SkinArrowsRight = [];
 
+        this.currentSkinSelection = [];
+        var currentP1SkinSelection = 0;
+        var currentP2SkinSelection = 1;
+        this.currentSkinSelection[0] = currentP1SkinSelection;
+        this.currentSkinSelection[1] = currentP2SkinSelection;
+
         for (var i = 0; i < NUM_SKIN_ARROWS; i++) {
             this.p1SkinArrowsLeft[i] = new Kinetic.Rect({
                 width:SKIN_ARROW_SIZE,
@@ -223,15 +229,7 @@ function Menu() {
 
     }
 
-
-
-    this.setCharacter = function(character){
-        // move the 'selector' down to the skin things
-
-        // set the players character to the selected one
-    };
-
-    this.onKeyDown = function(player, key) {
+    onKeyDown = function(player, key) {
         // check if the player is still selecting a character
         if (key == KEY_U) {
             menu.selectors[player.dir].onArrowUp();
@@ -247,6 +245,14 @@ function Menu() {
         menuLayer.draw();
     }
 
+}
+
+
+
+/** Gets the next skin for the current avatar. direction either -1 for left, 1 for right. 
+    Requires the playerId for the player selecting the skin */
+var getNextSkin = function(direction, playerId) {
+    // TODO
 }
 
 /** Selector Class */
@@ -270,6 +276,9 @@ function Selector(playerId) {
             }
         } else {
             // browse different skins
+            if (menu.currentSkinSelection[playerId] != NUM_SKIN_ARROWS -1) {
+                menu.currentSkinSelection[playerId]++;
+            }
         }
     }
 
@@ -283,6 +292,9 @@ function Selector(playerId) {
             }
         } else {
             // browse different skins
+            if (menu.currentSkinSelection[playerId] != 0) {
+                menu.currentSkinSelection[playerId]--;
+            }
         }
     }
 
@@ -295,7 +307,7 @@ function Selector(playerId) {
             }
         } else {
             // browse different skins
-
+            getNextSkin(-1,playerId);
         }
     }
 
@@ -307,7 +319,7 @@ function Selector(playerId) {
                 menu.currentSelection[playerId]++;    
             }
         } else {
-            // TODO browse different skins
+            getNextSkin(1,playerId);
         }
     }
 
@@ -316,6 +328,15 @@ function Selector(playerId) {
         if (!isCharSelected) {
             isCharSelected = true;
 
+            this.shape = new Kinetic.Rect({
+                width: SKIN_ARROW_SIZE,
+                height: SKIN_ARROW_SIZE,
+                stroke:"#E83333",
+                x: menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getX(),
+                y: menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getY(),
+            });
+
+            // TODO: set the characters player
         }
     }
 }

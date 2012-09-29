@@ -88,9 +88,7 @@ function start_game() {
     SKIN_ARROW_Y_ANCHOR_BOTTOM = READY_HEIGHT + READY_MARGIN_BOTTOM+SKIN_ARROW_TOP_MARGIN;
     SKIN_GAP = (stage.getHeight() - (SKIN_ARROW_Y_ANCHOR_BOTTOM + SKIN_ARROW_Y_ANCHOR) - (SKIN_ARROW_SIZE * NUM_SKIN_ARROWS)) / (NUM_SKIN_ARROWS - 1);
 
-
-
-
+    // TODO: make an array of characters or something that I can access by number
 
     // Globals
     SkillList = getSkillList();
