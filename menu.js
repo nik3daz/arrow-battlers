@@ -109,6 +109,7 @@ function Menu() {
         //================== SKILL BOXES ======================
         var p1Skills = [];
         var p2Skills = [];
+        this.skillBoxes = [];
 
         for (var i = 0; i < NUM_SKILLS; i++) {
             p1Skills[i] = new Kinetic.Rect({
@@ -133,6 +134,9 @@ function Menu() {
             menuLayer.add(p1Skills[i]);
             menuLayer.add(p2Skills[i]);
         }
+        this.skillBoxes[0] = p1Skills;
+        this.skillBoxes[1] = p2Skills;
+
         //================== SKIN ARROWS ======================
 
         this.skinArrows = [];
@@ -253,6 +257,11 @@ function Menu() {
     Requires the playerId for the player selecting the skin */
 var getNextSkin = function(direction, playerId) {
     // TODO
+}
+
+/** Called when a player has changed their selection (by hovering over a character) */
+var onCharacterHover = function(playerId, charId) {
+    // change the skill boxes
 }
 
 /** Selector Class */
