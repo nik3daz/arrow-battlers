@@ -203,6 +203,7 @@ function Selector(playerId) {
         }
     }
 
+
     /** */
     this.onArrowUp = function() {
         if (!isCharSelected) {
