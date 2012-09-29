@@ -19,12 +19,24 @@ function Menu() {
 
         this.initMenuForPlayer(0, -MENU_CENTER_DISTANCE);
         this.initMenuForPlayer(1, MENU_CENTER_DISTANCE);
+
+        var headText = new Kinetic.Text({
+            text: "HEAD",
+            align : "center",
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 100,
+            textFill:"black",
+            fontFamily:GAME_FONT,
+        });
+        centerOffset(headText)
+        menuLayer.add(headText);
     }
 
     this.initMenuForPlayer = function(playerId, centerX) {
 
-        //=================== PLAYER MONEY ========================
-        
+        //=================== PLAYER MONEY ========================        
         var money = new Kinetic.Text({
             text: "$" + players[playerId].money,
             align : "center",
@@ -40,7 +52,6 @@ function Menu() {
         menuLayer.add(money);
 
         //================== CHARACTER BOXES ======================
-
         this.charBoxes[playerId] = [];
 
         var verticalOffset = 0;
@@ -71,7 +82,6 @@ function Menu() {
         }
 
         //================== SKILL BOXES ======================
-
         var skills = [];
 
         for (var i = 0; i < NUM_SKILLS; i++) {
@@ -88,7 +98,6 @@ function Menu() {
         this.skillBoxes[playerId] = skills;
 
         //================== SKIN ARROWS ======================
-
         var skinArrows = [];
 
         var skinArrowsLeft = [];
@@ -124,7 +133,6 @@ function Menu() {
         this.skinArrows[playerId] = skinArrows;
 
         //================== READY BUTTONS ======================
-
         this.readyButtons[playerId] = new Kinetic.Rect({
             width:READY_WIDTH,
             height:READY_HEIGHT,
@@ -137,7 +145,6 @@ function Menu() {
         menuLayer.add(this.readyButtons[playerId]);
 
         //================== SELECTORS ======================
-
         this.currentSelection[playerId] = 0;
 
         this.selectors[playerId] = new Selector(playerId);
