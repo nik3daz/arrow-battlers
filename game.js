@@ -81,6 +81,11 @@ function Player(id, dir, udlre) {
         };
     }
 
+    this.setMoney = function(value) {
+        this.money = value;
+        menu.money[this.id].setText("$" + value);
+    }
+
     //================== PLAYER SETUP ======================
     this.id = id;
     this.dir = dir;

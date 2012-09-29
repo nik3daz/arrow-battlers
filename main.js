@@ -32,6 +32,7 @@ function start_game() {
     
     // Keypress
     function doKeyDown(evt) {
+        if (!keyFocus) return;
         var key = -1;
         var i;
         for (i = 0; i < 2; i++) {
@@ -84,10 +85,11 @@ function start_game() {
     NUM_SKILLS = 6;
 
     // Menu UI Constants
-    MONEY_MARGIN_ABOVE_BELOW = 15;   
-    MONEY_TEXT_HEIGHT = 10;
+    MONEY_Y_ANCHOR = 35;   
 
-    CHAR_BOX_MARGIN_TOP = MONEY_MARGIN_ABOVE_BELOW * 2 + MONEY_TEXT_HEIGHT;
+    MENU_CENTER_DISTANCE = stage.getWidth() / 4;
+
+    CHAR_BOX_MARGIN_TOP = 40; 
     CHAR_BOX_ROWS = 2;
     CHAR_BOX_MARGIN_SIDE = 50;
     CHAR_BOX_SIZE = (stage.getWidth()/2 - 2 * CHAR_BOX_MARGIN_SIDE) / 
@@ -95,19 +97,19 @@ function start_game() {
 
     SKILL_BOX_SIZE = CHAR_BOX_SIZE * (NUM_CHARACTERS/CHAR_BOX_ROWS) / NUM_SKILLS;
 
-    READY_MARGIN_BOTTOM = 10;
     READY_WIDTH = 100;
     READY_HEIGHT = 40;
+    READY_MARGIN_BOTTOM = 10 + READY_HEIGHT / 2;
 
     /** Number of skin arrows (body, hair, shoes means 3 skin arrows)*/
     NUM_SKIN_ARROWS = 3;
-    SKIN_ARROW_TOP_MARGIN = 20;
+    SKIN_ARROW_TOP_MARGIN = 40;
     SKIN_ARROW_SIZE = 35;
     SKIN_ARROW_BOTTOM_MARGIN = 20;
-    SKIN_ARROW_MARGIN_SIDE = 20;
+    SKIN_ARROW_CENTER_DIST = 100;
     SKIN_ARROW_Y_ANCHOR = CHAR_BOX_MARGIN_TOP + CHAR_BOX_SIZE * CHAR_BOX_ROWS + SKILL_BOX_SIZE + SKIN_ARROW_TOP_MARGIN;
     SKIN_ARROW_Y_ANCHOR_BOTTOM = READY_HEIGHT + READY_MARGIN_BOTTOM+SKIN_ARROW_TOP_MARGIN;
-    SKIN_GAP = (stage.getHeight() - (SKIN_ARROW_Y_ANCHOR_BOTTOM + SKIN_ARROW_Y_ANCHOR) - (SKIN_ARROW_SIZE * NUM_SKIN_ARROWS)) / (NUM_SKIN_ARROWS - 1);
+    SKIN_GAP = 15;
 
     // TODO: make an array of characters or something that I can access by number
     
@@ -123,7 +125,6 @@ function start_game() {
 
     menu = new Menu();
     menu.init();
-    keyFocus = menu;
     debugLayer.draw();
     bgLayer.draw();
     playerLayer.draw();
@@ -140,7 +141,7 @@ function start_game() {
 function makeLayers() {
     debugLayer = new Kinetic.Layer();
     hudLayer = new Kinetic.Layer();
-    menuLayer = new Kinetic.Layer({id: "menuLayer"});
+    menuLayer = new Kinetic.Layer({id: "menuLayer", x: stage.getWidth() / 2});
     playerLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
     bgLayer = new Kinetic.Layer();
     fadeLayer = new Kinetic.Layer();
@@ -218,6 +219,7 @@ function load_assets() {
             stage.remove(loadLayer);
             start_game();
             fadeOut();
+            keyFocus = menu;
         })
     });
     loader.start();

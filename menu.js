@@ -5,39 +5,43 @@ function Menu() {
             height: stage.getHeight(),
             fill: "white",
         });
-
+        centerOffset(background);
         menuLayer.add(background);
 
-        //=================== PLAYER MONEY ========================
-        var p1Money = new Kinetic.Text({
-            text: "$" + players[0].money,
-            align : "center",
-            x: stage.getWidth() / 2 / 2,
-            y: MONEY_MARGIN_ABOVE_BELOW,
-            textFill:"black",
-            fontFamily:GAME_FONT,
-        });
-
-        menuLayer.add(p1Money);
-
-        var p2Money = new Kinetic.Text({
-            text: "$" + players[0].money,
-            align : "center",
-            x: stage.getWidth() / 2 / 2 + stage.getWidth() / 2,
-            y: MONEY_MARGIN_ABOVE_BELOW,
-            textFill:"black",
-            fontFamily:GAME_FONT,
-        });
-
-        menuLayer.add(p2Money);
-        //================== CHARACTER BOXES ======================
+        this.money = [];
         this.charBoxes = [];
+        this.skillBoxes = [];
+        this.currentSelection = [];
+        this.selectors = [];
+        this.skinArrows = [];
+        this.currentSkinSelection = [];
+        this.readyButtons = [];
 
-        this.p1Chars = [];
-        this.p2Chars = [];
+        this.initMenuForPlayer(0, -MENU_CENTER_DISTANCE);
+        this.initMenuForPlayer(1, MENU_CENTER_DISTANCE);
+    }
+
+    this.initMenuForPlayer = function(playerId, centerX) {
+
+        //=================== PLAYER MONEY ========================
         
-        this.charBoxes[0] = this.p1Chars;
-        this.charBoxes[1] = this.p2Chars;
+        var money = new Kinetic.Text({
+            text: "$" + players[playerId].money,
+            align : "center",
+            x: centerX,
+            y: MONEY_Y_ANCHOR,
+            width: stage.getWidth() / 2,
+            height: 40,
+            textFill:"black",
+            fontFamily:GAME_FONT,
+        });
+        centerOffset(money);
+        this.money[playerId] = money;
+        menuLayer.add(money);
+
+        //================== CHARACTER BOXES ======================
+
+        this.charBoxes[playerId] = [];
 
         var verticalOffset = 0;
         var horizontalOffset = 0;
@@ -50,7 +54,7 @@ function Menu() {
                 horizontalOffset++;
             }
 
-            this.p1Chars[i] = new Kinetic.Rect({
+            this.charBoxes[playerId][i] = centerOffset(new Kinetic.Rect({
                 width: CHAR_BOX_SIZE,
                 height: CHAR_BOX_SIZE,
                 fill: {
@@ -59,37 +63,87 @@ function Menu() {
                 },
                     //"#CCC",
                 stroke:"black",
-                x:CHAR_BOX_MARGIN_SIDE + (horizontalOffset * CHAR_BOX_SIZE),        
-                y:(CHAR_BOX_MARGIN_TOP + ((verticalOffset-1) * CHAR_BOX_SIZE)),
-            });
+                x: centerX + (-1 + horizontalOffset) * CHAR_BOX_SIZE,        
+                y:(CHAR_BOX_MARGIN_TOP + ((verticalOffset-1/2) * CHAR_BOX_SIZE)),
+            }));
 
-            this.p2Chars[i] = new Kinetic.Rect({
-                width:CHAR_BOX_SIZE,
-                height:CHAR_BOX_SIZE,
-                fill: "#CCC",
-                stroke:"black",
-                x:stage.getWidth()/2 + CHAR_BOX_MARGIN_SIDE + (horizontalOffset * CHAR_BOX_SIZE),           
-                y:CHAR_BOX_MARGIN_TOP + ((verticalOffset-1) * CHAR_BOX_SIZE),
-            });
-
-            menuLayer.add(this.p1Chars[i]);
-            menuLayer.add(this.p2Chars[i]);
+            menuLayer.add(this.charBoxes[playerId][i]);
         }
 
-        //================== CHARACTER BOXES ======================
-        this.currentSelection = [];
-        this.currentSelection[0] = 0;
-        this.currentSelection[1] = 0;
+        //================== SKILL BOXES ======================
 
-        this.selectors = [];
-        this.selectors[0] = new Selector(0);
+        var skills = [];
 
-        menuLayer.add(this.selectors[0].shape);
+        for (var i = 0; i < NUM_SKILLS; i++) {
+            skills[i] = new Kinetic.Rect({
+                width: SKILL_BOX_SIZE,
+                height: SKILL_BOX_SIZE,
+                fill: "#444",
+                stroke:"black",
+                x:this.charBoxes[playerId][0].getX() - CHAR_BOX_SIZE/2 + i * SKILL_BOX_SIZE,
+                y:this.charBoxes[playerId][NUM_CHARACTERS-1].getY() - CHAR_BOX_SIZE/2 + this.charBoxes[playerId][NUM_CHARACTERS-1].getHeight(),
+            });
+            menuLayer.add(skills[i]);
+        }
+        this.skillBoxes[playerId] = skills;
 
-        this.selectors[1] = new Selector(1);
-        menuLayer.add(this.selectors[1].shape);
+        //================== SKIN ARROWS ======================
 
-       
+        var skinArrows = [];
+
+        var skinArrowsLeft = [];
+        var skinArrowsRight = [];
+
+        this.currentSkinSelection[playerId] = 0;
+
+        for (var i = 0; i < NUM_SKIN_ARROWS; i++) {
+            skinArrowsLeft[i] = centerOffset(new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_SIZE,
+                fill:"#000",
+                x: centerX - SKIN_ARROW_CENTER_DIST,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+            }));
+
+            skinArrowsRight[i] = centerOffset(new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_SIZE,
+                fill:"#000",
+                x: centerX + SKIN_ARROW_CENTER_DIST,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+            }));
+
+            menuLayer.add(skinArrowsLeft[i]);
+            menuLayer.add(skinArrowsRight[i]);
+
+        }
+
+        skinArrows[0] = skinArrowsLeft;
+        skinArrows[1] = skinArrowsRight;
+
+        this.skinArrows[playerId] = skinArrows;
+
+        //================== READY BUTTONS ======================
+
+        this.readyButtons[playerId] = new Kinetic.Rect({
+            width:READY_WIDTH,
+            height:READY_HEIGHT,
+            fill:"#444",
+            stroke:"black",
+            x:centerX,
+            y:stage.getHeight() - READY_MARGIN_BOTTOM,
+        });
+        centerOffset(this.readyButtons[playerId]);
+        menuLayer.add(this.readyButtons[playerId]);
+
+        //================== SELECTORS ======================
+
+        this.currentSelection[playerId] = 0;
+
+        this.selectors[playerId] = new Selector(playerId);
+
+        menuLayer.add(this.selectors[playerId].shape);
+
         var flash = function(selector) {
             setTimeout(function() {
                 selector.shape.setStroke("#FF7777");
@@ -102,141 +156,15 @@ function Menu() {
             }, 500);
         };
 
-        flash(this.selectors[0]);
-        flash(this.selectors[1]);
+        flash(this.selectors[playerId]);
         
-
-        //================== SKILL BOXES ======================
-        var p1Skills = [];
-        var p2Skills = [];
-        this.skillBoxes = [];
-
-        for (var i = 0; i < NUM_SKILLS; i++) {
-            p1Skills[i] = new Kinetic.Rect({
-                width: SKILL_BOX_SIZE,
-                height: SKILL_BOX_SIZE,
-                fill: "#444",
-                stroke:"black",
-                x:CHAR_BOX_MARGIN_SIDE + i * SKILL_BOX_SIZE,
-                y:this.p1Chars[NUM_CHARACTERS-1].getY() + this.p2Chars[NUM_CHARACTERS-1].getHeight(),
-            });
-
-            p2Skills[i] = new Kinetic.Rect({
-                width: SKILL_BOX_SIZE,
-                height: SKILL_BOX_SIZE,
-                fill: "#444",
-                stroke:"black",
-                x:stage.getWidth()/2 + CHAR_BOX_MARGIN_SIDE + i * SKILL_BOX_SIZE,
-                y:this.p2Chars[NUM_CHARACTERS-1].getY() + 
-                    this.p2Chars[NUM_CHARACTERS-1].getHeight(),
-            });
-
-            menuLayer.add(p1Skills[i]);
-            menuLayer.add(p2Skills[i]);
-        }
-        this.skillBoxes[0] = p1Skills;
-        this.skillBoxes[1] = p2Skills;
-
-        //================== SKIN ARROWS ======================
-
-        this.skinArrows = [];
-        this.p1SkinArrows = [];
-        this.p2SkinArrows = [];
-
-        this.p1SkinArrowsLeft = [];
-        this.p1SkinArrowsRight = [];
-        this.p2SkinArrowsLeft = [];
-        this.p2SkinArrowsRight = [];
-
-        this.currentSkinSelection = [];
-        var currentP1SkinSelection = 0;
-        var currentP2SkinSelection = 1;
-        this.currentSkinSelection[0] = currentP1SkinSelection;
-        this.currentSkinSelection[1] = currentP2SkinSelection;
-
-        for (var i = 0; i < NUM_SKIN_ARROWS; i++) {
-            this.p1SkinArrowsLeft[i] = new Kinetic.Rect({
-                width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_SIZE,
-                fill:"#000",
-                x:CHAR_BOX_MARGIN_SIDE + SKIN_ARROW_MARGIN_SIDE,
-                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
-            });
-
-            this.p1SkinArrowsRight[i] = new Kinetic.Rect({
-                width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_SIZE,
-                fill:"#000",
-                x:CHAR_BOX_SIZE * (NUM_CHARACTERS / CHAR_BOX_ROWS) - SKIN_ARROW_MARGIN_SIDE,
-                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
-            });
-
-            this.p2SkinArrowsLeft[i] = new Kinetic.Rect({
-                width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_SIZE,
-                fill:"#000",
-                x:stage.getWidth()/2 + CHAR_BOX_MARGIN_SIDE + SKIN_ARROW_MARGIN_SIDE,
-                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i*SKIN_GAP,
-            });
-
-            this.p2SkinArrowsRight[i] = new Kinetic.Rect({
-                width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_SIZE,
-                fill:"#000",
-                x:stage.getWidth()/2 + CHAR_BOX_SIZE * (NUM_CHARACTERS / CHAR_BOX_ROWS) - SKIN_ARROW_MARGIN_SIDE,
-                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
-            });
-        
-
-            menuLayer.add(this.p1SkinArrowsLeft[i]);
-            menuLayer.add(this.p1SkinArrowsRight[i]);
-
-            menuLayer.add(this.p2SkinArrowsLeft[i]);
-            menuLayer.add(this.p2SkinArrowsRight[i]);
-        }
-
-        this.p1SkinArrows[0] = this.p1SkinArrowsLeft;
-        this.p1SkinArrows[1] = this.p1SkinArrowsRight;
-        this.p2SkinArrows[0] = this.p2SkinArrowsLeft;
-        this.p2SkinArrows[1] = this.p2SkinArrowsRight;
-
-        this.skinArrows[0] = this.p1SkinArrows;
-        this.skinArrows[1] = this.p2SkinArrows;
-
-
-        //================== READY BUTTONS ======================
-        var readyButtons = [];
-
-
-        readyButtons[0] = new Kinetic.Rect({
-            width:READY_WIDTH,
-            height:READY_HEIGHT,
-            fill:"#444",
-            stroke:"black",
-            x:stage.getWidth()/2/2 - READY_WIDTH/2,
-            y:stage.getHeight() - READY_MARGIN_BOTTOM - READY_HEIGHT,
-        });
-
-        menuLayer.add(readyButtons[0]);
-
-        readyButtons[1] = new Kinetic.Rect({
-            width:READY_WIDTH,
-            height:READY_HEIGHT,
-            fill:"#444",
-            stroke:"black",
-            x:stage.getWidth()/2 + stage.getWidth()/2/2 - READY_WIDTH/2,
-            y:stage.getHeight() - READY_MARGIN_BOTTOM - READY_HEIGHT,
-        });
-
-        menuLayer.add(readyButtons[1]);
-        
-
     }
 
     this.show = function() {
         keyFocus = null;
         fadeIn(function() {
             menuLayer.moveToTop();
+            fadeLayer.moveToTop();
             fadeOut(function() {
                 keyFocus = this;
             });
@@ -280,12 +208,16 @@ function Selector(playerId) {
     /** Update shape changes */
     this.update = function() {
         if (!isCharSelected) {
-            this.shape.setX(menu.charBoxes[playerId][menu.currentSelection[playerId]].getX());
-            this.shape.setY(menu.charBoxes[playerId][menu.currentSelection[playerId]].getY());
+            this.shape.setWidth(CHAR_BOX_SIZE);
+            this.shape.setHeight(CHAR_BOX_SIZE);
+            centerOffset(this.shape);
+            this.shape.setPosition(menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
         } else {
             // skins
-            this.shape.setX(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getX());
-            this.shape.setY(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getY());
+            this.shape.setWidth(SKIN_ARROW_SIZE);
+            this.shape.setHeight(SKIN_ARROW_SIZE);
+            centerOffset(this.shape);
+            this.shape.setPosition(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getPosition());
         } 
     }
 
@@ -350,12 +282,6 @@ function Selector(playerId) {
         if (!isCharSelected) {
             isCharSelected = true;
 
-            this.shape = new Kinetic.Rect({
-                width: SKIN_ARROW_SIZE,
-                height: SKIN_ARROW_SIZE,
-                stroke:"#E83333",
-            });
-
             players[playerId].selectedChar = menu.currentSelection[playerId];
         } else {
             // TODO: do player ready
@@ -367,6 +293,7 @@ function Selector(playerId) {
                 height: CHAR_BOX_SIZE,
                 stroke:"#E83333",
             });
+    centerOffset(this.shape);
 
     var isCharSelected = false;
     this.update();
