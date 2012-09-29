@@ -233,6 +233,16 @@ function Menu() {
 
     }
 
+    this.show = function() {
+        keyFocus = null;
+        fadeIn(function() {
+            menuLayer.moveToTop();
+            fadeOut(function() {
+                keyFocus = this;
+            });
+        });
+    }
+
     this.onKeyDown = function(player, key) {
         // check if the player is still selecting a character
         if (key == KEY_U) {

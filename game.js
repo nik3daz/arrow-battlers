@@ -40,7 +40,7 @@ function Player(id, dir, udlre) {
         } else if (udlre[3] == keyCode) {
             key = KEY_R;
         } else if (udlre[4] == keyCode) {
-            key = KEY_E
+            key = KEY_E;
         }
         return key;
     }
