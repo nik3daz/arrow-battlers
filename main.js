@@ -252,13 +252,13 @@ function load_assets() {
     images["arrow_left"] = loader.addImage("arrow_left.png");
     images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
     images["ready_button"] = loader.addImage("ready_button.png");
+    images["ddr_arrow_left"] = loader.addImage("ddr_left_arrow.png");
 
     loader.addProgressListener(function(e) {
         loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);
         loadLayer.draw();
     });
     loader.addCompletionListener(function() {
-        console.log("GO");
         fadeIn(function() {
             stage.remove(loadLayer);
             start_game();

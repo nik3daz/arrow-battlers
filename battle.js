@@ -35,15 +35,15 @@ function SkillQueueBox(playerId, centerX) {
 			fill:"black",
 			opacity:0.4,
 			x:0,
-			y:stage.getHeight()/2,
+			y:0,
 		});
 
 		queueGroup.add(background);
 
 		// skills. build up from bottom of screen
-		var paddingTopBot = 20;
 		var skillIconSize = 50;
-		var skillIconGap = ((stage.getHeight() / 2) - (paddingTopBot*2) - (skillIconSize * SKILL_QUEUE_SIZE)) / (SKILL_QUEUE_SIZE-1)
+		var paddingTopBot = 20 + skillIconSize / 2;
+		var skillIconGap = ((stage.getHeight() / 2) - (paddingTopBot*2) - (skillIconSize * (SKILL_QUEUE_SIZE - 1))) / (SKILL_QUEUE_SIZE-1)
 		this.icons = [];
 		this.arrows = [];
 
@@ -58,9 +58,10 @@ function SkillQueueBox(playerId, centerX) {
 				height:skillIconSize,
 				stroke:"black",
 				fill:"black",
-				x: marginLeft,
-				y: stage.getHeight()/2 + paddingTopBot + (i*skillIconSize) + (i*skillIconGap),
+				x: marginLeft + skillIconSize / 2,
+				y: paddingTopBot + i * (skillIconSize + skillIconGap),
 			})
+            centerOffset(this.icons[i]);
 	
 
 			queueGroup.add(this.icons[i]);
@@ -73,15 +74,16 @@ function SkillQueueBox(playerId, centerX) {
 					width:skillArrowSize,
 					height:skillArrowSize,
 					stroke:"red",
-					x:(marginLeft + skillIconSize + marginLeft) + skillArrowSize * j + skillArrowGap * j,
-					y:this.icons[i].getY() + this.icons[i].getHeight()/2 - skillArrowSize/2,
+					x:(marginLeft + skillIconSize + marginLeft) + skillArrowSize * (1/2 + j) + skillArrowGap * j,
+					y:this.icons[i].getY(),
 				});
+                centerOffset(this.arrows[i][j]);
 
 				queueGroup.add(this.arrows[i][j]);
 			}
 
 		}
-		queueGroup.setX(centerX - background.getWidth() / 2);
+		queueGroup.setPosition(centerX - background.getWidth() / 2, stage.getHeight() / 2);
 		hudLayer.add(queueGroup);
 	}
 
