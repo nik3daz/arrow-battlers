@@ -129,29 +129,29 @@ function Menu() {
         var skinArrowsLeft = [];
         var skinArrowsRight = [];
 
-        this.currentSkinSelection[playerId] = 0;
-
+        this.currentSkinSelection[playerId] = 0; 
         for (var i = 0; i < NUM_SKIN_ARROWS; i++) {
             skinArrowsLeft[i] = centerOffset(new Kinetic.Rect({
                 width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_HEIGHT,
+                
                 fill: {
                     image: images.arrow_left,
-                    offset: [30, 0],
+                    offset: [0, 0],
                 },
                 x: centerX - SKIN_ARROW_CENTER_DIST,
-                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP,
             }));
 
             skinArrowsRight[i] = centerOffset(new Kinetic.Rect({
                 width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_HEIGHT,
                 fill: {
                     image: images.arrow_right,
-                    offset: [30, 0],
+                    offset: [0, 0],
                 },
                 x: centerX + SKIN_ARROW_CENTER_DIST,
-                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_SIZE + i *SKIN_GAP,
+                y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP,
             }));
 
             menuLayer.add(skinArrowsLeft[i]);

@@ -105,12 +105,13 @@ function start_game() {
     /** Number of skin arrows (body, hair, shoes means 3 skin arrows)*/
     NUM_SKIN_ARROWS = 3;
     SKIN_ARROW_TOP_MARGIN = 40;
-    SKIN_ARROW_SIZE = 35;
+    SKIN_ARROW_SIZE = images.arrow_left.width-1;
+    SKIN_ARROW_HEIGHT = images.arrow_left.height-1;
     SKIN_ARROW_BOTTOM_MARGIN = 20;
     SKIN_ARROW_CENTER_DIST = 100;
     SKIN_ARROW_Y_ANCHOR = CHAR_BOX_MARGIN_TOP + CHAR_BOX_SIZE * CHAR_BOX_ROWS + SKILL_BOX_SIZE + SKIN_ARROW_TOP_MARGIN;
-    SKIN_ARROW_Y_ANCHOR_BOTTOM = READY_HEIGHT + READY_MARGIN_BOTTOM+SKIN_ARROW_TOP_MARGIN;
-    SKIN_GAP = 15;
+    SKIN_ARROW_Y_ANCHOR_BOTTOM = READY_HEIGHT + READY_MARGIN_BOTTOM + SKIN_ARROW_TOP_MARGIN;
+    SKIN_GAP = 27;
 
     // TODO: make an array of characters or something that I can access by number
     CLASS_SPRITE_SHEET_PAGE_BORDER_SIZE = 2;
