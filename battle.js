@@ -85,9 +85,11 @@ function SkillQueueBox(playerId, centerX) {
 		}
 		queueGroup.setPosition(centerX - background.getWidth() / 2, stage.getHeight() / 2);
 		hudLayer.add(queueGroup);
+
+		this.update(players[playerId]);
 	}
 
-	this.update = function() {
+	this.update = function(player) {
 		// update icons
 		for (var i = 0; i < this.icons.length; i++) {
 			var skill = player.skillQueue[i];
@@ -101,11 +103,18 @@ function SkillQueueBox(playerId, centerX) {
 				if (j < skill.length) {
 					if (isActive) {
 						//draw arrow of skill sequence
+						this.arrows[i][j].setFill("#0ff");
+					} else {
+						this.arrows[i][j].setFill("#000");
 					}
 					
 				} else {
 					// blank out the spot becuase the skill doesn't go this long l-OL!
-
+					if (isActive) {
+						this.arrows[i][j].setFill("#fff");
+					} else {
+						this.arrows[i][j].setFill("#000");
+					}
 				}
 			}
 		}
