@@ -37,7 +37,7 @@ function Menu() {
            text: "BODY",
            align : "center",
            x: 0,
-           y: SKIN_ARROW_Y_ANCHOR + 1*SKIN_ARROW_SIZE + 1 *SKIN_GAP + 2,
+           y: SKIN_ARROW_Y_ANCHOR + 1*SKIN_ARROW_HEIGHT + 1 *SKIN_GAP + 2,
            width: 50,
            height: 15,
            textFill:"black",
@@ -47,10 +47,10 @@ function Menu() {
        menuLayer.add(bodyText);
 
         var shoesText = new Kinetic.Text({
-           text: "SHOES",
+           text: "FEET",
            align : "center",
            x: 0,
-           y: SKIN_ARROW_Y_ANCHOR + 2*SKIN_ARROW_SIZE + 2 *SKIN_GAP + 2,
+           y: SKIN_ARROW_Y_ANCHOR + 2*SKIN_ARROW_HEIGHT + 2 *SKIN_GAP + 2,
            width: 50,
            height: 15,
            textFill:"black",
@@ -134,7 +134,7 @@ function Menu() {
             skinArrowsLeft[i] = centerOffset(new Kinetic.Rect({
                 width:SKIN_ARROW_SIZE,
                 height:SKIN_ARROW_HEIGHT,
-                
+
                 fill: {
                     image: images.arrow_left,
                     offset: [0, 0],
@@ -185,19 +185,28 @@ function Menu() {
 
         var flash = function(selector) {
             setTimeout(function() {
-                selector.shape.setStroke("#FF7777");
-                if (selector.isCharSelected) {
-                    selector.secondShape.setStroke("#FF7777");
-                }
-                menuLayer.draw();
-                setTimeout(function() {
-                    selector.shape.setStroke("#E83333");
+                // first flash
+                // TODO change from flashing stroke to flashing sprite
+                if (!selector.isCharSelected) {
+                    selector.shape.setStroke("#FF7777");
                     if (selector.isCharSelected) {
-                        selector.secondShape.setStroke("#E83333");
+                        selector.secondShape.setStroke("#FF7777");
                     }
                     menuLayer.draw();
-                    flash(selector);
+                }
+                
+                // TODO change from flashing stroke to flashing sprite
+                setTimeout(function() {
+                    if (!selector.isCharSelected) {
+                        selector.shape.setStroke("#E83333");
+                        if (selector.isCharSelected) {
+                            selector.secondShape.setStroke("#E83333");
+                        }
+                        menuLayer.draw();
+                        flash(selector);
+                    }
                 }, 500);
+
             }, 500);
         };
 
@@ -259,11 +268,6 @@ function Selector(playerId) {
             this.shape.setPosition(menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
         } else {
             // skins
-            this.shape.setWidth(SKIN_ARROW_SIZE);
-            this.shape.setHeight(SKIN_ARROW_SIZE);
-            this.secondShape.setWidth(SKIN_ARROW_SIZE);
-            this.secondShape.setHeight(SKIN_ARROW_SIZE);
-            centerOffset(this.shape);
             centerOffset(this.secondShape);
             this.shape.setPosition(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getPosition());
             this.secondShape.setPosition(menu.skinArrows[playerId][1][menu.currentSkinSelection[playerId]].getPosition());
@@ -331,11 +335,27 @@ function Selector(playerId) {
         if (!this.isCharSelected) {
             this.isCharSelected = true;
             players[playerId].selectedChar = menu.currentSelection[playerId];
+
+            this.shape = new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_HEIGHT,
+
+                fill: {
+                    image: images.arrow_left_sel,
+                    offset: [0, 0],
+                },
+            });
+            centerOffset(this.shape);
+            menuLayer.add(this.shape);
             // make another shape for the thing
             this.secondShape = new Kinetic.Rect({
-                width: CHAR_BOX_SIZE,
-                height: CHAR_BOX_SIZE,
-                stroke:"#E83333",
+                width:SKIN_ARROW_SIZE,
+                height:SKIN_ARROW_HEIGHT,
+
+                fill: {
+                    image: images.arrow_right_sel,
+                    offset: [0, 0],
+                },
             });
             centerOffset(this.secondShape);
             menuLayer.add(this.secondShape);

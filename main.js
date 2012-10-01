@@ -230,6 +230,9 @@ function load_assets() {
     images["vader"] = loader.addImage("http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg");
     images["arrow_left"] = loader.addImage("arrow_left.png");
     images["arrow_right"] = loader.addImage("arrow_right.png");
+    images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
+    images["arrow_right_sel"] = loader.addImage("arrow_right_sel.png");
+
     loader.addProgressListener(function(e) {
         loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);
         loadLayer.draw();
