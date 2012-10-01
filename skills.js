@@ -114,4 +114,7 @@ function Skill(config) {
         // generates a sequence
         return seq;
     }
+
+    this.activate = config.activate;
+    this.animate = config.animate;
 }

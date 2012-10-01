@@ -103,9 +103,9 @@ function SkillQueueBox(playerId, centerX) {
 				if (j < skill.length) {
 					if (isActive) {
 						//draw arrow of skill sequence
-						this.arrows[i][j].setFill("#0ff");
+						setArrowImage(this.arrows[i][j], skill.sequence[j]);
 					} else {
-						this.arrows[i][j].setFill("#000");
+						setArrowImage(this.arrows[i][j], skill.sequence[j]);
 					}
 					
 				} else {
@@ -118,6 +118,6 @@ function SkillQueueBox(playerId, centerX) {
 				}
 			}
 		}
-
+        hudLayer.draw();
 	}
 }

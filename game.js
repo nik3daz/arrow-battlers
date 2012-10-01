@@ -43,21 +43,24 @@ function Player(id, dir, udlre) {
 
     /** Takes player keystroke, matches against skill lists */
     this.onKeyDown = function(key) {
+        var activated = false;
         // Remove skills that don't match
         for (var i = 0; i < this.activeSkills.length; i++) {
             var currentSkill = this.skillQueue[this.activeSkills[i]];
             if (currentSkill.get(this.skillStep) != key) {
                 this.activeSkills.splice(i--, 1);
-            }
-            
-            // the skill is activated
-            else if (currentSkill.length == this.skillStep + 1) {
+            } else if (currentSkill.length == this.skillStep + 1) {
                 currentSkill.skill.activate(this);
-                this.resetSkillQueue();
+                activated = true;
                 break;
-            }
+            } 
         }
-        this.skillStep++;
+        
+        if (activated) {
+            this.resetSkillQueue();
+        } else {
+            this.skillStep++;
+        }
 
         // Player fucked up
         if (this.activeSkills.length == 0) {
