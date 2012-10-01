@@ -77,13 +77,13 @@ function Player(id, dir, udlre) {
         for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
             this.skillQueue.push(this.nextSkill());
         }
+        
         // Skills that the player is in the middle of activating
         this.activeSkills = range(0, SKILL_QUEUE_SIZE);
     }
 
     /** Get the next skill object that is placed in the skill list */
     this.nextSkill = function() {
-        
         var skill = SkillList.getRandom();
         var sequence = skill.generateSequence(this);
         return {

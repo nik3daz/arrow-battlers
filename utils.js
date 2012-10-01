@@ -3,6 +3,15 @@ function centerOffset(shape) {
     return shape;
 }
 
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /** 
  * Makes an animation object for Kinetic.Sprite.
  * Makes frames from start positon to end position.
