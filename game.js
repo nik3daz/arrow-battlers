@@ -3,9 +3,8 @@ function Game() {
     players[0] = new Player(0, 1, [87, 83, 65, 68, 32]);
     // Right Player
     players[1] = new Player(1, -1, [38, 40, 37, 39, 13]);
-    this.onKeyDown = function(key) {
-        players[0].onKeyDown(key);
-        players[1].onKeyDown(key);
+    this.onKeyDown = function(player, key) {
+        players[player.id].onKeyDown(key);
     };
 }
 
@@ -52,7 +51,7 @@ function Player(id, dir, udlre) {
             }
             
             // the skill is activated
-            if (currentSkill.length == this.skillStep + 1) {
+            else if (currentSkill.length == this.skillStep + 1) {
                 currentSkill.skill.activate(this);
                 this.resetSkillQueue();
                 break;

@@ -5,7 +5,7 @@ function getSkillList() {
         name: "Attack",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:1,
+        sequenceLength:3,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -108,7 +108,7 @@ function Skill(config) {
         
         var seq = [];
         for (var i = 0; i < seqLength; i++) {
-            seq[i] = KEY_U;
+            seq[i] = Math.floor(Math.random() * 4);
         }
 
         // generates a sequence
