@@ -87,7 +87,6 @@ function start_game() {
 
     // Menu UI Constants
     MONEY_Y_ANCHOR = 35;   
-
     MENU_CENTER_DISTANCE = stage.getWidth() / 4;
 
     CHAR_BOX_MARGIN_TOP = 40; 
@@ -98,8 +97,8 @@ function start_game() {
 
     SKILL_BOX_SIZE = CHAR_BOX_SIZE * (NUM_CHARACTERS/CHAR_BOX_ROWS) / NUM_SKILLS;
 
-    READY_WIDTH = 100;
-    READY_HEIGHT = 40;
+    READY_WIDTH = images.ready_button.width;
+    READY_HEIGHT = images.ready_button.height;
     READY_MARGIN_BOTTOM = 10 + READY_HEIGHT / 2;
 
     /** Number of skin arrows (body, hair, shoes means 3 skin arrows)*/
@@ -232,6 +231,7 @@ function load_assets() {
     images["arrow_right"] = loader.addImage("arrow_right.png");
     images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
     images["arrow_right_sel"] = loader.addImage("arrow_right_sel.png");
+    images["ready_button"] = loader.addImage("ready_button.png");
 
     loader.addProgressListener(function(e) {
         loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);

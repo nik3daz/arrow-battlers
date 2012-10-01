@@ -168,8 +168,10 @@ function Menu() {
         this.readyButtons[playerId] = new Kinetic.Rect({
             width:READY_WIDTH,
             height:READY_HEIGHT,
-            fill:"#444",
-            stroke:"black",
+            fill:{
+                    image: images.ready_button,
+                    offset: [0, 0],
+                },
             x:centerX,
             y:stage.getHeight() - READY_MARGIN_BOTTOM,
         });
