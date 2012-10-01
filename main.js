@@ -47,6 +47,16 @@ function start_game() {
     }
 
     function initLayers() {
+    	var background = new Kinetic.Rect({
+                width: stage.getWidth(),
+                height: stage.getHeight(),
+                fill: {
+                    image: images.battle_bg,
+                    //offset: [-170, -50],
+                },
+            });
+            bgLayer.add(background);
+
     }
     
     // Key Constants
@@ -226,11 +236,11 @@ function load_assets() {
     //TODO call loader.addImage("url") to load images
     // Image cache
     images = [];
+    images["battle_bg"] = loader.addImage("battle_bg.png");
+    images["ready_button_red"] = loader.addImage("ready_button_red.png");
     images["vader"] = loader.addImage("http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg");
     images["arrow_left"] = loader.addImage("arrow_left.png");
-    images["arrow_right"] = loader.addImage("arrow_right.png");
     images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
-    images["arrow_right_sel"] = loader.addImage("arrow_right_sel.png");
     images["ready_button"] = loader.addImage("ready_button.png");
 
     loader.addProgressListener(function(e) {

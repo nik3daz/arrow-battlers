@@ -4,8 +4,8 @@ function Menu() {
             width: stage.getWidth(),
             height: stage.getHeight(),
             fill: "white",
+            x: -stage.getWidth()/2,
         });
-        centerOffset(background);
         menuLayer.add(background);
 
         this.money = [];
@@ -147,13 +147,13 @@ function Menu() {
                 width:SKIN_ARROW_SIZE,
                 height:SKIN_ARROW_HEIGHT,
                 fill: {
-                    image: images.arrow_right,
+                    image: images.arrow_left,
                     offset: [0, 0],
                 },
                 x: centerX + SKIN_ARROW_CENTER_DIST,
                 y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP,
             }));
-
+            skinArrowsRight[i].setScale(-1);
             menuLayer.add(skinArrowsLeft[i]);
             menuLayer.add(skinArrowsRight[i]);
 
@@ -268,11 +268,12 @@ function Selector(playerId) {
             this.shape.setHeight(CHAR_BOX_SIZE);
             centerOffset(this.shape);
             this.shape.setPosition(menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
-        } else {
+        } else if (!this.isSkinSelected){
             // skins
-            centerOffset(this.secondShape);
-            this.shape.setPosition(menu.skinArrows[playerId][0][menu.currentSkinSelection[playerId]].getPosition());
-            this.secondShape.setPosition(menu.skinArrows[playerId][1][menu.currentSkinSelection[playerId]].getPosition());
+            for (var i = 0 ; i < NUM_SKIN_ARROWS; i++) {
+                this.switchArrowImage(playerId, i, images.arrow_left); 
+            }
+            this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left_sel); 
         } 
     }
 
@@ -283,7 +284,7 @@ function Selector(playerId) {
             if (menu.currentSelection[playerId] + (NUM_CHARACTERS/CHAR_BOX_ROWS) < NUM_CHARACTERS) {
                 menu.currentSelection[playerId] += (NUM_CHARACTERS/CHAR_BOX_ROWS);
             }
-        } else {
+        } else if (!this.isSkinSelected){
             // browse different skins
             if (menu.currentSkinSelection[playerId] != NUM_SKIN_ARROWS -1) {
                 menu.currentSkinSelection[playerId]++;
@@ -299,7 +300,7 @@ function Selector(playerId) {
              if (menu.currentSelection[playerId] - (NUM_CHARACTERS/CHAR_BOX_ROWS) >= 0) {
                 menu.currentSelection[playerId] -= (NUM_CHARACTERS/CHAR_BOX_ROWS);
             }
-        } else {
+        } else if (!this.isSkinSelected){
             // browse different skins
             if (menu.currentSkinSelection[playerId] != 0) {
                 menu.currentSkinSelection[playerId]--;
@@ -314,7 +315,7 @@ function Selector(playerId) {
             if (menu.currentSelection[playerId] - 1 >= 0) {
                 menu.currentSelection[playerId]--;    
             }
-        } else {
+        } else if (!this.isSkinSelected){
             // browse different skins
             getNextSkin(-1,playerId);
         }
@@ -327,53 +328,59 @@ function Selector(playerId) {
             if (menu.currentSelection[playerId] + 1 < NUM_CHARACTERS) {
                 menu.currentSelection[playerId]++;    
             }
-        } else {
+        } else if (!this.isSkinSelected){
             getNextSkin(1,playerId);
         }
     }
 
+    
     /** */
     this.onEnter = function() {
         if (!this.isCharSelected) {
             this.isCharSelected = true;
             players[playerId].selectedChar = menu.currentSelection[playerId];
-
-            this.shape = new Kinetic.Rect({
-                width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_HEIGHT,
-
-                fill: {
-                    image: images.arrow_left_sel,
-                    offset: [0, 0],
-                },
-            });
-            centerOffset(this.shape);
-            menuLayer.add(this.shape);
-            // make another shape for the thing
-            this.secondShape = new Kinetic.Rect({
-                width:SKIN_ARROW_SIZE,
-                height:SKIN_ARROW_HEIGHT,
-
-                fill: {
-                    image: images.arrow_right_sel,
-                    offset: [0, 0],
-                },
-            });
-            centerOffset(this.secondShape);
-            menuLayer.add(this.secondShape);
-        } else {
+            // change arrow to red
+            this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left_sel);
+        } else if (!this.isSkinSelected){
+            this.isSkinSelected = true;
             // TODO: do player ready
+            // change arrow to blue
+            this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left);
+
+            // fill the ready_button
+            menu.readyButtons[playerId].setFill({
+                    image: images.ready_button_red,
+                    offset: [0, 0],
+            });
+
+            
+
         } 
     }
-
+    
+    this.switchArrowImage = function(playerId, selection, image, level) {
+        menu.skinArrows[playerId][0][selection].setFill({
+            image: image,
+        });
+        menu.skinArrows[playerId][1][selection].setFill({
+            image: image,
+        });
+    }
+    
+    this.reset = function() {
+        this.isCharSelected = false;
+        this.isSkinSelected = false;
+    }
+    
     this.shape = new Kinetic.Rect({
                 width: CHAR_BOX_SIZE,
                 height: CHAR_BOX_SIZE,
                 stroke:"#E83333",
             });
     centerOffset(this.shape);
+        
 
-    this.isCharSelected = false;
+    this.reset();
     this.update();
 }
 
