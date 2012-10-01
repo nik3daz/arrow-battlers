@@ -9,22 +9,19 @@ function Game() {
     };
 }
 
-/** Players are on a layer where 0 is the center of screen */
+/** Players are on a layer where 0 is the center of screen 
+
+    player.skillQueue - the skills available on screen for the player to activate
+    player.activeSkills - the skills the player is trying to activate
+*/
 function Player(id, dir, udlre) {
+    this.opponentId = 1 - id;
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
     this.reset = function() {
         this.hp = 100;
-        // Skills that are in the process of activation
-        this.skillStep = 0;
 
-        // Skills that the player can currently activate
-        this.skillQueue = [];
-        for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
-            this.skillQueue.push(this.nextSkill());
-        }
-        // Skills that the player is in the middle of activating
-        this.activeSkills = range(0, SKILL_QUEUE_SIZE);
+        this.resetSkillQueue();
     };
 
     /** Returns KEY_X for the given event keycode, -1 on no match */
@@ -50,29 +47,45 @@ function Player(id, dir, udlre) {
         // Remove skills that don't match
         for (var i = 0; i < this.activeSkills.length; i++) {
             var currentSkill = this.skillQueue[this.activeSkills[i]];
-            if (currentSkill.get(this.skillStep) != d) {
+            if (currentSkill.get(this.skillStep) != key) {
                 this.activeSkills.splice(i--, 1);
             }
+            
+            // the skill is activated
             if (currentSkill.length == this.skillStep + 1) {
-                this.activate(currentSkill.skill);
-                this.skillQueue.splice(this.activeSkills[i], 1);
-                this.skillQueue.push(this.nextSkill());
+                currentSkill.skill.activate(this);
+                this.resetSkillQueue();
+                break;
             }
         }
         this.skillStep++;
+
         // Player fucked up
         if (this.activeSkills.length == 0) {
             // TODO Punish
+
             // Refresh matching skill list
-            this.activeSkills = range(0, SKILL_QUEUE_SIZE); 
+            this.resetSkillQueue();
         }
+    }
+
+    this.resetSkillQueue = function() {
+        this.skillStep = 0;
+
+        // Skills that are on screen
+        this.skillQueue = [];
+        for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
+            this.skillQueue.push(this.nextSkill());
+        }
+        // Skills that the player is in the middle of activating
+        this.activeSkills = range(0, SKILL_QUEUE_SIZE);
     }
 
     /** Get the next skill object that is placed in the skill list */
     this.nextSkill = function() {
-        var rand = Math.floor(Math.random() * NUM_SKILLS);
-        var skill = SkillList[rand];
-        var sequence = skill.getSequence();
+        
+        var skill = SkillList.getRandom();
+        var sequence = skill.generateSequence(this);
         return {
             sequence: sequence,
             length: sequence.length,
@@ -91,6 +104,7 @@ function Player(id, dir, udlre) {
     this.dir = dir;
     this.selectedChar = 0;
     this.money = 0;
+
     this.shape = new Kinetic.Rect({
             x: 100 * dir,
             y: 50,
@@ -100,6 +114,10 @@ function Player(id, dir, udlre) {
     });
     centerOffset(this.shape);
 
-    this.reset();
+    //================== PLAYER BATTLE SETUP ======================
+    this.initForBattle = function() {
+        this.reset();     
+    }
+   
     playerLayer.add(this.shape);
 }

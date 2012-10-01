@@ -1,0 +1,4 @@
+// pirate
+function Class(name, ) {
+
+}

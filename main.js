@@ -94,6 +94,7 @@ function start_game() {
     // Game Constants
     NUM_CHARACTERS = chars.length;
     NUM_SKILLS = 6;
+    SKILL_MAX_LENGTH - 6;
 
     // Menu UI Constants
     MONEY_Y_ANCHOR = 35;   
@@ -122,6 +123,9 @@ function start_game() {
     SKIN_ARROW_Y_ANCHOR_BOTTOM = READY_HEIGHT + READY_MARGIN_BOTTOM + SKIN_ARROW_TOP_MARGIN;
     SKIN_GAP = 27;
 
+
+
+
     // TODO: make an array of characters or something that I can access by number
     CLASS_SPRITE_SHEET_PAGE_BORDER_SIZE = 2;
     CLASS_SPRITE_SHEET_FRAME_PADDING = 1;
@@ -129,23 +133,29 @@ function start_game() {
     CLASS_SPRITE_SHEET_FRAME_WIDTH = 70;
 
     // Globals
-    SkillList = getSkillList();
+    SkillList = new getSkillList();
     players = [];
     
     // Main
     game = new Game();
+    
     initLayers();
-
-   
-
     menu = new Menu();
     menu.init();
+
+    battle = new Battle();
+    battle.initBattle(players);
+
     debugLayer.draw();
     bgLayer.draw();
     playerLayer.draw();
     hudLayer.draw();
     menuLayer.draw();
     
+    // do game shit
+
+
+    menuLayer.moveToBottom();
 
     // Attach event listeners
     window.addEventListener('keydown', doKeyDown, false);
@@ -168,7 +178,7 @@ function Class(config) {
 /** Create and add all layers to the stage */
 function makeLayers() {
     debugLayer = new Kinetic.Layer();
-    hudLayer = new Kinetic.Layer();
+    hudLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
     menuLayer = new Kinetic.Layer({id: "menuLayer", x: stage.getWidth() / 2});
     playerLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
     bgLayer = new Kinetic.Layer();
