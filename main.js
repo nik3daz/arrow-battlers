@@ -94,7 +94,7 @@ function start_game() {
     // Game Constants
     NUM_CHARACTERS = chars.length;
     NUM_SKILLS = 6;
-    SKILL_MAX_LENGTH - 6;
+    SKILL_MAX_LENGTH = 6;
 
     // Menu UI Constants
     MONEY_Y_ANCHOR = 35;   

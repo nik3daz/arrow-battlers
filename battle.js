@@ -43,7 +43,7 @@ function SkillQueueBox(playerId, centerX) {
 		var skillIconSize = 30;
 		var skillIconGap = ((stage.getHeight() / 2) - (paddingTopBot*2) - (skillIconSize * SKILL_QUEUE_SIZE)) / (SKILL_QUEUE_SIZE-1)
 		icons = [];
-		arrows[] = [];
+		arrows = [];
 
 		var marginLeft = 10;
 		var skillArrowSize = 50;
