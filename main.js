@@ -146,6 +146,8 @@ function start_game() {
     battle = new Battle();
     battle.initBattle(players);
 
+    keyFocus = game;
+
     debugLayer.draw();
     bgLayer.draw();
     playerLayer.draw();

@@ -67,6 +67,7 @@ function Player(id, dir, udlre) {
             // Refresh matching skill list
             this.resetSkillQueue();
         }
+        battle.skillQueueBoxes[id].update(this);
     }
 
     this.resetSkillQueue = function() {
@@ -77,7 +78,7 @@ function Player(id, dir, udlre) {
         for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
             this.skillQueue.push(this.nextSkill());
         }
-        
+
         // Skills that the player is in the middle of activating
         this.activeSkills = range(0, SKILL_QUEUE_SIZE);
     }

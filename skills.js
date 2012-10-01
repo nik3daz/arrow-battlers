@@ -5,7 +5,7 @@ function getSkillList() {
         name: "Attack",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:1,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -19,7 +19,7 @@ function getSkillList() {
         name: "Block",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:2,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -33,7 +33,7 @@ function getSkillList() {
         name: "Heal",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:3,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -47,7 +47,7 @@ function getSkillList() {
         name: "DoT",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:4,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -61,7 +61,7 @@ function getSkillList() {
         name: "HoT",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:5,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -106,7 +106,12 @@ function Skill(config) {
         if (!seqLength) seqLength = config.sequenceLength;
         if (!difficulty) difficulty = config.sequenceDifficulty;
         
+        var seq = [];
+        for (var i = 0; i < seqLength; i++) {
+            seq[i] = KEY_U;
+        }
+
         // generates a sequence
-        return [KEY_U,KEY_D,KEY_L,KEY_R,KEY_U,KEY_R];
+        return seq;
     }
 }
