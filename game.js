@@ -16,6 +16,9 @@ function Game() {
 function Player(id, dir, udlre) {
     var curPlayer = this;
     this.opponentId = 1 - id;
+    
+    this.dotCurrent = false;
+    this.hotCurrent = false;
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
     this.reset = function() {
@@ -44,10 +47,68 @@ function Player(id, dir, udlre) {
             this.hp = 100;
         }
 
-         battle.healthBars[id].update();
+        battle.healthBars[id].update();
     }
 
+    this.dot = function(totalDamageAmount, time, numTicks) {
+        if (!this.dotCurrent) {
+            this.dotCurrent = true;
+            var animTime = 0;
+            var count = numTicks;
+            var tickTime = time / numTicks;
+            var damageAmount = totalDamageAmount / numTicks;
 
+            var anim = new Kinetic.Animation({
+                func: function(f) {
+                    animTime += f.timeDiff;
+                    if (animTime > tickTime) {
+                        if (count == 0) {
+                            curPlayer.dotCurrent = false;
+                            anim.stop();
+                            return;
+                        }
+
+                        curPlayer.damage(damageAmount);
+
+                        count--;
+                        animTime -= tickTime;
+                    }
+                },
+                node: hudLayer,
+            });
+            anim.start();
+        }
+    }
+
+    this.hot = function(totalHealAmount, time, numTicks) {
+        if (!this.hotCurrent) {
+            this.hotCurrent = true;
+            var animTime = 0;
+            var count = numTicks;
+            var tickTime = time / numTicks;
+            var healAmount = totalHealAmount / numTicks;
+
+            var anim = new Kinetic.Animation({
+                func: function(f) {
+                    animTime += f.timeDiff;
+                    if (animTime > tickTime) {
+                        if (count == 0) {
+                            curPlayer.hotCurrent = false;
+                            anim.stop();
+                            return;
+                        }
+
+                        curPlayer.heal(healAmount);
+
+                        count--;
+                        animTime -= tickTime;
+                    }
+                },
+                node: hudLayer,
+            });
+            anim.start();
+        }
+    }
 
     /** Returns KEY_X for the given event keycode, -1 on no match */
     this.getUdlre = function(evt) {
