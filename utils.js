@@ -78,15 +78,20 @@ function range(a, b) {
 
 /**
  * Sets the arrow in the given rect to point in direction of KEY_X
+ * color can be: "red", "green", "purple", "red", "yellow"
  */
-function setArrowImage(rect, key) {
+function setArrowImage(rect, key, color) {
     if (key == null) {
         rect.setFill(null);
         return;
     }
 
     var rots = [90, 270, 180, 0];
-    rect.setFill({image: images["ddr_arrow_left"]});
+    if (color == null) {
+        rect.setFill({image: images["arrow"]});
+    } else {
+        rect.setFill({image: images["arrow_"+color]});
+    }
     rect.setRotationDeg(rots[key]);
 }
 

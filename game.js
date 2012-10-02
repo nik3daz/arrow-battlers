@@ -27,7 +27,7 @@ function Player(id, dir, udlre) {
 
     this.damage = function(damage) {
         // damage the player
-        this.hp = this.hp - damage;
+        this.hp -= damage;
 
         // check if the player is still alive
         if (this.hp <= 0) {

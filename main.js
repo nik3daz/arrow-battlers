@@ -249,7 +249,12 @@ function load_assets() {
     images["arrow_left"] = loader.addImage("arrow_left.png");
     images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
     images["ready_button"] = loader.addImage("ready_button.png");
-    images["ddr_arrow_left"] = loader.addImage("ddr_left_arrow.png");
+    images["arrow"] = loader.addImage("arrow.png");
+    images["arrow_blue"] = loader.addImage("arrow-blue.png");
+    images["arrow_green"] = loader.addImage("arrow-green.png");
+    images["arrow_purple"] = loader.addImage("arrow-purple.png");
+    images["arrow_red"] = loader.addImage("arrow-red.png");
+    images["arrow_yellow"] = loader.addImage("arrow-yellow.png");
     images["health_bar"] = loader.addImage("health-bar.png");
 
     loader.addProgressListener(function(e) {

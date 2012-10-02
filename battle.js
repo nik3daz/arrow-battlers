@@ -201,11 +201,16 @@ function SkillQueueBox(playerId, centerX) {
 
 			for (var j = 0; j < this.arrows[i].length; j++) {
 				if (j < skill.length) {
-					if (isActive) {
+					if (isActive && j > player.skillStep) {
 						//draw arrow of skill sequence
 						setArrowImage(this.arrows[i][j], skill.sequence[j]);
-					} else {
+						this.arrows[i][j].setOpacity(1);
+					} else if (j == player.skillStep && isActive) {
+						setArrowImage(this.arrows[i][j], skill.sequence[j], "green");
+						this.arrows[i][j].setOpacity(1);
+					} else 	{
 						setArrowImage(this.arrows[i][j], skill.sequence[j]);
+						this.arrows[i][j].setOpacity(0.2);
 					}
 					
 				} else {
@@ -315,7 +320,7 @@ function GameResultsOverlay() {
 	this.show = function(winnerId) {
 		overlay.show();
 		overlay.moveToTop();
-		update(winnerId);
+		this.update(winnerId);
 	}
 
 	this.update = function(winnerId) {
