@@ -250,6 +250,7 @@ function load_assets() {
     images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
     images["ready_button"] = loader.addImage("ready_button.png");
     images["ddr_arrow_left"] = loader.addImage("ddr_left_arrow.png");
+    images["health_bar"] = loader.addImage("health-bar.png");
 
     loader.addProgressListener(function(e) {
         loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);

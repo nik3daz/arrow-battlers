@@ -23,6 +23,26 @@ function Player(id, dir, udlre) {
         this.resetSkillQueue();
     };
 
+    this.damage = function(damage) {
+        // damage the player
+        this.hp = this.hp - damage;
+
+        // check if the player is still alive
+        if (this.hp <= 0) {
+            // PWNED
+            battle.gameOver(opponentId);
+        }
+    }
+
+    this.heal = function(healed) {
+        this.hp = this.hp + healed;
+        if (this.hp > 100) {
+            this.hp = 100;
+        }
+    }
+
+
+
     /** Returns KEY_X for the given event keycode, -1 on no match */
     this.getUdlre = function(evt) {
         var keyCode = evt.keyCode;
@@ -122,5 +142,5 @@ function Player(id, dir, udlre) {
         this.reset();     
     }
    
-    playerLayer.add(this.shape);
+    //playerLayer.add(this.shape);
 }

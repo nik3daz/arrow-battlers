@@ -9,7 +9,7 @@ function Battle() {
 	this.initBattleUI = function(playerId) {
 		// make a skill boxes for each player
 		this.skillQueueBoxes = [];
-
+		this.healthBars = [];
 
 		this.initBattleUIForPlayer(players[0], -MENU_CENTER_DISTANCE);
 		this.initBattleUIForPlayer(players[1], MENU_CENTER_DISTANCE);	
@@ -18,10 +18,56 @@ function Battle() {
 	this.initBattleUIForPlayer = function(player, centerX) {
 		this.skillQueueBoxes[player.id] = new SkillQueueBox(player.id, centerX);
 		this.skillQueueBoxes[player.id].init();
+		this.healthBars[player.id] = new HealthBar(player.id, centerX);
+		this.healthBars[player.id].init();
+	}
 
+	this.gameOver = function(winnerId) {
+		winnerOverlay = new GameResultsOverlay(winnerId);
 	}
 }
 
+function HealthBar(playerId, centerX) {
+	this.init = function() {
+		var queueGroup = new Kinetic.Group();
+
+		var barHeight = 42;
+		var barWidth = stage.getWidth()/2 - 100;
+		
+		var health = new Kinetic.Rect({
+			height:barHeight,
+			width:barWidth,
+			fill: {
+		        image: images.health_bar,
+		        offset: [0, 0],
+		    },
+			x:0,
+			y:0,
+		})
+		queueGroup.add(health);
+
+		var background = new Kinetic.Rect({
+			height:barHeight,
+			width:barWidth,
+			stroke:"white",
+		    strokeWidth:5,
+			x:0,
+			y:0,
+		});
+		queueGroup.add(background);
+
+
+
+		queueGroup.setPosition(centerX - background.getWidth() / 2, 20);
+		hudLayer.add(queueGroup);
+
+		this.update();
+	}
+
+	this.update = function() {
+
+	}
+}
 
 function SkillQueueBox(playerId, centerX) {
 	this.init = function() {
@@ -35,14 +81,14 @@ function SkillQueueBox(playerId, centerX) {
 			fill:"black",
 			opacity:0.4,
 			x:0,
-			y:0,
+			y:25,
 		});
 
 		queueGroup.add(background);
 
 		// skills. build up from bottom of screen
 		var skillIconSize = 50;
-		var paddingTopBot = 20 + skillIconSize / 2;
+		var paddingTopBot = 30 + skillIconSize / 2;
 		var skillIconGap = ((stage.getHeight() / 2) - (paddingTopBot*2) - (skillIconSize * (SKILL_QUEUE_SIZE - 1))) / (SKILL_QUEUE_SIZE-1)
 		this.icons = [];
 		this.arrows = [];
@@ -83,7 +129,7 @@ function SkillQueueBox(playerId, centerX) {
 			}
 
 		}
-		queueGroup.setPosition(centerX - background.getWidth() / 2, stage.getHeight() / 2);
+		queueGroup.setPosition(centerX - background.getWidth() / 2, stage.getHeight() / 2 + 20);
 		hudLayer.add(queueGroup);
 
 		this.update(players[playerId]);
@@ -120,4 +166,8 @@ function SkillQueueBox(playerId, centerX) {
 		}
         hudLayer.draw();
 	}
+}
+
+function GameResultsOverlay(winnerId) {
+
 }
