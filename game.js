@@ -33,6 +33,8 @@ function Player(id, dir, udlre) {
             // PWNED
             battle.gameOver(opponentId);
         }
+
+        battle.healthBars[id].update();
     }
 
     this.heal = function(healed) {
@@ -40,6 +42,8 @@ function Player(id, dir, udlre) {
         if (this.hp > 100) {
             this.hp = 100;
         }
+
+         battle.healthBars[id].update();
     }
 
 

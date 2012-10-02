@@ -32,11 +32,11 @@ function HealthBar(playerId, centerX) {
 		var queueGroup = new Kinetic.Group();
 
 		var barHeight = 42;
-		var barWidth = stage.getWidth()/2 - 100;
+		barWidth = stage.getWidth()/2 - 100;
 		
-		var health = new Kinetic.Rect({
+		this.health = new Kinetic.Rect({
 			height:barHeight,
-			width:barWidth - 150,
+			width:barWidth,
 			fill: {
 		        image: images.health_bar,
 		        offset: [0, 0],
@@ -44,7 +44,7 @@ function HealthBar(playerId, centerX) {
 			x:0,
 			y:0,
 		});
-		queueGroup.add(health);
+		queueGroup.add(this.health);
 
 		var background = new Kinetic.Rect({
 			height:barHeight,
@@ -56,8 +56,6 @@ function HealthBar(playerId, centerX) {
 		});
 		queueGroup.add(background);
 
-
-
 		queueGroup.setPosition(centerX - players[playerId].dir * (background.getWidth() / 2 + 10), 20);
 		queueGroup.setScale([players[playerId].dir, 1])
 		hudLayer.add(queueGroup);
@@ -66,7 +64,10 @@ function HealthBar(playerId, centerX) {
 	}
 
 	this.update = function() {
-
+		// get players hp
+		var hp = players[playerId].hp;
+		this.health.setWidth((barWidth * hp / 100));
+		hudLayer.draw();
 	}
 }
 
@@ -161,9 +162,9 @@ function SkillQueueBox(playerId, centerX) {
 				} else {
 					// blank out the spot becuase the skill doesn't go this long l-OL!
 					if (isActive) {
-						
+						setArrowImage(this.arrows[i][j],null);
 					} else {
-						
+						setArrowImage(this.arrows[i][j],null);
 					}
 				}
 			}
