@@ -246,7 +246,7 @@ function GameResultsOverlay() {
 		});
 		overlay.add(dialogBackground);
 
-		winningPlayerText = new Kinetic.Text({
+		this.winningPlayerText = new Kinetic.Text({
            text: "Left Player",
            align : "center",
            x: stage.getWidth()/2,
@@ -256,9 +256,10 @@ function GameResultsOverlay() {
            textFill:"black",
            fontFamily:GAME_FONT,
         });
-        centerOffset(winningPlayerText);
-		overlay.add(winningPlayerText);
-        victoryText = new Kinetic.Text({
+        centerOffset(this.winningPlayerText);
+		overlay.add(this.winningPlayerText);
+       
+       	this.victoryText = new Kinetic.Text({
         	text: "VICTORY",
         	align :  "center",
         	x: stage.getWidth()/2,
@@ -269,10 +270,10 @@ function GameResultsOverlay() {
            	fontSize:20,
            	fontFamily:GAME_FONT,
         });
-        centerOffset(victoryText);
-        overlay.add(victoryText);
+        centerOffset(this.victoryText);
+        overlay.add(this.victoryText);
 
-        moneyReceivedText = new Kinetic.Text({
+        this.moneyReceivedText = new Kinetic.Text({
            text: "Winner Receives\n50 coins",
            align : "center",
            x: stage.getWidth()/2,
@@ -284,8 +285,8 @@ function GameResultsOverlay() {
            fontFamily:GAME_FONT,
         });
 
-		centerOffset(moneyReceivedText);
-        overlay.add(moneyReceivedText);
+		centerOffset(this.moneyReceivedText);
+        overlay.add(this.moneyReceivedText);
 
          loserMoneyReceivedText = new Kinetic.Text({
            text: "Loser Receives\n10 coins",
@@ -304,6 +305,7 @@ function GameResultsOverlay() {
 
 		overlay.setOffset([background.getWidth() / 2, 0]);
 		hudLayer.add(overlay);
+		overlay.hide();
 	}
 
 	this.hide = function() {
@@ -313,10 +315,16 @@ function GameResultsOverlay() {
 	this.show = function(winnerId) {
 		overlay.show();
 		overlay.moveToTop();
-		update();
+		update(winnerId);
 	}
 
-	this.update = function() {
+	this.update = function(winnerId) {
+		if (winnerId == 0) {
+			this.winningPlayerText.setText("Left Player");
+		} else {
+			this.winningPlayerText.setText("Right Player");
+		}
+
 		hudLayer.draw();
 	}
 }
