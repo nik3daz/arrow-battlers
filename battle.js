@@ -76,17 +76,23 @@ function SkillQueueBox(playerId, centerX) {
 		var queueGroup = new Kinetic.Group();
 
 		// background
-		var background = new Kinetic.Rect({
+        queueGroup.add(new Kinetic.Rect({
 			height:stage.getHeight()/2,
 			width:stage.getWidth()/2 - 50,
-			stroke:"black",
 			fill:"black",
 			opacity:0.6,
 			x:0,
 			y:22,
-		});
+		}));
 
-		queueGroup.add(background);
+		var background = new Kinetic.Rect({
+			height:stage.getHeight()/2,
+			width:stage.getWidth()/2 - 50,
+			stroke:"#444",
+            strokeWidth: 5,
+			x:0,
+			y:22,
+		});
 
 		// skills. build up from bottom of screen
 		var skillIconSize = 50;
@@ -131,12 +137,52 @@ function SkillQueueBox(playerId, centerX) {
 			}
 
 		}
+
+        //================= Recovery Bar ===================
+		var recoveryGroup = new Kinetic.Group();
+
+		var barHeight = 20;
+		var barWidth = background.getWidth() / 2;
+		
+	    var bar = new Kinetic.Rect({
+			height:barHeight,
+			width:barWidth,
+			fill: "cyan",
+			x:0,
+			y:0,
+		});
+        centerOffset(bar);
+		recoveryGroup.add(bar);
+
+		var barBackground = new Kinetic.Rect({
+			height:barHeight,
+			width:barWidth,
+			stroke:"white",
+		    strokeWidth:5,
+			x:0,
+			y:0,
+		});
+        centerOffset(barBackground);
+		recoveryGroup.add(barBackground);
+		recoveryGroup.hide();
+        recoveryGroup.setPosition(centerX, stage.getHeight() / 2 + 150);
+
+
+
 		queueGroup.setOffset([background.getWidth() / 2, 0]);
 		queueGroup.setPosition([centerX, stage.getHeight() / 2 + 20]);
+		queueGroup.add(background);
 		hudLayer.add(queueGroup);
+        hudLayer.add(recoveryGroup);
 
         this.background = background;
         this.queueGroup = queueGroup;
+        this.recoveryBar = {
+            show: function() { recoveryGroup.show(); },
+            hide: function() { recoveryGroup.hide(); },
+            setWidth: function(x) { bar.setWidth(x); },
+            width: barBackground.getWidth(),
+        };
 		this.update(players[playerId]);
 	}
 

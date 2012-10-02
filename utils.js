@@ -88,3 +88,32 @@ function setArrowImage(rect, key) {
     rect.setFill({image: images["ddr_arrow_left"]});
     rect.setRotationDeg(rots[key]);
 }
+/*
+function shootShape(shape, dir, x, y, speed, layer) {
+	var anim = new Kinetic.Animation({
+        	func: function(frame) {
+			if (dir == -1){ //to left
+				shape.setX(stage.getWidth()-frame.time)
+			}
+			else if (dir == 1){ //to right
+				shape.setX(frame.time);
+			}
+			shape.setY(y);
+			if ((shape.getX() < -shape.getWidth()) && dir == -1 ){
+				//stop animation
+				anim.stop();
+				// remove from layer and delete	
+					
+			}
+			if ((shape.getX() > (stage.getWidth()+shape.getWidth())) && dir == 1){
+				// stop animation
+				anim.stop();
+				// remove from layer and delete
+					
+			}
+				},
+			});
+	anim.start();
+
+
+}*/

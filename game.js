@@ -14,6 +14,7 @@ function Game() {
     player.activeSkills - the skills the player is trying to activate
 */
 function Player(id, dir, udlre) {
+    var curPlayer = this;
     this.opponentId = 1 - id;
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
@@ -91,63 +92,70 @@ function Player(id, dir, udlre) {
         // Player fucked up
         if (this.activeSkills.length == 0) {
             // TODO Punish
-
             // Refresh matching skill list
-            this.resetSkillQueueAnimate();
+            this.resetSkillQueueAnimate(this.failSkillAnimate);
         }
         battle.skillQueueBoxes[id].update(this);
     }
 
-    this.resetSkillQueueAnimate = function() {
-        var shape = battle.skillQueueBoxes[id].background;
-        var curPlayer = this;
-        this.keyLock = true;
-        /*
-        var origX = shape.getX();
-        var origY = shape.getY();
-        shape.transitionTo({
-            opacity: 0,
-            duration: 0.5,
-            callback: function() {
-            shape.background.setFill("white");
-            shape.background.setOpacity(1);
-            shape.background.moveToTop();
-                curPlayer.resetSkillQueue();
-                shape.transitionTo({
-                    opacity: 1,
-                    duration: 0.5,
-                    callback: function() {
-                        curPlayer.keyLock = false;
-                    },
-                });
-            },
-        });*/
-        var of = shape.getFill();
-        var oo = shape.getOpacity();
-        var count = 9;
-        var t = 0;
+    this.failSkillAnimate = function() {
+        var recoveryTime = 1500;
+        battle.skillQueueBoxes[id].queueGroup.setOpacity(0.5);
+        hudLayer.draw();
+        curPlayer.keyLock = true;
+        var bar = battle.skillQueueBoxes[id].recoveryBar;
+        bar.show();
         var anim = new Kinetic.Animation({
             func: function(f) {
-                t += f.time;
-                if (t > 1000) {
+                bar.setWidth(f.time/recoveryTime * bar.width);
+            },
+            node: hudLayer,
+        });
+        anim.start();
+        setTimeout(function() {
+            anim.stop();
+            curPlayer.keyLock = false;
+            battle.skillQueueBoxes[id].queueGroup.setOpacity(1);
+            bar.hide();
+            hudLayer.draw();
+        }, recoveryTime);
+    }
+
+    this.resetSkillQueueAnimate = function(cb) {
+        if (!cb) cb = function() {};
+        var bgShape = battle.skillQueueBoxes[id].background;
+        var qgShape = battle.skillQueueBoxes[id].queueGroup;
+        var ox = qgShape.getX();
+        var oy = qgShape.getY();
+        curPlayer.keyLock = true;
+        var count = 10;
+        var t = 100;
+        var flashTime = 50;
+        var anim = new Kinetic.Animation({
+            func: function(f) {
+                t += f.timeDiff;
+                if (t > flashTime) {
                     if (count == 0) {
                         anim.stop();
                         curPlayer.resetSkillQueue();
                         battle.skillQueueBoxes[id].update(curPlayer);
                         curPlayer.keyLock = false;
+                        qgShape.setX(ox);
+                        qgShape.setY(oy);
+
+                        cb();
+                        return;
                     }
-                    if (shape.getFill() != of) {
-                        shape.setFill(of);
-                        shape.setOpacity(oo);
-                        shape.moveToBottom();
+                    if (bgShape.getFill() != null) {
+                        bgShape.setFill(null);
                     } else {
-                        shape.setFill("white");
-                        shape.setOpacity(1);
-                        shape.moveToTop();
+                        bgShape.setFill("#EEE");
                     }
                     count--;
-                    t -= 1000;
+                    t -= flashTime;
                 }
+                qgShape.setX(ox - 5 + 10 * Math.random());
+                qgShape.setY(oy - 5 + 10 * Math.random());
             },
             node: hudLayer,
         });
