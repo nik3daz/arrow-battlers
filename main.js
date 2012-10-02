@@ -123,7 +123,7 @@ function start_game() {
     SKIN_ARROW_Y_ANCHOR_BOTTOM = READY_HEIGHT + READY_MARGIN_BOTTOM + SKIN_ARROW_TOP_MARGIN;
     SKIN_GAP = 27;
 
-
+    HUD_CENTER_DISTANCE = MENU_CENTER_DISTANCE + 20;
 
 
     // TODO: make an array of characters or something that I can access by number

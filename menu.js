@@ -332,7 +332,10 @@ function Selector(playerId) {
             if (menu.currentPlayersReady == 2){
                 fadeIn(function() {
                     menuLayer.moveToBottom();
-                    fadeOut();
+                    fadeOut(function() {
+                        keyFocus = game;
+                    });
+
                 });
             }
         } 

@@ -11,8 +11,8 @@ function Battle() {
 		this.skillQueueBoxes = [];
 		this.healthBars = [];
 
-		this.initBattleUIForPlayer(players[0], -MENU_CENTER_DISTANCE);
-		this.initBattleUIForPlayer(players[1], MENU_CENTER_DISTANCE);	
+		this.initBattleUIForPlayer(players[0], -HUD_CENTER_DISTANCE);
+		this.initBattleUIForPlayer(players[1], HUD_CENTER_DISTANCE);	
 	}
 
 	this.initBattleUIForPlayer = function(player, centerX) {
@@ -36,14 +36,14 @@ function HealthBar(playerId, centerX) {
 		
 		var health = new Kinetic.Rect({
 			height:barHeight,
-			width:barWidth,
+			width:barWidth - 150,
 			fill: {
 		        image: images.health_bar,
 		        offset: [0, 0],
 		    },
 			x:0,
 			y:0,
-		})
+		});
 		queueGroup.add(health);
 
 		var background = new Kinetic.Rect({
@@ -58,7 +58,8 @@ function HealthBar(playerId, centerX) {
 
 
 
-		queueGroup.setPosition(centerX - background.getWidth() / 2, 20);
+		queueGroup.setPosition(centerX - players[playerId].dir * (background.getWidth() / 2 + 10), 20);
+		queueGroup.setScale([players[playerId].dir, 1])
 		hudLayer.add(queueGroup);
 
 		this.update();
@@ -79,9 +80,9 @@ function SkillQueueBox(playerId, centerX) {
 			width:stage.getWidth()/2 - 50,
 			stroke:"black",
 			fill:"black",
-			opacity:0.4,
+			opacity:0.6,
 			x:0,
-			y:25,
+			y:22,
 		});
 
 		queueGroup.add(background);
@@ -94,7 +95,7 @@ function SkillQueueBox(playerId, centerX) {
 		this.arrows = [];
 
 		var marginLeft = 10;
-		var skillArrowSize = 40;
+		var skillArrowSize = 36;
 		var skillArrowGap = (background.getWidth() - (marginLeft + skillIconSize + marginLeft + marginLeft) - (skillArrowSize * SKILL_MAX_LENGTH)) / (SKILL_MAX_LENGTH-1);
 
 		for (var i = 0 ; i < SKILL_QUEUE_SIZE; i++) {
@@ -119,7 +120,7 @@ function SkillQueueBox(playerId, centerX) {
 				this.arrows[i][j] = new Kinetic.Rect({
 					width:skillArrowSize,
 					height:skillArrowSize,
-					stroke:"red",
+					
 					x:(marginLeft + skillIconSize + marginLeft) + skillArrowSize * (1/2 + j) + skillArrowGap * j,
 					y:this.icons[i].getY(),
 				});
@@ -157,9 +158,9 @@ function SkillQueueBox(playerId, centerX) {
 				} else {
 					// blank out the spot becuase the skill doesn't go this long l-OL!
 					if (isActive) {
-						this.arrows[i][j].setFill("#fff");
+						
 					} else {
-						this.arrows[i][j].setFill("#000");
+						
 					}
 				}
 			}
