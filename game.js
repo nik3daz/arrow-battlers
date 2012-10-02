@@ -21,6 +21,7 @@ function Player(id, dir, udlre) {
         this.hp = 100;
 
         this.resetSkillQueue();
+        this.keyLock = false;
     };
 
     this.damage = function(damage) {
@@ -63,6 +64,7 @@ function Player(id, dir, udlre) {
 
     /** Takes player keystroke, matches against skill lists */
     this.onKeyDown = function(key) {
+        if (this.keyLock) return;
         var activated = false;
         // Remove skills that don't match
         for (var i = 0; i < this.activeSkills.length; i++) {
@@ -77,7 +79,7 @@ function Player(id, dir, udlre) {
         }
         
         if (activated) {
-            this.resetSkillQueue();
+            this.resetSkillQueueAnimate();
         } else {
             this.skillStep++;
         }
@@ -87,9 +89,66 @@ function Player(id, dir, udlre) {
             // TODO Punish
 
             // Refresh matching skill list
-            this.resetSkillQueue();
+            this.resetSkillQueueAnimate();
         }
         battle.skillQueueBoxes[id].update(this);
+    }
+
+    this.resetSkillQueueAnimate = function() {
+        var shape = battle.skillQueueBoxes[id].background;
+        var curPlayer = this;
+        this.keyLock = true;
+        /*
+        var origX = shape.getX();
+        var origY = shape.getY();
+        shape.transitionTo({
+            opacity: 0,
+            duration: 0.5,
+            callback: function() {
+            shape.background.setFill("white");
+            shape.background.setOpacity(1);
+            shape.background.moveToTop();
+                curPlayer.resetSkillQueue();
+                shape.transitionTo({
+                    opacity: 1,
+                    duration: 0.5,
+                    callback: function() {
+                        curPlayer.keyLock = false;
+                    },
+                });
+            },
+        });*/
+        var of = shape.getFill();
+        var oo = shape.getOpacity();
+        var count = 9;
+        var t = 0;
+        var anim = new Kinetic.Animation({
+            func: function(f) {
+                t += f.time;
+                if (t > 1000) {
+                    if (count == 0) {
+                        anim.stop();
+                        curPlayer.resetSkillQueue();
+                        battle.skillQueueBoxes[id].update(curPlayer);
+                        curPlayer.keyLock = false;
+                    }
+                    if (shape.getFill() != of) {
+                        shape.setFill(of);
+                        shape.setOpacity(oo);
+                        shape.moveToBottom();
+                    } else {
+                        shape.setFill("white");
+                        shape.setOpacity(1);
+                        shape.moveToTop();
+                    }
+                    count--;
+                    t -= 1000;
+                }
+            },
+            node: hudLayer,
+        });
+        curPlayer.keyLock = true;
+        anim.start();
     }
 
     this.resetSkillQueue = function() {

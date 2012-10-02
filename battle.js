@@ -130,9 +130,12 @@ function SkillQueueBox(playerId, centerX) {
 			}
 
 		}
-		queueGroup.setPosition(centerX - background.getWidth() / 2, stage.getHeight() / 2 + 20);
+		queueGroup.setOffset([background.getWidth() / 2, 0]);
+		queueGroup.setPosition([centerX, stage.getHeight() / 2 + 20]);
 		hudLayer.add(queueGroup);
 
+        this.background = background;
+        this.queueGroup = queueGroup;
 		this.update(players[playerId]);
 	}
 
