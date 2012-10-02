@@ -12,6 +12,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
+            players[caster.opponentId].damage(10);
         },
     });
 
@@ -26,6 +27,8 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
+            // damage other player
+            players[caster.opponentId].damage(10);
         },
     });
 
@@ -40,6 +43,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
+            players[caster.opponentId].damage(10);
         },
     });
 
@@ -54,6 +58,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
+            players[caster.opponentId].damage(10);
         },
     });
 
@@ -68,6 +73,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
+            players[caster.opponentId].damage(10);
         },
     });
 
@@ -82,6 +88,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
+            players[caster.opponentId].damage(10);
         },
     });
     
