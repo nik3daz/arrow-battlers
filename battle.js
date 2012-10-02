@@ -31,48 +31,93 @@ function SkillQueueBox(playerId, centerX) {
 		var background = new Kinetic.Rect({
 			height:stage.getHeight()/2,
 			width:stage.getWidth()/2 - 50,
-			fill:"#555",
+			stroke:"black",
+			fill:"black",
+			opacity:0.4,
 			x:0,
-			y:stage.getHeight()/2,
+			y:0,
 		});
 
 		queueGroup.add(background);
 
 		// skills. build up from bottom of screen
-		var paddingTopBot = 20;
-		var skillIconSize = 30;
-		var skillIconGap = ((stage.getHeight() / 2) - (paddingTopBot*2) - (skillIconSize * SKILL_QUEUE_SIZE)) / (SKILL_QUEUE_SIZE-1)
-		icons = [];
-		arrows = [];
+		var skillIconSize = 50;
+		var paddingTopBot = 20 + skillIconSize / 2;
+		var skillIconGap = ((stage.getHeight() / 2) - (paddingTopBot*2) - (skillIconSize * (SKILL_QUEUE_SIZE - 1))) / (SKILL_QUEUE_SIZE-1)
+		this.icons = [];
+		this.arrows = [];
 
 		var marginLeft = 10;
-		var skillArrowSize = 50;
+		var skillArrowSize = 40;
+		var skillArrowGap = (background.getWidth() - (marginLeft + skillIconSize + marginLeft + marginLeft) - (skillArrowSize * SKILL_MAX_LENGTH)) / (SKILL_MAX_LENGTH-1);
+
 		for (var i = 0 ; i < SKILL_QUEUE_SIZE; i++) {
 			// make rect for each skill icon
-			icons[i] = new Kinetic.Rect({
+			this.icons[i] = new Kinetic.Rect({
 				width:skillIconSize,
 				height:skillIconSize,
 				stroke:"black",
-				x: marginLeft,
-				y: stage.getHeight()/2 + paddingTopBot + (i*skillIconSize) + (i*skillIconGap),
+				fill:"black",
+				x: marginLeft + skillIconSize / 2,
+				y: paddingTopBot + i * (skillIconSize + skillIconGap),
 			})
+            centerOffset(this.icons[i]);
 	
 
-			queueGroup.add(icons[i]);
+			queueGroup.add(this.icons[i]);
 			// list of rect spaces for arrow keys
 
 			// make the lisssttt
-
+			this.arrows[i] = [];
 			for (var j = 0; j < SKILL_MAX_LENGTH; j++) {
+				this.arrows[i][j] = new Kinetic.Rect({
+					width:skillArrowSize,
+					height:skillArrowSize,
+					stroke:"red",
+					x:(marginLeft + skillIconSize + marginLeft) + skillArrowSize * (1/2 + j) + skillArrowGap * j,
+					y:this.icons[i].getY(),
+				});
+                centerOffset(this.arrows[i][j]);
 
+				queueGroup.add(this.arrows[i][j]);
 			}
 
 		}
-		queueGroup.setX(centerX - background.getWidth() / 2);
+		queueGroup.setPosition(centerX - background.getWidth() / 2, stage.getHeight() / 2);
 		hudLayer.add(queueGroup);
+
+		this.update(players[playerId]);
 	}
 
-	this.update = function() {
+	this.update = function(player) {
+		// update icons
+		for (var i = 0; i < this.icons.length; i++) {
+			var skill = player.skillQueue[i];
 
+			var isActive = false;
+			if (contains(player.activeSkills, i)) {
+				isActive = true;
+			}
+
+			for (var j = 0; j < this.arrows[i].length; j++) {
+				if (j < skill.length) {
+					if (isActive) {
+						//draw arrow of skill sequence
+						setArrowImage(this.arrows[i][j], skill.sequence[j]);
+					} else {
+						setArrowImage(this.arrows[i][j], skill.sequence[j]);
+					}
+					
+				} else {
+					// blank out the spot becuase the skill doesn't go this long l-OL!
+					if (isActive) {
+						this.arrows[i][j].setFill("#fff");
+					} else {
+						this.arrows[i][j].setFill("#000");
+					}
+				}
+			}
+		}
+        hudLayer.draw();
 	}
 }

@@ -3,6 +3,15 @@ function centerOffset(shape) {
     return shape;
 }
 
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /** 
  * Makes an animation object for Kinetic.Sprite.
  * Makes frames from start positon to end position.
@@ -65,3 +74,17 @@ function range(a, b) {
     return r;
 }
         
+
+/**
+ * Sets the arrow in the given rect to point in direction of KEY_X
+ */
+function setArrowImage(rect, key) {
+    if (key == null) {
+        rect.setFill(null);
+        return;
+    }
+
+    var rots = [90, 270, 180, 0];
+    rect.setFill({image: images["ddr_arrow_left"]});
+    rect.setRotationDeg(rots[key]);
+}

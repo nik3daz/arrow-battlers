@@ -3,9 +3,8 @@ function Game() {
     players[0] = new Player(0, 1, [87, 83, 65, 68, 32]);
     // Right Player
     players[1] = new Player(1, -1, [38, 40, 37, 39, 13]);
-    this.onKeyDown = function(key) {
-        players[0].onKeyDown(key);
-        players[1].onKeyDown(key);
+    this.onKeyDown = function(player, key) {
+        players[player.id].onKeyDown(key);
     };
 }
 
@@ -44,21 +43,24 @@ function Player(id, dir, udlre) {
 
     /** Takes player keystroke, matches against skill lists */
     this.onKeyDown = function(key) {
+        var activated = false;
         // Remove skills that don't match
         for (var i = 0; i < this.activeSkills.length; i++) {
             var currentSkill = this.skillQueue[this.activeSkills[i]];
             if (currentSkill.get(this.skillStep) != key) {
                 this.activeSkills.splice(i--, 1);
-            }
-            
-            // the skill is activated
-            if (currentSkill.length == this.skillStep + 1) {
+            } else if (currentSkill.length == this.skillStep + 1) {
                 currentSkill.skill.activate(this);
-                this.resetSkillQueue();
+                activated = true;
                 break;
-            }
+            } 
         }
-        this.skillStep++;
+        
+        if (activated) {
+            this.resetSkillQueue();
+        } else {
+            this.skillStep++;
+        }
 
         // Player fucked up
         if (this.activeSkills.length == 0) {
@@ -67,6 +69,7 @@ function Player(id, dir, udlre) {
             // Refresh matching skill list
             this.resetSkillQueue();
         }
+        battle.skillQueueBoxes[id].update(this);
     }
 
     this.resetSkillQueue = function() {
@@ -77,13 +80,13 @@ function Player(id, dir, udlre) {
         for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
             this.skillQueue.push(this.nextSkill());
         }
+
         // Skills that the player is in the middle of activating
         this.activeSkills = range(0, SKILL_QUEUE_SIZE);
     }
 
     /** Get the next skill object that is placed in the skill list */
     this.nextSkill = function() {
-        
         var skill = SkillList.getRandom();
         var sequence = skill.generateSequence(this);
         return {
