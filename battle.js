@@ -315,7 +315,7 @@ function GameResultsOverlay() {
 	this.show = function(winnerId) {
 		overlay.show();
 		overlay.moveToTop();
-		update(winnerId);
+		this.update(winnerId);
 	}
 
 	this.update = function(winnerId) {
