@@ -12,7 +12,10 @@ function Battle() {
 		this.healthBars = [];
 
 		this.initBattleUIForPlayer(players[0], -HUD_CENTER_DISTANCE);
-		this.initBattleUIForPlayer(players[1], HUD_CENTER_DISTANCE);	
+		this.initBattleUIForPlayer(players[1], HUD_CENTER_DISTANCE);
+
+		this.overlay = new GameResultsOverlay();
+		this.overlay.init();
 	}
 
 	this.initBattleUIForPlayer = function(player, centerX) {
@@ -23,7 +26,7 @@ function Battle() {
 	}
 
 	this.gameOver = function(winnerId) {
-		winnerOverlay = new GameResultsOverlay(winnerId);
+		this.overlay.show(winnerId);
 	}
 }
 
@@ -173,6 +176,101 @@ function SkillQueueBox(playerId, centerX) {
 	}
 }
 
-function GameResultsOverlay(winnerId) {
+function GameResultsOverlay() {
+	this.init = function() {
+		background = new Kinetic.Rect({
+			width:stage.getWidth(),
+			height:stage.getHeight(),
+			fill:"black",
+			opacity:0.6,
+			x:0,
+			y:0,
+		});
 
+		overlay = new Kinetic.Group();
+		overlay.add(background);
+
+		dialogBackground = new Kinetic.Rect({
+			width:stage.getWidth()/2,
+			height:stage.getHeight()/2,
+			fill:"white",
+			stroke:"black",
+			x:stage.getWidth()/4,
+			y:stage.getHeight()/4,
+		});
+		overlay.add(dialogBackground);
+
+		winningPlayerText = new Kinetic.Text({
+           text: "Left Player",
+           align : "center",
+           x: stage.getWidth()/2,
+           y: dialogBackground.getY() + 40,
+           width: 200,
+           height: 15,
+           textFill:"black",
+           fontFamily:GAME_FONT,
+        });
+        centerOffset(winningPlayerText);
+		overlay.add(winningPlayerText);
+        victoryText = new Kinetic.Text({
+        	text: "VICTORY",
+        	align :  "center",
+        	x: stage.getWidth()/2,
+           	y: dialogBackground.getY() + 90,
+           	width: 200,
+           	height: 40,
+           	textFill:"green",
+           	fontSize:20,
+           	fontFamily:GAME_FONT,
+        });
+        centerOffset(victoryText);
+        overlay.add(victoryText);
+
+        moneyReceivedText = new Kinetic.Text({
+           text: "Winner Receives\n50 coins",
+           align : "center",
+           x: stage.getWidth()/2,
+           y: dialogBackground.getY() + 160,
+           lineHeight:2,
+           width: 400,
+           height: 100,
+           textFill:"black",
+           fontFamily:GAME_FONT,
+        });
+
+		centerOffset(moneyReceivedText);
+        overlay.add(moneyReceivedText);
+
+         loserMoneyReceivedText = new Kinetic.Text({
+           text: "Loser Receives\n10 coins",
+           align : "center",
+           x: stage.getWidth()/2,
+           y: dialogBackground.getY() + 220,
+           lineHeight:2,
+           width: 400,
+           height: 100,
+           textFill:"black",
+           fontFamily:GAME_FONT,
+        });
+
+		centerOffset(loserMoneyReceivedText);
+        overlay.add(loserMoneyReceivedText);
+
+		overlay.setOffset([background.getWidth() / 2, 0]);
+		hudLayer.add(overlay);
+	}
+
+	this.hide = function() {
+		overlay.hide();
+	}
+
+	this.show = function(winnerId) {
+		overlay.show();
+		overlay.moveToTop();
+		update();
+	}
+
+	this.update = function() {
+		hudLayer.draw();
+	}
 }

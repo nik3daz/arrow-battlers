@@ -31,7 +31,7 @@ function Player(id, dir, udlre) {
         // check if the player is still alive
         if (this.hp <= 0) {
             // PWNED
-            battle.gameOver(opponentId);
+            battle.gameOver(this.opponentId);
         }
 
         battle.healthBars[id].update();
