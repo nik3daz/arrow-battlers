@@ -152,11 +152,6 @@ function start_game() {
     hudLayer.draw();
     menuLayer.draw();
     
-    // do game shit
-
-
-    menuLayer.moveToBottom();
-
     // Attach event listeners
     window.addEventListener('keydown', doKeyDown, false);
     window.addEventListener('keyup',doKeyUp, false);
@@ -264,7 +259,7 @@ function load_assets() {
             start_game();
             fadeOut();
             keyFocus = menu;
-        })
+        });
     });
     loader.start();
 }

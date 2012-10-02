@@ -16,11 +16,10 @@ function Menu() {
         this.skinArrows = [];
         this.currentSkinSelection = [];
         this.readyButtons = [];
-
         this.initMenuForPlayer(0, -MENU_CENTER_DISTANCE);
         this.initMenuForPlayer(1, MENU_CENTER_DISTANCE);
 
-       var headText = new Kinetic.Text({
+        var headText = new Kinetic.Text({
            text: "HEAD",
            align : "center",
            x: 0,
@@ -29,11 +28,11 @@ function Menu() {
            height: 15,
            textFill:"black",
            fontFamily:GAME_FONT,
-       });
-       centerOffset(headText)
-       menuLayer.add(headText);
+        });
+        centerOffset(headText)
+        menuLayer.add(headText);
 
-       var bodyText = new Kinetic.Text({
+        var bodyText = new Kinetic.Text({
            text: "BODY",
            align : "center",
            x: 0,
@@ -42,9 +41,9 @@ function Menu() {
            height: 15,
            textFill:"black",
            fontFamily:GAME_FONT,
-       });
-       centerOffset(bodyText)
-       menuLayer.add(bodyText);
+        });
+        centerOffset(bodyText)
+        menuLayer.add(bodyText);
 
         var shoesText = new Kinetic.Text({
            text: "FEET",
@@ -55,9 +54,18 @@ function Menu() {
            height: 15,
            textFill:"black",
            fontFamily:GAME_FONT,
-       });
-       centerOffset(shoesText)
-       menuLayer.add(shoesText);
+        });
+        centerOffset(shoesText)
+        menuLayer.add(shoesText);
+        
+        this.reset();
+    }
+
+    this.reset = function() {
+        this.currentPlayersReady = 0;
+        this.selectors[0].reset();
+        this.selectors[1].reset();
+        menuLayer.draw();
     }
 
     this.initMenuForPlayer = function(playerId, centerX) {
@@ -185,35 +193,6 @@ function Menu() {
 
         menuLayer.add(this.selectors[playerId].shape);
 
-        var flash = function(selector) {
-            setTimeout(function() {
-                // first flash
-                // TODO change from flashing stroke to flashing sprite
-                if (!selector.isCharSelected) {
-                    selector.shape.setStroke("#FF7777");
-                    if (selector.isCharSelected) {
-                        selector.secondShape.setStroke("#FF7777");
-                    }
-                    menuLayer.draw();
-                }
-                
-                // TODO change from flashing stroke to flashing sprite
-                setTimeout(function() {
-                    if (!selector.isCharSelected) {
-                        selector.shape.setStroke("#E83333");
-                        if (selector.isCharSelected) {
-                            selector.secondShape.setStroke("#E83333");
-                        }
-                        menuLayer.draw();
-                        flash(selector);
-                    }
-                }, 500);
-
-            }, 500);
-        };
-
-        flash(this.selectors[playerId]);
-        
     }
 
     this.show = function() {
@@ -339,12 +318,9 @@ function Selector(playerId) {
         if (!this.isCharSelected) {
             this.isCharSelected = true;
             players[playerId].selectedChar = menu.currentSelection[playerId];
-            // change arrow to red
             this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left_sel);
         } else if (!this.isSkinSelected){
             this.isSkinSelected = true;
-            // TODO: do player ready
-            // change arrow to blue
             this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left);
 
             // fill the ready_button
@@ -352,9 +328,13 @@ function Selector(playerId) {
                     image: images.ready_button_red,
                     offset: [0, 0],
             });
-
-            
-
+            menu.currentPlayersReady++;
+            if (menu.currentPlayersReady == 2){
+                fadeIn(function() {
+                    menuLayer.moveToBottom();
+                    fadeOut();
+                });
+            }
         } 
     }
     
@@ -370,6 +350,39 @@ function Selector(playerId) {
     this.reset = function() {
         this.isCharSelected = false;
         this.isSkinSelected = false;
+        menu.readyButtons[playerId].setFill({
+            image: images.ready_button,
+            offset: [0, 0],
+        });
+        var flash = function(selector) {
+            setTimeout(function() {
+                // first flash
+                // TODO change from flashing stroke to flashing sprite
+                if (!selector.isCharSelected) {
+                    selector.shape.setStroke("#FF7777");
+                    if (selector.isCharSelected) {
+                        selector.secondShape.setStroke("#FF7777");
+                    }
+                    menuLayer.draw();
+                }
+                
+                // TODO change from flashing stroke to flashing sprite
+                setTimeout(function() {
+                    if (!selector.isCharSelected) {
+                        selector.shape.setStroke("#E83333");
+                        if (selector.isCharSelected) {
+                            selector.secondShape.setStroke("#E83333");
+                        }
+                        menuLayer.draw();
+                        flash(selector);
+                    }
+                }, 500);
+
+            }, 500);
+        };
+
+        flash(this);
+        
     }
     
     this.shape = new Kinetic.Rect({
@@ -379,7 +392,7 @@ function Selector(playerId) {
             });
     centerOffset(this.shape);
         
-
+    
     this.reset();
     this.update();
 }
