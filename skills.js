@@ -12,7 +12,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(10);
+            players[caster.opponentId].dot(50, 5000,5);
         },
     });
 
@@ -28,7 +28,7 @@ function getSkillList() {
         /** Does something when it's activated to a player */
         activate: function(caster) {
             // damage other player
-            players[caster.opponentId].damage(10);
+            players[caster.opponentId].dot(50, 5000,5);
         },
     });
 
@@ -43,7 +43,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(10);
+            players[caster.opponentId].dot(50, 5000,5);
         },
     });
 
@@ -58,7 +58,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(10);
+            players[caster.opponentId].dot(50, 5000,5);
         },
     });
 
@@ -73,7 +73,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(10);
+            players[caster.opponentId].dot(50, 5000,5);
         },
     });
 
@@ -88,7 +88,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(10);
+            players[caster.opponentId].dot(50, 5000,5);
         },
     });
     
@@ -109,13 +109,24 @@ function getSkillList() {
 
 
 function Skill(config) {
+    suffix = [0,1,2,3];
+
     this.generateSequence = function(player, seqLength, difficulty) {
         if (!seqLength) seqLength = config.sequenceLength;
         if (!difficulty) difficulty = config.sequenceDifficulty;
         
         var seq = [];
         for (var i = 0; i < seqLength; i++) {
-            seq[i] = Math.floor(Math.random() * 4);
+            if (i == seqLength - 1) {
+                seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1);
+                if (suffix.length == 0) {
+                    suffix = [0,1,2,3];
+                }
+            } else {
+                seq[i] = Math.floor(Math.random() * 4);
+            }
+
+
         }
 
         // generates a sequence
