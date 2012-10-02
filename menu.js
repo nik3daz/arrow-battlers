@@ -198,10 +198,11 @@ function Menu() {
     this.show = function() {
         keyFocus = null;
         fadeIn(function() {
+            menu.reset();
             menuLayer.moveToTop();
             fadeLayer.moveToTop();
             fadeOut(function() {
-                keyFocus = this;
+                keyFocus = menu;
             });
         });
     }
@@ -332,6 +333,7 @@ function Selector(playerId) {
             if (menu.currentPlayersReady == 2){
                 fadeIn(function() {
                     menuLayer.moveToBottom();
+                    game.reset();
                     fadeOut(function() {
                         keyFocus = game;
                     });

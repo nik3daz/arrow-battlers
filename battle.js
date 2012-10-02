@@ -34,7 +34,7 @@ function HealthBar(playerId, centerX) {
 	this.init = function() {
 		var queueGroup = new Kinetic.Group();
 
-		var barHeight = 42;
+		var barHeight = 21;
 		barWidth = stage.getWidth()/2 - 100;
 		
 		this.health = new Kinetic.Rect({
@@ -62,19 +62,33 @@ function HealthBar(playerId, centerX) {
 		queueGroup.setPosition(centerX - players[playerId].dir * (background.getWidth() / 2 + 10), 20);
 		queueGroup.setScale([players[playerId].dir, 1])
 		hudLayer.add(queueGroup);
+        var health = this.health
+        var anim = new Kinetic.Animation({
+            func: function(f) {
+                var hp = players[playerId].hp;
+                var w = (barWidth * hp / 100);
+                var d = w - health.getWidth();
+                if (Math.abs(d) > 1) {
+                    d = d / Math.abs(d) * f.timeDiff / 5;
+                    health.setWidth(health.getWidth() + d);
+                } else {
+                    health.setWidth(w);
+                }
+            },
+            node: hudLayer,
+        });
+        anim.start();
 
-		this.update();
 	}
 
-	this.update = function() {
-		// get players hp
-		var hp = players[playerId].hp;
-		this.health.setWidth((barWidth * hp / 100));
-		hudLayer.draw();
-	}
+    this.drawHealth = function() {
+        this.health.setWidth(players[playerId].hp * barWidth / 100);
+    }
+
 }
 
 function SkillQueueBox(playerId, centerX) {
+    var player = players[playerId];
 	this.init = function() {
 		var queueGroup = new Kinetic.Group();
 
@@ -186,10 +200,10 @@ function SkillQueueBox(playerId, centerX) {
             setWidth: function(x) { bar.setWidth(x); },
             width: barBackground.getWidth(),
         };
-		this.update(players[playerId]);
+		this.update();
 	}
 
-	this.update = function(player) {
+	this.update = function() {
 		// update icons
 		for (var i = 0; i < this.icons.length; i++) {
 			var skill = player.skillQueue[i];
@@ -208,6 +222,8 @@ function SkillQueueBox(playerId, centerX) {
 					} else if (j == player.skillStep && isActive) {
 						setArrowImage(this.arrows[i][j], skill.sequence[j], "green");
 						this.arrows[i][j].setOpacity(1);
+				    } else if (isActive) {
+				        this.arrows[i][j].setOpacity(1);
 					} else 	{
 						setArrowImage(this.arrows[i][j], skill.sequence[j]);
 						this.arrows[i][j].setOpacity(0.2);
@@ -228,6 +244,7 @@ function SkillQueueBox(playerId, centerX) {
 }
 
 function GameResultsOverlay() {
+    var curObject = this;
 	this.init = function() {
 		background = new Kinetic.Rect({
 			width:stage.getWidth(),
@@ -238,7 +255,7 @@ function GameResultsOverlay() {
 			y:0,
 		});
 
-		overlay = new Kinetic.Group();
+	    var overlay = new Kinetic.Group();
 		overlay.add(background);
 
 		dialogBackground = new Kinetic.Rect({
@@ -310,16 +327,18 @@ function GameResultsOverlay() {
 
 		overlay.setOffset([background.getWidth() / 2, 0]);
 		hudLayer.add(overlay);
+		overlay.moveToTop();
 		overlay.hide();
+        this.shape = overlay;
 	}
 
 	this.hide = function() {
-		overlay.hide();
+		this.shape.hide();
 	}
 
 	this.show = function(winnerId) {
-		overlay.show();
-		overlay.moveToTop();
+		this.shape.show();
+        keyFocus = curObject;
 		this.update(winnerId);
 	}
 
@@ -329,7 +348,13 @@ function GameResultsOverlay() {
 		} else {
 			this.winningPlayerText.setText("Right Player");
 		}
+        players[winnerId].setMoney(players[winnerId].money + 50);
+        players[1-winnerId].setMoney(players[1-winnerId].money + 10);
 
 		hudLayer.draw();
 	}
+
+    this.onKeyDown = function() {
+        menu.show();
+    }
 }

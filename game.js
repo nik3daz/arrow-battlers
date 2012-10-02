@@ -6,6 +6,15 @@ function Game() {
     this.onKeyDown = function(player, key) {
         players[player.id].onKeyDown(key);
     };
+    this.reset = function() {
+        players[0].reset();
+        players[1].reset();
+        battle.healthBars[0].drawHealth();
+        battle.healthBars[1].drawHealth();
+        battle.skillQueueBoxes[0].update();
+        battle.skillQueueBoxes[1].update();
+        battle.overlay.hide();
+    };
 }
 
 /** Players are on a layer where 0 is the center of screen 
@@ -23,19 +32,18 @@ function Player(id, dir, udlre) {
 
         this.resetSkillQueue();
         this.keyLock = false;
+        
     };
 
     this.damage = function(damage) {
         // damage the player
-        this.hp -= damage;
+        this.hp -= 100;
 
         // check if the player is still alive
         if (this.hp <= 0) {
             // PWNED
             battle.gameOver(this.opponentId);
         }
-
-        battle.healthBars[id].update();
     }
 
     this.heal = function(healed) {
@@ -43,8 +51,6 @@ function Player(id, dir, udlre) {
         if (this.hp > 100) {
             this.hp = 100;
         }
-
-         battle.healthBars[id].update();
     }
 
 
@@ -95,7 +101,7 @@ function Player(id, dir, udlre) {
             // Refresh matching skill list
             this.resetSkillQueueAnimate(this.failSkillAnimate);
         }
-        battle.skillQueueBoxes[id].update(this);
+        battle.skillQueueBoxes[id].update();
     }
 
     this.failSkillAnimate = function() {
@@ -138,7 +144,7 @@ function Player(id, dir, udlre) {
                     if (count == 0) {
                         anim.stop();
                         curPlayer.resetSkillQueue();
-                        battle.skillQueueBoxes[id].update(curPlayer);
+                        battle.skillQueueBoxes[id].update();
                         curPlayer.keyLock = false;
                         qgShape.setX(ox);
                         qgShape.setY(oy);
