@@ -15,6 +15,7 @@ function getSkillList() {
             players[caster.opponentId].damage(10);
         },
         iconFill: "red",
+        extraHitDelay: 0,
     });
 
     globalSkills["Block"] = new Skill({
@@ -32,6 +33,7 @@ function getSkillList() {
 //            players[caster.opponentId].dot(50, 5000,5);
         },
         iconFill: "black",
+        extraHitDelay: 0,
     });
 
     globalSkills["Heal"] = new Skill({
@@ -48,6 +50,7 @@ function getSkillList() {
             players[caster.id].heal(10);
         },
         iconFill: "white",
+        extraHitDelay: 0,
     });
 
     globalSkills["DoT"] = new Skill({
@@ -64,6 +67,7 @@ function getSkillList() {
             players[caster.opponentId].dot(20, 5000,5);
         },
         iconFill: "green",
+        extraHitDelay: 0,
     });
 
     globalSkills["HoT"] = new Skill({
@@ -80,6 +84,7 @@ function getSkillList() {
             players[caster.id].hot(20, 5000,5);
         },
         iconFill: "magenta",
+        extraHitDelay: 0,
     });
 
     globalSkills["MagicAttack"] = new Skill({
@@ -96,6 +101,7 @@ function getSkillList() {
             players[caster.opponentId].dot(5, 5000,5);
         },
         iconFill: "blue",
+        extraHitDelay: 0,
     });
     
     this.globalSkills = globalSkills;
@@ -134,6 +140,8 @@ function Skill(config) {
         return seq;
     }
 
+    this.hitDelay = 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length +
+            config.extraHitDelay;
     this.iconFill = config.iconFill;
     this.activate = config.activate;
     this.animate = config.animate;

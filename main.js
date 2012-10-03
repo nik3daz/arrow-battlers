@@ -256,6 +256,9 @@ function load_assets() {
     images["arrow_red"] = loader.addImage("arrow-red.png");
     images["arrow_yellow"] = loader.addImage("arrow-yellow.png");
     images["health_bar"] = loader.addImage("health-bar.png");
+    images["robot_head"] = loader.addImage("sprites/head-sheet2.png");
+    images["robot_body"] = loader.addImage("sprites/body-sheet2.png");
+    images["robot_feet"] = loader.addImage("sprites/feet-sheet2.png");
 
     loader.addProgressListener(function(e) {
         loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);

@@ -35,11 +35,13 @@ function Player(id, dir, udlre) {
 
         this.resetSkillQueue();
         this.keyLock = false;
+        this.blocking = false;
         
     };
 
     this.damage = function(damage) {
         if (this.blocking) return;
+        this.setPlayerAnimation("hurt");
         // damage the player
         this.changeHealth(-damage);
     }
@@ -58,11 +60,14 @@ function Player(id, dir, udlre) {
         if (!this.dotCurrent && !this.blocking) {
             this.dotCurrent = true;
             this.ot({
-                func: function(v) { curPlayer.changeHealth(-v); },
+                func: function(v) { 
+                    curPlayer.setPlayerAnimation("hurt");
+                    curPlayer.changeHealth(-v);
+                },
                 amount: totalDamageAmount,
                 time: time,
                 numTicks: numTicks,
-                cb: function() { this.dotCurrent = false; },
+                cb: function() { curPlayer.dotCurrent = false; },
             });
         }
     }
@@ -75,7 +80,7 @@ function Player(id, dir, udlre) {
                 amount: totalHealAmount,
                 time: time,
                 numTicks: numTicks,
-                cb: function() { this.hotCurrent = false; },
+                cb: function() { curPlayer.hotCurrent = false; },
             });
         }
     }
@@ -152,7 +157,10 @@ function Player(id, dir, udlre) {
                 if (currentSkill.get(this.skillStep) != key) {
                     this.activeSkills.splice(i--, 1);
                 } else if (currentSkill.length == this.skillStep + 1) {
-                    currentSkill.skill.activate(this);
+                    setTimeout(function() {
+                        currentSkill.skill.activate(curPlayer);
+                    }, currentSkill.skill.hitDelay);
+                    console.log(currentSkill.skill.hitDelay);
                     activated = true;
                     break;
                 } 
@@ -160,6 +168,8 @@ function Player(id, dir, udlre) {
             
             if (activated) {
                 this.resetSkillQueueAnimate();
+                this.setPlayerAnimation("attack");
+                currentSkill.skill.animate();
             } else {
                 this.skillStep++;
             }
@@ -268,20 +278,63 @@ function Player(id, dir, udlre) {
         menu.money[this.id].setText("$" + value);
     }
 
+    this.setPlayerSprite = function(prefix) {
+        this.head.setImage(images[prefix + "_head"]);
+        this.body.setImage(images[prefix + "_body"]);
+        this.feet.setImage(images[prefix + "_feet"]);
+    }
+
+    var setSpriteAnimation = function(sprite, animName) {
+        sprite.setAnimation(animName);
+        sprite.afterFrame(PlayerSpriteAnimations[animName].length - 1,
+            function () {
+                sprite.setAnimation("idle");
+            });
+    };
+
+    this.setPlayerAnimation = function(animName) {
+        setSpriteAnimation(this.head, animName);
+        setSpriteAnimation(this.body, animName);
+        setSpriteAnimation(this.feet, animName);
+    }
+
     //================== PLAYER SETUP ======================
     this.id = id;
     this.dir = dir;
     this.selectedChar = 0;
     this.money = 0;
 
-    this.shape = new Kinetic.Rect({
-            x: 100 * dir,
-            y: 50,
-            fill: "black",
-            width: 50,
-            height: 100,
+    var shape = new Kinetic.Group({
+        x: (stage.getWidth() / 2 - 40) * -dir,
+        y: stage.getHeight() / 2 - 160,
+        scale: [dir, 1],
     });
-    centerOffset(this.shape);
+    this.head = new Kinetic.Sprite({
+        image: images["robot_head"],
+        animations: PlayerSpriteAnimations,
+        animation: "idle",
+        frameRate: PLAYER_SPRITE_FPS,
+    });
+    this.body = new Kinetic.Sprite({
+        image: images["robot_body"],
+        animations: PlayerSpriteAnimations,
+        animation: "idle",
+        frameRate: PLAYER_SPRITE_FPS,
+    });
+    this.feet = new Kinetic.Sprite({
+        image: images["robot_feet"],
+        animations: PlayerSpriteAnimations,
+        animation: "idle",
+        frameRate: PLAYER_SPRITE_FPS,
+    });
+    shape.add(this.head);
+    shape.add(this.body);
+    shape.add(this.feet);
+    playerLayer.add(shape);
+    this.head.start();
+    this.body.start();
+    this.feet.start();
+    this.shape = shape;
 
     //================== PLAYER BATTLE SETUP ======================
     this.initForBattle = function() {

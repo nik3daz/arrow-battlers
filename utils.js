@@ -7,24 +7,6 @@ function contains(a, obj) {
     return a.indexOf(obj) > -1;
 }
 
-/** 
- * Makes an animation object for Kinetic.Sprite.
- * Makes frames from start positon to end position.
- * Sprite sheet should be horizontal
- */
-function makeSpriteAnimation(width, height, start, end) {
-    var anims = [];
-    for (var x = start; x < end; x += width) {
-        anims.push({
-            x: x,
-            y: 0,
-            height: height,
-            width: width,
-        });
-    }
-    return anims;
-}
-
 /**
  * Fades the fadeLayer in and calls cb when done
  * cb is optional.
