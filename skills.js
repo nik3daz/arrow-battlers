@@ -31,7 +31,7 @@ function getSkillList() {
             // damage other player
 //            players[caster.opponentId].dot(50, 5000,5);
         },
-        iconFill: "blue",
+        iconFill: "black",
     });
 
     globalSkills["Heal"] = new Skill({
@@ -45,7 +45,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].heal(10);
+            players[caster.id].heal(10);
         },
         iconFill: "white",
     });
@@ -77,7 +77,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].hot(20, 5000,5);
+            players[caster.id].hot(20, 5000,5);
         },
         iconFill: "magenta",
     });
@@ -95,7 +95,7 @@ function getSkillList() {
         activate: function(caster) {
             players[caster.opponentId].dot(5, 5000,5);
         },
-        iconFill: "white",
+        iconFill: "blue",
     });
     
     this.globalSkills = globalSkills;

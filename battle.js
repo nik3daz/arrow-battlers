@@ -222,9 +222,10 @@ function SkillQueueBox(playerId, centerX) {
 						setArrowImage(this.arrows[i][j], skill.sequence[j]);
 						this.arrows[i][j].setOpacity(1);
 					} else if (j == player.skillStep && isActive) {
-						setArrowImage(this.arrows[i][j], skill.sequence[j], "green");
+						setArrowImage(this.arrows[i][j], skill.sequence[j]);
 						this.arrows[i][j].setOpacity(1);
-				    } else if (isActive) {
+				    } else if (isActive && j < player.skillStep) {
+				    	setArrowImage(this.arrows[i][j], skill.sequence[j], "green");
 				        this.arrows[i][j].setOpacity(1);
 					} else 	{
 						setArrowImage(this.arrows[i][j], skill.sequence[j]);
