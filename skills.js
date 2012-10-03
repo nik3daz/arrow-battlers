@@ -115,7 +115,8 @@ function getSkillList() {
 
 
 function Skill(config) {
-    var suffix = range(0, 3);
+    var suffix = [range(0,4), range(0,4), range(0,4), range(0,4), range(0,4), range(0,4)];
+
 
     this.generateSequence = function(player, seqLength, difficulty) {
         if (!seqLength) seqLength = config.sequenceLength;
@@ -123,16 +124,10 @@ function Skill(config) {
         
         var seq = [];
         for (var i = 0; i < seqLength; i++) {
-            if (i == seqLength - 1) {
-                seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1);
-                if (suffix.length == 0) {
-                    suffix = range(0, 3);
+            seq[i] = suffix[i].splice(Math.floor(Math.random()*suffix[i].length), 1);
+                if (suffix[i].length == 0) {
+                    suffix[i] = range(0, 4);
                 }
-            } else {
-                seq[i] = Math.floor(Math.random() * 4);
-            }
-
-
         }
 
         // generates a sequence
