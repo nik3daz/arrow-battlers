@@ -98,7 +98,7 @@ function SkillQueueBox(playerId, centerX) {
 			height:stage.getHeight()/2,
 			width:stage.getWidth()/2 - 50,
 			fill:"black",
-			opacity:0.6,
+			opacity:0.8,
 			x:0,
 			y:22,
 		}));
@@ -128,7 +128,6 @@ function SkillQueueBox(playerId, centerX) {
 			this.icons[i] = new Kinetic.Rect({
 				width:skillIconSize,
 				height:skillIconSize,
-				stroke:"black",
 				fill:"black",
 				x: marginLeft + skillIconSize / 2,
 				y: paddingTopBot + i * (skillIconSize + skillIconGap),
@@ -207,8 +206,8 @@ function SkillQueueBox(playerId, centerX) {
 	this.update = function() {
 		// update icons
 		for (var i = 0; i < this.icons.length; i++) {
-			var skill = player.skillQueue[i];
-			this.icons[i].setFill(skill.skill.iconFill);
+			var skillSequence = player.skillQueue[i];
+			this.icons[i].setFill(skillSequence.skill.iconFill);
 
 			var isActive = false;
 			if (contains(player.activeSkills, i)) {
@@ -216,19 +215,19 @@ function SkillQueueBox(playerId, centerX) {
 			}
 
 			for (var j = 0; j < this.arrows[i].length; j++) {
-				if (j < skill.length) {
+				if (j < skillSequence.length) {
 					if (isActive && j > player.skillStep) {
 						//draw arrow of skill sequence
-						setArrowImage(this.arrows[i][j], skill.sequence[j], skill.skill.iconFill);
+						setArrowImage(this.arrows[i][j], skillSequence.sequence[j], skillSequence.skill.arrowColor);
 						this.arrows[i][j].setOpacity(1);
 					} else if (j == player.skillStep && isActive) {
-						setArrowImage(this.arrows[i][j], skill.sequence[j], skill.skill.iconFill);
+						setArrowImage(this.arrows[i][j], skillSequence.sequence[j], skillSequence.skill.arrowColor);
 						this.arrows[i][j].setOpacity(1);
 				    } else if (isActive && j < player.skillStep) {
-				    	setArrowImage(this.arrows[i][j], skill.sequence[j], "complete");
+				    	setArrowImage(this.arrows[i][j], skillSequence.sequence[j], "complete");
 				        this.arrows[i][j].setOpacity(1);
 					} else 	{
-						setArrowImage(this.arrows[i][j], skill.sequence[j], skill.skill.iconFill);
+						setArrowImage(this.arrows[i][j], skillSequence.sequence[j], skillSequence.skill.arrowColor);
 						this.arrows[i][j].setOpacity(0.2);
 					}
 					

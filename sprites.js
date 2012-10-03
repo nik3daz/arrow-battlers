@@ -21,12 +21,9 @@ function makeSpriteAnimation(y, width, height, frames) {
 
 //============== SPRITE DEFINITIONS ================
 
-PlayerSprites = {
-	robot: {
-		imageName: "",
-	}
-};
-
+PlayerSprites = [
+    "tron",
+];
 var idleAnimation = makeSpriteAnimation(0, SPRITE_WIDTH, SPRITE_HEIGHT, 4);
 idleAnimation = idleAnimation.concat(idleAnimation.slice().reverse());
 

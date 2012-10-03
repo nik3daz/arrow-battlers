@@ -14,8 +14,10 @@ function getSkillList() {
         activate: function(caster) {
             players[caster.opponentId].damage(10);
         },
-        iconFill: "red",
+        arrowColor: "red",
+        iconFill: {image: images["attack"]},
         extraHitDelay: 0,
+        cooldown: 500,
     });
 
     globalSkills["Block"] = new Skill({
@@ -33,7 +35,9 @@ function getSkillList() {
 //            players[caster.opponentId].dot(50, 5000,5);
         },
         extraHitDelay: 0,
-        iconFill: "yellow",
+        arrowColor: "yellow",
+        iconFill: {image: images["defend"]},
+        cooldown: 1000,
     });
 
     globalSkills["Heal"] = new Skill({
@@ -49,8 +53,10 @@ function getSkillList() {
         activate: function(caster) {
             players[caster.id].heal(10);
         },
-        iconFill: "white",
+        arrowColor: "white",
+        iconFill: {image: images["heal"]},
         extraHitDelay: 0,
+        cooldown: 500,
     });
 
     globalSkills["DoT"] = new Skill({
@@ -64,10 +70,12 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(20, 5000,5);
+            players[caster.opponentId].dot(20, 10000, 10);
         },
-        iconFill: "green",
+        arrowColor: "green",
+        iconFill: {image: images["dot"]},
         extraHitDelay: 0,
+        cooldown: 1500,
     });
 
     globalSkills["HoT"] = new Skill({
@@ -81,10 +89,12 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.id].hot(20, 5000,5);
+            players[caster.id].hot(20, 5000, 5);
         },
-        iconFill: "magenta",
+        arrowColor: "magenta",
+        iconFill: "white", //{image: images["hot"]},
         extraHitDelay: 0,
+        cooldown: 1000,
     });
 
     globalSkills["QuickAttack"] = new Skill({
@@ -100,8 +110,10 @@ function getSkillList() {
         activate: function(caster) {
             players[caster.opponentId].dot(5, 5000,5);
         },
-        iconFill: "blue",
+        arrowColor: "blue",
+        iconFill: "blue", //{image: images["attack"]},
         extraHitDelay: 0,
+        cooldown: 300,
     });
     
     this.globalSkills = globalSkills;
@@ -143,7 +155,9 @@ function Skill(config) {
 
     this.hitDelay = 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length +
             config.extraHitDelay;
+    this.arrowColor = config.arrowColor;
     this.iconFill = config.iconFill;
     this.activate = config.activate;
     this.animate = config.animate;
+    this.cooldown = config.cooldown;
 }

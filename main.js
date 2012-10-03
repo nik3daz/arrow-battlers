@@ -258,9 +258,18 @@ function load_assets() {
     images["arrow_red"] = loader.addImage("arrow-red.png");
     images["arrow_yellow"] = loader.addImage("arrow-yellow.png");
     images["health_bar"] = loader.addImage("health-bar.png");
-    images["robot_head"] = loader.addImage("sprites/head-sheet2.png");
-    images["robot_body"] = loader.addImage("sprites/body-sheet2.png");
-    images["robot_feet"] = loader.addImage("sprites/feet-sheet2.png");
+    images["attack"] = loader.addImage("abilities/attack.png");
+    images["dot"] = loader.addImage("abilities/dot.png");
+    images["magic"] = loader.addImage("abilities/magic.png");
+    images["defend"] = loader.addImage("abilities/defend.png");
+    images["heal"] = loader.addImage("abilities/heal.png");
+
+    for (var i = 0; i < PlayerSprites.length; i++) {
+        var x = PlayerSprites[i];
+        images[x + "_head"] = loader.addImage("sprites/" + x + "-head-sheet.png");
+        images[x + "_body"] = loader.addImage("sprites/" + x + "-body-sheet.png");
+        images[x + "_feet"] = loader.addImage("sprites/" + x + "-feet-sheet.png");
+    }
 
     loader.addProgressListener(function(e) {
         loadBar.setWidth(e.completedCount / e.totalCount * BAR_WIDTH);

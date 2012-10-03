@@ -19,8 +19,8 @@ function Game() {
 
 /** Players are on a layer where 0 is the center of screen 
 
-    player.skillQueue - the skills available on screen for the player to activate
-    player.activeSkills - the skills the player is trying to activate
+    player.skillQueue - the skillSequences available on screen for the player to activate
+    player.activeSkills - the skillSequences the player is trying to activate
 */
 function Player(id, dir, udlre) {
     var curPlayer = this;
@@ -122,7 +122,7 @@ function Player(id, dir, udlre) {
         }, 500);
         this.resetSkillQueueAnimate(function() {
             curPlayer.blockDisabled = false;
-            curPlayer.failSkillAnimate(500);
+            curPlayer.cooldownAnimate(500);
         });
     }
 
@@ -153,23 +153,24 @@ function Player(id, dir, udlre) {
             var activated = false;
             // Remove skills that don't match
             for (var i = 0; i < this.activeSkills.length; i++) {
-                var currentSkill = this.skillQueue[this.activeSkills[i]];
-                if (currentSkill.get(this.skillStep) != key) {
+                var skillSequence = this.skillQueue[this.activeSkills[i]];
+                if (skillSequence.get(this.skillStep) != key) {
                     this.activeSkills.splice(i--, 1);
-                } else if (currentSkill.length == this.skillStep + 1) {
+                } else if (skillSequence.length == this.skillStep + 1) {
                     setTimeout(function() {
-                        currentSkill.skill.activate(curPlayer);
-                    }, currentSkill.skill.hitDelay);
-                    console.log(currentSkill.skill.hitDelay);
+                        skillSequence.skill.activate(curPlayer);
+                    }, skillSequence.skill.hitDelay);
                     activated = true;
                     break;
                 } 
             }
             
             if (activated) {
-                this.resetSkillQueueAnimate();
+                this.resetSkillQueueAnimate(function() {
+                    curPlayer.cooldownAnimate(skillSequence.skill.cooldown);
+                });
                 this.setPlayerAnimation("attack");
-                currentSkill.skill.animate();
+                skillSequence.skill.animate();
             } else {
                 this.skillStep++;
             }
@@ -178,13 +179,13 @@ function Player(id, dir, udlre) {
             if (this.activeSkills.length == 0) {
                 // TODO Punish
                 // Refresh matching skill list
-                this.resetSkillQueueAnimate(function() { curPlayer.failSkillAnimate(1500); });
+                this.resetSkillQueueAnimate(function() { curPlayer.cooldownAnimate(1500); });
             }
         }
         battle.skillQueueBoxes[id].update();
     }
 
-    this.failSkillAnimate = function(recoveryTime) {
+    this.cooldownAnimate = function(recoveryTime) {
         battle.skillQueueBoxes[id].queueGroup.setOpacity(0.5);
         curPlayer.keyLock = true;
         var bar = battle.skillQueueBoxes[id].recoveryBar;
@@ -278,9 +279,15 @@ function Player(id, dir, udlre) {
         menu.money[this.id].setText("$" + value);
     }
 
-    this.setPlayerSprite = function(prefix) {
+    this.setHead = function(prefix) {
         this.head.setImage(images[prefix + "_head"]);
+    }
+
+    this.setBody = function(prefix) {
         this.body.setImage(images[prefix + "_body"]);
+    }
+
+    this.setFeet = function(prefix) {
         this.feet.setImage(images[prefix + "_feet"]);
     }
 
@@ -310,19 +317,19 @@ function Player(id, dir, udlre) {
         scale: [dir, 1],
     });
     this.head = new Kinetic.Sprite({
-        image: images["robot_head"],
+        image: images["tron_head"],
         animations: PlayerSpriteAnimations,
         animation: "idle",
         frameRate: PLAYER_SPRITE_FPS,
     });
     this.body = new Kinetic.Sprite({
-        image: images["robot_body"],
+        image: images["tron_body"],
         animations: PlayerSpriteAnimations,
         animation: "idle",
         frameRate: PLAYER_SPRITE_FPS,
     });
     this.feet = new Kinetic.Sprite({
-        image: images["robot_feet"],
+        image: images["tron_feet"],
         animations: PlayerSpriteAnimations,
         animation: "idle",
         frameRate: PLAYER_SPRITE_FPS,
