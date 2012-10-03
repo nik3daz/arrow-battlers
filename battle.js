@@ -68,9 +68,10 @@ function HealthBar(playerId, centerX) {
                 var hp = players[playerId].hp;
                 var w = (barWidth * hp / 100);
                 var d = w - health.getWidth();
-                if (Math.abs(d) > 1) {
-                    d = d / Math.abs(d) * f.timeDiff / 5;
-                    health.setWidth(health.getWidth() + d);
+                var step = f.timeDiff / 5;
+                if (Math.abs(d) > step && d != 0) {
+                    var delta = d / Math.abs(d) * step;
+                    health.setWidth(health.getWidth() + delta);
                 } else {
                     health.setWidth(w);
                 }
@@ -207,6 +208,7 @@ function SkillQueueBox(playerId, centerX) {
 		// update icons
 		for (var i = 0; i < this.icons.length; i++) {
 			var skill = player.skillQueue[i];
+			this.icons[i].setFill(skill.skill.iconFill);
 
 			var isActive = false;
 			if (contains(player.activeSkills, i)) {

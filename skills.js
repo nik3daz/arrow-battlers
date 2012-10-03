@@ -12,8 +12,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(50, 5000,5);
+            players[caster.opponentId].damage(10);
         },
+        iconFill: "red",
     });
 
     globalSkills["Block"] = new Skill({
@@ -28,8 +29,9 @@ function getSkillList() {
         /** Does something when it's activated to a player */
         activate: function(caster) {
             // damage other player
-            players[caster.opponentId].dot(50, 5000,5);
+//            players[caster.opponentId].dot(50, 5000,5);
         },
+        iconFill: "blue",
     });
 
     globalSkills["Heal"] = new Skill({
@@ -43,8 +45,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(50, 5000,5);
+            players[caster.opponentId].heal(10);
         },
+        iconFill: "white",
     });
 
     globalSkills["DoT"] = new Skill({
@@ -58,8 +61,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(50, 5000,5);
+            players[caster.opponentId].dot(20, 5000,5);
         },
+        iconFill: "green",
     });
 
     globalSkills["HoT"] = new Skill({
@@ -73,8 +77,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(50, 5000,5);
+            players[caster.opponentId].hot(20, 5000,5);
         },
+        iconFill: "magenta",
     });
 
     globalSkills["MagicAttack"] = new Skill({
@@ -88,8 +93,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(50, 5000,5);
+            players[caster.opponentId].dot(5, 5000,5);
         },
+        iconFill: "white",
     });
     
     this.globalSkills = globalSkills;
@@ -109,7 +115,7 @@ function getSkillList() {
 
 
 function Skill(config) {
-    suffix = [0,1,2,3];
+    var suffix = range(0, 3);
 
     this.generateSequence = function(player, seqLength, difficulty) {
         if (!seqLength) seqLength = config.sequenceLength;
@@ -120,7 +126,7 @@ function Skill(config) {
             if (i == seqLength - 1) {
                 seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1);
                 if (suffix.length == 0) {
-                    suffix = [0,1,2,3];
+                    suffix = range(0, 3);
                 }
             } else {
                 seq[i] = Math.floor(Math.random() * 4);
@@ -133,6 +139,7 @@ function Skill(config) {
         return seq;
     }
 
+    this.iconFill = config.iconFill;
     this.activate = config.activate;
     this.animate = config.animate;
 }

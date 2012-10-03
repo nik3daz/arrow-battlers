@@ -39,81 +39,86 @@ function Player(id, dir, udlre) {
     };
 
     this.damage = function(damage) {
+        if (this.blocking) return;
         // damage the player
-        this.hp -= 100;
-
-        // check if the player is still alive
-        if (this.hp <= 0) {
-            // PWNED
-            battle.gameOver(this.opponentId);
-        }
+        this.changeHealth(-damage);
     }
 
     this.heal = function(healed) {
-        this.hp = this.hp + healed;
-        if (this.hp > 100) {
-            this.hp = 100;
-        }
+        this.changeHealth(healed);
+    }
+
+    this.changeHealth = function(amount) {
+        this.hp += amount;
+        if (this.hp > 100) this.hp = 100;
+        if (this.hp <= 0) battle.gameOver(this.opponentId);
     }
 
     this.dot = function(totalDamageAmount, time, numTicks) {
-        if (!this.dotCurrent) {
+        if (!this.dotCurrent && !this.blocking) {
             this.dotCurrent = true;
-            var animTime = 0;
-            var count = numTicks;
-            var tickTime = time / numTicks;
-            var damageAmount = totalDamageAmount / numTicks;
-
-            var anim = new Kinetic.Animation({
-                func: function(f) {
-                    animTime += f.timeDiff;
-                    if (animTime > tickTime) {
-                        if (count == 0) {
-                            curPlayer.dotCurrent = false;
-                            anim.stop();
-                            return;
-                        }
-
-                        curPlayer.damage(damageAmount);
-
-                        count--;
-                        animTime -= tickTime;
-                    }
-                },
-                node: hudLayer,
+            this.ot({
+                func: function(v) { curPlayer.changeHealth(-v); },
+                amount: totalDamageAmount,
+                time: time,
+                numTicks: numTicks,
+                cb: function() { this.dotCurrent = false; },
             });
-            anim.start();
         }
     }
 
     this.hot = function(totalHealAmount, time, numTicks) {
         if (!this.hotCurrent) {
             this.hotCurrent = true;
-            var animTime = 0;
-            var count = numTicks;
-            var tickTime = time / numTicks;
-            var healAmount = totalHealAmount / numTicks;
-
-            var anim = new Kinetic.Animation({
-                func: function(f) {
-                    animTime += f.timeDiff;
-                    if (animTime > tickTime) {
-                        if (count == 0) {
-                            curPlayer.hotCurrent = false;
-                            anim.stop();
-                            return;
-                        }
-
-                        curPlayer.heal(healAmount);
-
-                        count--;
-                        animTime -= tickTime;
-                    }
-                },
-                node: hudLayer,
+            this.ot({
+                func: function(v) { curPlayer.heal(v); },
+                amount: totalHealAmount,
+                time: time,
+                numTicks: numTicks,
+                cb: function() { this.hotCurrent = false; },
             });
-            anim.start();
         }
+    }
+
+    this.ot = function(config) {
+        var animTime = 0;
+        var count = config.numTicks;
+        var tickTime = config.time / config.numTicks;
+        var step = config.amount / config.numTicks;
+
+        var anim = new Kinetic.Animation({
+            func: function(f) {
+                animTime += f.timeDiff;
+                if (animTime > tickTime) {
+                    if (count == 0) {
+                        anim.stop();
+                        if (config.cb) config.cb();
+                        return;
+                    }
+
+                    config.func(step);
+
+                    count--;
+                    animTime -= tickTime;
+                }
+            },
+            node: hudLayer,
+        });
+        anim.start();
+    }
+
+    this.block = function(time) {
+        if (this.blockDisabled) return;
+        this.blocking = true;
+        this.blockDisabled = true;;
+        setTimeout(function() {
+            curPlayer.blocking = false;
+            console.log("Block end");
+        }, 500);
+        this.resetSkillQueueAnimate(function() {
+            curPlayer.blockDisabled = false;
+            curPlayer.failSkillAnimate(500);
+        });
     }
 
     /** Returns KEY_X for the given event keycode, -1 on no match */
@@ -137,40 +142,43 @@ function Player(id, dir, udlre) {
     /** Takes player keystroke, matches against skill lists */
     this.onKeyDown = function(key) {
         if (this.keyLock) return;
-        var activated = false;
-        // Remove skills that don't match
-        for (var i = 0; i < this.activeSkills.length; i++) {
-            var currentSkill = this.skillQueue[this.activeSkills[i]];
-            if (currentSkill.get(this.skillStep) != key) {
-                this.activeSkills.splice(i--, 1);
-            } else if (currentSkill.length == this.skillStep + 1) {
-                currentSkill.skill.activate(this);
-                activated = true;
-                break;
-            } 
-        }
-        
-        if (activated) {
-            this.resetSkillQueueAnimate();
+        if (key == KEY_E) {
+            this.block();
         } else {
-            this.skillStep++;
-        }
+            var activated = false;
+            // Remove skills that don't match
+            for (var i = 0; i < this.activeSkills.length; i++) {
+                var currentSkill = this.skillQueue[this.activeSkills[i]];
+                if (currentSkill.get(this.skillStep) != key) {
+                    this.activeSkills.splice(i--, 1);
+                } else if (currentSkill.length == this.skillStep + 1) {
+                    currentSkill.skill.activate(this);
+                    activated = true;
+                    break;
+                } 
+            }
+            
+            if (activated) {
+                this.resetSkillQueueAnimate();
+            } else {
+                this.skillStep++;
+            }
 
-        // Player fucked up
-        if (this.activeSkills.length == 0) {
-            // TODO Punish
-            // Refresh matching skill list
-            this.resetSkillQueueAnimate(this.failSkillAnimate);
+            // Player fucked up
+            if (this.activeSkills.length == 0) {
+                // TODO Punish
+                // Refresh matching skill list
+                this.resetSkillQueueAnimate(function() { curPlayer.failSkillAnimate(1500); });
+            }
         }
         battle.skillQueueBoxes[id].update();
     }
 
-    this.failSkillAnimate = function() {
-        var recoveryTime = 1500;
+    this.failSkillAnimate = function(recoveryTime) {
         battle.skillQueueBoxes[id].queueGroup.setOpacity(0.5);
-        hudLayer.draw();
         curPlayer.keyLock = true;
         var bar = battle.skillQueueBoxes[id].recoveryBar;
+        bar.setWidth(0);
         bar.show();
         var anim = new Kinetic.Animation({
             func: function(f) {
