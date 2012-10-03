@@ -31,7 +31,7 @@ function getSkillList() {
             // damage other player
 //            players[caster.opponentId].dot(50, 5000,5);
         },
-        iconFill: "black",
+        iconFill: "yellow",
     });
 
     globalSkills["Heal"] = new Skill({
@@ -82,8 +82,8 @@ function getSkillList() {
         iconFill: "magenta",
     });
 
-    globalSkills["MagicAttack"] = new Skill({
-        name: "MagicAttack",
+    globalSkills["QuickAttack"] = new Skill({
+        name: "QuickAttack",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:6,
@@ -115,18 +115,19 @@ function getSkillList() {
 
 
 function Skill(config) {
-    var suffix = [range(0,4), range(0,4), range(0,4), range(0,4), range(0,4), range(0,4)];
-
+    var suffix = range(0,4);
+    
 
     this.generateSequence = function(player, seqLength, difficulty) {
+
         if (!seqLength) seqLength = config.sequenceLength;
         if (!difficulty) difficulty = config.sequenceDifficulty;
         
         var seq = [];
         for (var i = 0; i < seqLength; i++) {
-            seq[i] = suffix[i].splice(Math.floor(Math.random()*suffix[i].length), 1);
-                if (suffix[i].length == 0) {
-                    suffix[i] = range(0, 4);
+            seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1);
+                if (suffix.length == 0) {
+                    suffix = range(0, 4);
                 }
         }
 

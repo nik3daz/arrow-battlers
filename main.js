@@ -251,8 +251,10 @@ function load_assets() {
     images["ready_button"] = loader.addImage("ready_button.png");
     images["arrow"] = loader.addImage("arrow.png");
     images["arrow_blue"] = loader.addImage("arrow-blue.png");
+    images["arrow_complete"] = loader.addImage("arrow-selected.png");
+    images["arrow_white"] = loader.addImage("arrow-white.png");
     images["arrow_green"] = loader.addImage("arrow-green.png");
-    images["arrow_purple"] = loader.addImage("arrow-purple.png");
+    images["arrow_magenta"] = loader.addImage("arrow-magenta.png");
     images["arrow_red"] = loader.addImage("arrow-red.png");
     images["arrow_yellow"] = loader.addImage("arrow-yellow.png");
     images["health_bar"] = loader.addImage("health-bar.png");
