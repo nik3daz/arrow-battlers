@@ -69,7 +69,6 @@ function start_game() {
     chars = [
         {
             // CHAR 1
-            
         },
         {
             // CHAR 2
