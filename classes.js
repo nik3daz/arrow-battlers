@@ -9,7 +9,7 @@ function ClassList() {
 // pirate
 function Class(pId) {
 	this.init = function() {
-
+		
 	}
 }
 

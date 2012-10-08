@@ -282,7 +282,7 @@ function GameResultsOverlay() {
         });
         centerOffset(this.winningPlayerText);
 		overlay.add(this.winningPlayerText);
-       
+
        	this.victoryText = new Kinetic.Text({
         	text: "VICTORY",
         	align :  "center",

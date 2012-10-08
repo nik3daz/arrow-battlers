@@ -31,8 +31,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            // damage other player
-//            players[caster.opponentId].dot(50, 5000,5);
+            caster.block();
         },
         extraHitDelay: 0,
         arrowColor: "yellow",

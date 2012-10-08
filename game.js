@@ -40,7 +40,11 @@ function Player(id, dir, udlre) {
     };
 
     this.damage = function(damage) {
-        if (this.blocking) return;
+        if (this.blockHp > 0) {
+            this.blockHp -= damage;
+            // deanimate wall
+            return;
+        }
         this.setPlayerAnimation("hurt");
         // damage the player
         this.changeHealth(-damage);
@@ -57,7 +61,7 @@ function Player(id, dir, udlre) {
     }
 
     this.dot = function(totalDamageAmount, time, numTicks) {
-        if (!this.dotCurrent && !this.blocking) {
+        if (!this.dotCurrent && this.blockHp <= 0) {
             this.dotCurrent = true;
             this.ot({
                 func: function(v) { 
@@ -113,17 +117,11 @@ function Player(id, dir, udlre) {
     }
 
     this.block = function(time) {
-        if (this.blockDisabled) return;
-        this.blocking = true;
-        this.blockDisabled = true;;
+        this.blockHp = 15;
         setTimeout(function() {
-            curPlayer.blocking = false;
-            console.log("Block end");
-        }, 500);
-        this.resetSkillQueueAnimate(function() {
-            curPlayer.blockDisabled = false;
-            curPlayer.cooldownAnimate(500);
-        });
+            this.blockHp = 0;
+        }, 10000);
+        // Animate wall
     }
 
     /** Returns KEY_X for the given event keycode, -1 on no match */
