@@ -184,8 +184,6 @@ function SkillQueueBox(playerId, centerX) {
 		recoveryGroup.hide();
         recoveryGroup.setPosition(centerX, stage.getHeight() / 2 + 150);
 
-
-
 		queueGroup.setOffset([background.getWidth() / 2, 0]);
 		queueGroup.setPosition([centerX, stage.getHeight() / 2 + 20]);
 		queueGroup.add(background);

@@ -69,6 +69,10 @@ function start_game() {
     chars = [
         {
             // CHAR 1
+            name:"Pirate",
+            skillModifier: function(skillList) {
+                skillList["Block"].sequenceLength = 5;                
+            }
         },
         {
             // CHAR 2
