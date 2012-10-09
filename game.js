@@ -7,14 +7,24 @@ function Game() {
         players[player.id].onKeyDown(key);
     };
     this.reset = function() {
-        players[0].reset();
-        players[1].reset();
         battle.healthBars[0].drawHealth();
         battle.healthBars[1].drawHealth();
         battle.skillQueueBoxes[0].update();
         battle.skillQueueBoxes[1].update();
         battle.overlay.hide();
     };
+    this.show = function() {
+        fadeIn(function() {
+            menuLayer.moveToBottom();
+            players[0].initForBattle();
+            players[1].initForBattle();
+            game.reset();
+            fadeOut(function() {
+                keyFocus = game;
+            });
+
+        });
+    }
 }
 
 /** Players are on a layer where 0 is the center of screen 
@@ -35,7 +45,7 @@ function Player(id, dir, udlre) {
 
         this.resetSkillQueue();
         this.keyLock = false;
-        this.blocking = false;
+        this.blockHp = 0;
         
     };
 
@@ -63,6 +73,7 @@ function Player(id, dir, udlre) {
     this.dot = function(totalDamageAmount, time, numTicks) {
         if (!this.dotCurrent && this.blockHp <= 0) {
             this.dotCurrent = true;
+            curPlayer.updateSprite();
             this.ot({
                 func: function(v) { 
                     curPlayer.setPlayerAnimation("hurt");
@@ -71,7 +82,10 @@ function Player(id, dir, udlre) {
                 amount: totalDamageAmount,
                 time: time,
                 numTicks: numTicks,
-                cb: function() { curPlayer.dotCurrent = false; },
+                cb: function() {
+                    curPlayer.dotCurrent = false;
+                    curPlayer.updateSprite();
+                },
             });
         }
     }
@@ -277,16 +291,29 @@ function Player(id, dir, udlre) {
         menu.money[this.id].setText("$" + value);
     }
 
+    //============== SPRITE FUNCTIONS =================
+
+    this.updateSprite = function() {
+        var dotSuffix = "_dot";
+        if (!curPlayer.dotCurrent) dotSuffix = "";
+        curPlayer.head.attrs.image = images[curPlayer.headSprite + "_head" + dotSuffix];
+        curPlayer.body.attrs.image = images[curPlayer.bodySprite + "_body" + dotSuffix];
+        curPlayer.feet.attrs.image = images[curPlayer.feetSprite + "_feet" + dotSuffix];
+    }
+
     this.setHead = function(prefix) {
-        this.head.setImage(images[prefix + "_head"]);
+        curPlayer.headSprite = prefix;
+        curPlayer.updateSprite();
     }
 
     this.setBody = function(prefix) {
-        this.body.setImage(images[prefix + "_body"]);
+        curPlayer.bodySprite = prefix;
+        curPlayer.updateSprite();
     }
 
     this.setFeet = function(prefix) {
-        this.feet.setImage(images[prefix + "_feet"]);
+        curPlayer.feetSprite = prefix;
+        curPlayer.updateSprite();
     }
 
     var setSpriteAnimation = function(sprite, animName) {
@@ -303,6 +330,14 @@ function Player(id, dir, udlre) {
         setSpriteAnimation(this.feet, animName);
     }
 
+    this.toMenuPosition = function() {
+        shape.setPosition(-dir * 250, 290);
+    }
+
+    this.toGamePosition = function() {
+        shape.setPosition((stage.getWidth() / 2 - 40) * -dir, 
+            stage.getHeight() / 2 - 160);
+    }
     //================== PLAYER SETUP ======================
     this.id = id;
     this.dir = dir;
@@ -310,8 +345,6 @@ function Player(id, dir, udlre) {
     this.money = 0;
 
     var shape = new Kinetic.Group({
-        x: (stage.getWidth() / 2 - 40) * -dir,
-        y: stage.getHeight() / 2 - 160,
         scale: [dir, 1],
     });
     this.head = new Kinetic.Sprite({
@@ -335,6 +368,9 @@ function Player(id, dir, udlre) {
     shape.add(this.head);
     shape.add(this.body);
     shape.add(this.feet);
+    this.headSprite = "tron";
+    this.bodySprite = "tron";
+    this.feetSprite = "tron";
     playerLayer.add(shape);
     this.head.start();
     this.body.start();
@@ -343,6 +379,7 @@ function Player(id, dir, udlre) {
 
     //================== PLAYER BATTLE SETUP ======================
     this.initForBattle = function() {
+        this.toGamePosition();
         this.reset();     
     }
    

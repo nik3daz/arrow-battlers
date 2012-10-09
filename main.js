@@ -186,9 +186,9 @@ function makeLayers() {
 
     stage.add(debugLayer);
     stage.add(bgLayer);
-    stage.add(playerLayer);
     stage.add(hudLayer);
     stage.add(menuLayer);
+    stage.add(playerLayer);
     stage.add(fadeLayer);
 }
 
@@ -248,7 +248,6 @@ function load_assets() {
     images = [];
     images["battle_bg"] = loader.addImage("battle_bg.png");
     images["ready_button_red"] = loader.addImage("ready_button_red.png");
-    images["vader"] = loader.addImage("http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg");
     images["arrow_left"] = loader.addImage("arrow_left.png");
     images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
     images["ready_button"] = loader.addImage("ready_button.png");
@@ -281,14 +280,53 @@ function load_assets() {
         loadLayer.draw();
     });
     loader.addCompletionListener(function() {
+
+        generateDoTSprites();
+
         fadeIn(function() {
             stage.remove(loadLayer);
             start_game();
+            players[0].toMenuPosition();
+            players[1].toMenuPosition();
             fadeOut();
             keyFocus = menu;
         });
     });
     loader.start();
+}
+
+function generateDoTSprites() {
+    for (var i = 0; i < PlayerSprites.length; i++) {
+        var x = PlayerSprites[i];
+        greenify(images[x + "_head"], x + "_head_dot");
+        greenify(images[x + "_body"], x + "_body_dot");
+        greenify(images[x + "_feet"], x + "_feet_dot");
+    }
+}
+
+function greenify(image, key) {
+    // Comment to enable color change. Requires http:// access (not file:// access)
+    images[key] = image; return;
+
+
+    var gimg = new Kinetic.Image({image:image});
+    gimg.applyFilter({
+        filter: function(imageData) {
+            var data = imageData.data;
+            for(var i = 0; i < data.length; i += 4) {
+                // red
+                data[i] += 100;
+                // green
+                data[i + 1] *= 0.8;
+                // blue
+                data[i + 2] += 100;
+                // i+3 is alpha (the fourth element)
+            }
+        },
+        callback: function() {
+            images[key] = gimg.getImage();
+        },
+    });
 }
 
 /** Set up the fade layer */

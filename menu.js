@@ -158,6 +158,9 @@ function Menu() {
         fadeIn(function() {
             menu.reset();
             menuLayer.moveToTop();
+            playerLayer.moveToTop();
+            players[0].toMenuPosition();
+            players[1].toMenuPosition();
             fadeLayer.moveToTop();
             fadeOut(function() {
                 keyFocus = menu;
@@ -299,14 +302,7 @@ function Selector(playerId, centerX) {
             });
             menu.currentPlayersReady++;
             if (menu.currentPlayersReady == 2){
-                fadeIn(function() {
-                    menuLayer.moveToBottom();
-                    game.reset();
-                    fadeOut(function() {
-                        keyFocus = game;
-                    });
-
-                });
+                game.show();
             }
         } 
     }
