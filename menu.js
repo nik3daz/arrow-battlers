@@ -3,7 +3,9 @@ function Menu() {
         var background = new Kinetic.Rect({
             width: stage.getWidth(),
             height: stage.getHeight(),
-            fill: "white",
+            fill: {
+                image: images["menu_bg"],
+            },
             x: -stage.getWidth()/2,
         });
         menuLayer.add(background);
@@ -85,52 +87,6 @@ function Menu() {
         this.money[playerId] = money;
         menuLayer.add(money);
 
-        //================== CHARACTER BOXES ======================
-        this.charBoxes[playerId] = [];
-
-        var verticalOffset = 0;
-        var horizontalOffset = 0;
-
-        for (var i = 0; i < NUM_CHARACTERS; i++) {  
-            if (i % (NUM_CHARACTERS/CHAR_BOX_ROWS) == 0) {
-                verticalOffset++;
-                horizontalOffset = 0;
-            } else {
-                horizontalOffset++;
-            }
-
-            this.charBoxes[playerId][i] = centerOffset(new Kinetic.Rect({
-                width: CHAR_BOX_SIZE,
-                height: CHAR_BOX_SIZE,
-                fill: {
-                    image: images.vader,
-                    offset: [-170, -50],
-                },
-                    //"#CCC",
-                stroke:"black",
-                x: centerX + (-1 + horizontalOffset) * CHAR_BOX_SIZE,        
-                y:(CHAR_BOX_MARGIN_TOP + ((verticalOffset-1/2) * CHAR_BOX_SIZE)),
-            }));
-
-            menuLayer.add(this.charBoxes[playerId][i]);
-        }
-
-        //================== SKILL BOXES ======================
-        var skills = [];
-
-        for (var i = 0; i < NUM_SKILLS; i++) {
-            skills[i] = new Kinetic.Rect({
-                width: SKILL_BOX_SIZE,
-                height: SKILL_BOX_SIZE,
-                fill: "#444",
-                stroke:"black",
-                x:this.charBoxes[playerId][0].getX() - CHAR_BOX_SIZE/2 + i * SKILL_BOX_SIZE,
-                y:this.charBoxes[playerId][NUM_CHARACTERS-1].getY() - CHAR_BOX_SIZE/2 + this.charBoxes[playerId][NUM_CHARACTERS-1].getHeight(),
-            });
-            menuLayer.add(skills[i]);
-        }
-        this.skillBoxes[playerId] = skills;
-
         //================== SKIN ARROWS ======================
         var skinArrows = [];
 
@@ -146,6 +102,7 @@ function Menu() {
                 fill: {
                     image: images.arrow_left,
                     offset: [0, 0],
+                    repeat: 'no-repeat',
                 },
                 x: centerX - SKIN_ARROW_CENTER_DIST,
                 y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP,
@@ -157,6 +114,7 @@ function Menu() {
                 fill: {
                     image: images.arrow_left,
                     offset: [0, 0],
+                    repeat: 'no-repeat',
                 },
                 x: centerX + SKIN_ARROW_CENTER_DIST,
                 y:SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP,
@@ -189,7 +147,7 @@ function Menu() {
         //================== SELECTORS ======================
         this.currentSelection[playerId] = 0;
 
-        this.selectors[playerId] = new Selector(playerId);
+        this.selectors[playerId] = new Selector(playerId, centerX);
 
         menuLayer.add(this.selectors[playerId].shape);
 
@@ -240,14 +198,24 @@ var onCharacterHover = function(playerId, charId) {
 }
 
 /** Selector Class */
-function Selector(playerId) {
+function Selector(playerId, centerX) {
+
+    var SELECTOR_ANCHOR_X = 106;
+    var SELECTOR_ANCHOR_Y = 106;
+    var SELECTOR_ANCHOR_Y2 = 176;
+    var CHAR_BOX_HEIGHT = 50;
+    var CHAR_BOX_WIDTHS = [0, 106, 212.5];
+
     /** Update shape changes */
     this.update = function() {
         if (!this.isCharSelected) {
-            this.shape.setWidth(CHAR_BOX_SIZE);
-            this.shape.setHeight(CHAR_BOX_SIZE);
             centerOffset(this.shape);
-            this.shape.setPosition(menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
+            var offset = (menu.currentSelection[playerId] % 3);
+            if (menu.currentSelection[playerId] < 3) {
+                this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y);//menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
+            } else {
+                this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y2);//menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
+            }
         } else if (!this.isSkinSelected){
             // skins
             for (var i = 0 ; i < NUM_SKIN_ARROWS; i++) {
@@ -346,9 +314,11 @@ function Selector(playerId) {
     this.switchArrowImage = function(playerId, selection, image, level) {
         menu.skinArrows[playerId][0][selection].setFill({
             image: image,
+            repeat: 'no-repeat',
         });
         menu.skinArrows[playerId][1][selection].setFill({
             image: image,
+            repeat: 'no-repeat',
         });
     }
     
@@ -357,27 +327,20 @@ function Selector(playerId) {
         this.isSkinSelected = false;
         menu.readyButtons[playerId].setFill({
             image: images.ready_button,
-            offset: [0, 0],
         });
         var flash = function(selector) {
             setTimeout(function() {
                 // first flash
                 // TODO change from flashing stroke to flashing sprite
                 if (!selector.isCharSelected) {
-                    selector.shape.setStroke("#FF7777");
-                    if (selector.isCharSelected) {
-                        selector.secondShape.setStroke("#FF7777");
-                    }
+                    selector.shape.setOpacity(0.5);
                     menuLayer.draw();
                 }
                 
                 // TODO change from flashing stroke to flashing sprite
                 setTimeout(function() {
                     if (!selector.isCharSelected) {
-                        selector.shape.setStroke("#E83333");
-                        if (selector.isCharSelected) {
-                            selector.secondShape.setStroke("#E83333");
-                        }
+                        selector.shape.setOpacity(1);
                         menuLayer.draw();
                         flash(selector);
                     }
@@ -391,9 +354,11 @@ function Selector(playerId) {
     }
     
     this.shape = new Kinetic.Rect({
-                width: CHAR_BOX_SIZE,
-                height: CHAR_BOX_SIZE,
-                stroke:"#E83333",
+                width: 101,
+                height: 64,
+                fill: {
+                    image: images["selector"],
+                },
             });
     centerOffset(this.shape);
         

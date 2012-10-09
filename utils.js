@@ -65,9 +65,9 @@ function setArrowImage(rect, key, color) {
 
     var rots = [90, 270, 180, 0];
     if (color == null) {
-        rect.setFill({image: images["arrow"]});
+        rect.setFill({image: images["arrow"], repeat: 'no-repeat'});
     } else {
-        rect.setFill({image: images["arrow_"+color]});
+        rect.setFill({image: images["arrow_"+color], repeat: 'no-repeat'});
     }
     rect.setRotationDeg(rots[key]);
 }

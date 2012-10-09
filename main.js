@@ -101,7 +101,7 @@ function start_game() {
 
     // Menu UI Constants
     MONEY_Y_ANCHOR = 35;   
-    MENU_CENTER_DISTANCE = stage.getWidth() / 4;
+    MENU_CENTER_DISTANCE = 178.5;
 
     CHAR_BOX_MARGIN_TOP = 40; 
     CHAR_BOX_ROWS = 2;
@@ -266,6 +266,8 @@ function load_assets() {
     images["magic"] = loader.addImage("abilities/magic.png");
     images["defend"] = loader.addImage("abilities/defend.png");
     images["heal"] = loader.addImage("abilities/heal.png");
+    images["menu_bg"] = loader.addImage("menu-bg.png");
+    images["selector"] = loader.addImage("character-cursor.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {
         var x = PlayerSprites[i];
