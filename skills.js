@@ -107,7 +107,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(5, 5000,5);
+            players[caster.opponentId].damage(5);
         },
         arrowColor: "blue",
         iconFill: "blue", //{image: images["attack"]},

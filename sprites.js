@@ -22,7 +22,7 @@ function makeSpriteAnimation(y, width, height, frames) {
 //============== SPRITE DEFINITIONS ================
 
 PlayerSprites = [
-    "tron", "icetron"
+    "tron", "fireTron", "iceTron", "greenTron"
 ];
 var idleAnimation = makeSpriteAnimation(0, SPRITE_WIDTH, SPRITE_HEIGHT, 4);
 idleAnimation = idleAnimation.concat(idleAnimation.slice().reverse());
