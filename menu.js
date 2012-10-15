@@ -13,9 +13,11 @@ function Menu() {
         this.money = [];
         this.charBoxes = [];
         this.skillBoxes = [];
+        this.cost = [];
         this.currentSelection = [];
         this.selectors = [];
         this.skinArrows = [];
+        this.playerName = [];
         this.currentSkinSelection = [];
         this.readyButtons = [];
         this.initMenuForPlayer(0, -MENU_CENTER_DISTANCE);
@@ -122,7 +124,6 @@ function Menu() {
             skinArrowsRight[i].setScale(-1);
             menuLayer.add(skinArrowsLeft[i]);
             menuLayer.add(skinArrowsRight[i]);
-
         }
 
         skinArrows[0] = skinArrowsLeft;
@@ -144,6 +145,20 @@ function Menu() {
         centerOffset(this.readyButtons[playerId]);
         menuLayer.add(this.readyButtons[playerId]);
 
+         //================== PLAYER NAME ======================
+        this.playerName[playerId] = new Kinetic.Text({
+        text: "TRON",
+            align : "center",
+            x: centerX,
+            y: 280,
+            width: stage.getWidth() / 2,
+            height: 40,
+            textFill:"black",
+            fontFamily:GAME_FONT,
+        });
+        centerOffset(this.playerName[playerId]);
+        menuLayer.add(this.playerName[playerId]);
+
         //================== SELECTORS ======================
         this.currentSelection[playerId] = 0;
 
@@ -152,13 +167,46 @@ function Menu() {
         menuLayer.add(this.selectors[playerId].shape);
 
         //================== LOCKED CHAR BOXES ======================
+        var SELECTOR_ANCHOR_X = 106;
+        var SELECTOR_ANCHOR_Y = 106;
+        var SELECTOR_ANCHOR_Y2 = 176;
+        var CHAR_BOX_HEIGHT = 50;
+        var CHAR_BOX_WIDTHS = [0, 106, 212.5];
+        this.charBoxes[playerId] = [];
         for (var i = 0; i < NUM_CHARACTERS; i++) {
-            
+            var offset = i % 3;
+            var yOffset;
+
+            if (i < 3) {
+                yOffset = SELECTOR_ANCHOR_Y;
+            } else {
+               yOffset = SELECTOR_ANCHOR_Y2;
+            }
+
+            this.charBoxes[playerId][i] = new Kinetic.Rect({
+                width:93,
+                height:64,
+                fill: {
+                    image: images.locked_char,
+                    offset: [0,0],
+                },
+                x:centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset],
+                y:yOffset,
+            });
+
+            centerOffset(this.charBoxes[playerId][i]);
+            menuLayer.add(this.charBoxes[playerId][i]);
+            this.charBoxes[playerId][i].moveDown();
+
+            // make box invis if selected
+            if (contains(players[playerId].unlockedChars, i)) {
+                this.charBoxes[playerId][i].hide();
+            }
         }
 
-        //================== PLAYER NAME ======================
 
 
+       
     }
 
     this.show = function() {
@@ -234,6 +282,11 @@ function Selector(playerId, centerX) {
             } else {
                 this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y2);
             }
+            if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                menu.playerName[playerId].setText(ClassList.characters[menu.currentSelection[playerId]].name);
+            } else {
+                menu.playerName[playerId].setText("UNKNOWN");
+            }
         } else if (!this.isSkinSelected){
             // skins
             for (var i = 0 ; i < NUM_SKIN_ARROWS; i++) {
@@ -249,7 +302,10 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] + (NUM_CHARACTERS/CHAR_BOX_ROWS) < NUM_CHARACTERS) {
                 menu.currentSelection[playerId] += (NUM_CHARACTERS/CHAR_BOX_ROWS);
-                players[playerId].selectChar(menu.currentSelection[playerId]);
+                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                    players[playerId].selectChar(menu.currentSelection[playerId]);
+                }
+               
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -266,7 +322,9 @@ function Selector(playerId, centerX) {
             // browse characters
              if (menu.currentSelection[playerId] - (NUM_CHARACTERS/CHAR_BOX_ROWS) >= 0) {
                 menu.currentSelection[playerId] -= (NUM_CHARACTERS/CHAR_BOX_ROWS);
-                players[playerId].selectChar(menu.currentSelection[playerId]);
+                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                    players[playerId].selectChar(menu.currentSelection[playerId]);
+                }
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -282,7 +340,9 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] - 1 >= 0) {
                 menu.currentSelection[playerId]--;    
-                players[playerId].selectChar(menu.currentSelection[playerId]);
+                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                    players[playerId].selectChar(menu.currentSelection[playerId]);
+                }
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -296,7 +356,9 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] + 1 < NUM_CHARACTERS) {
                 menu.currentSelection[playerId]++; 
-                players[playerId].selectChar(menu.currentSelection[playerId]);   
+                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                    players[playerId].selectChar(menu.currentSelection[playerId]);
+                }
             }
         } else if (!this.isSkinSelected){
             getNextSkin(1,playerId);
@@ -307,9 +369,28 @@ function Selector(playerId, centerX) {
     /** */
     this.onEnter = function() {
         if (!this.isCharSelected) {
-            this.isCharSelected = true;
-            players[playerId].selectChar(menu.currentSelection[playerId]);
-            this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left_sel);
+            // IF CHARACTER IS UNLOCKED
+            if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                this.isCharSelected = true;
+                players[playerId].selectChar(menu.currentSelection[playerId]);
+                this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left_sel);
+            } else {
+                // PAY THE MONEY
+                players[playerId].unlockCharacter(menu.currentSelection[playerId],
+                    function() {
+                        // failed
+                        // TODO: flash money
+                    },
+                    function() {
+                        // success
+                        // unlock
+                        menu.charBoxes[playerId][menu.currentSelection[playerId]].hide();
+                        menu.money[playerId].setText("$"+players[playerId].money);
+                        players[playerId].selectChar(menu.currentSelection[playerId]);
+                        menuLayer.draw();
+                    }
+                );
+            }
         } else if (!this.isSkinSelected){
             this.isSkinSelected = true;
             this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left);

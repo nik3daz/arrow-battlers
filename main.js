@@ -254,6 +254,7 @@ function load_assets() {
     images["menu_bg"] = loader.addImage("menu-bg.png");
     images["selector"] = loader.addImage("character-cursor.png");
     images["projectile"] = loader.addImage("sprites/blue-projectile.png");
+    images["locked_char"] = loader.addImage("lockcharbox.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {
         var x = PlayerSprites[i];

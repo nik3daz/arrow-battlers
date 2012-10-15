@@ -13,6 +13,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
+            price:50,
 		});
 
 		characters[1] = new Class({
@@ -26,6 +27,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
+            price:50,
 		});
 
 		characters[2] = new Class({
@@ -39,6 +41,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
+            price:50,
 		});
 
 		characters[3] = new Class({
@@ -52,6 +55,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
+            price:50,
 		});
 
 		characters[4] = new Class({
@@ -65,6 +69,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
+            price:50,
 		});
 
 		characters[5] = new Class({
@@ -78,6 +83,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
+            price:50,
 		});
 		this.characters = characters;
 	}
@@ -92,6 +98,8 @@ function Class(config) {
 		this.skillList = new getSkillList().globalSkills;
 		this.skins = config.skins;
 		this.config = config;
+        this.price = config.price;
+        this.name = config.name;
 
 		if (config.skillModifier)
 			config.skillModifier(this.skillList);
