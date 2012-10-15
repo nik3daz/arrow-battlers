@@ -1,4 +1,4 @@
-function getSkillList() {
+function getElementsByTagName('')SkillList() {
     var globalSkills = [];
     
     globalSkills["Attack"] = new Skill({
