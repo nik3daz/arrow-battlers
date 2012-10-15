@@ -151,6 +151,14 @@ function Menu() {
 
         menuLayer.add(this.selectors[playerId].shape);
 
+        //================== LOCKED CHAR BOXES ======================
+        for (var i = 0; i < NUM_CHARACTERS; i++) {
+            
+        }
+
+        //================== PLAYER NAME ======================
+
+
     }
 
     this.show = function() {
