@@ -35,6 +35,7 @@ function Game() {
 function Player(id, dir, udlre) {
     var curPlayer = this;
     this.opponentId = 1 - id;
+    this.unlockedChars = [0];
     
     this.dotCurrent = false;
     this.hotCurrent = false;
@@ -48,6 +49,18 @@ function Player(id, dir, udlre) {
         this.blockHp = 0;
         
     };
+
+    /** Unlocks a character, pays the money and all that shiiiiiit */
+    this.unlockCharacter = function(characterId, fcb, scb) {
+        var price = ClassList.characters[characterId].price;
+        if (this.money >= price) {
+            this.money -= price;
+            this.unlockedChars.push(characterId);
+            scb();
+        } else {
+            fcb();
+        }
+    }
 
     this.damage = function(damage) {
         if (this.blockHp > 0) {
@@ -331,7 +344,7 @@ function Player(id, dir, udlre) {
     this.id = id;
     this.dir = dir;
     this.selectedChar = 0;
-    this.money = 0;
+    this.money = 100;
     this.skinIndex = [0,0,0];
 
 

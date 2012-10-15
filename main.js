@@ -252,6 +252,7 @@ function load_assets() {
     images["heal"] = loader.addImage("abilities/heal.png");
     images["menu_bg"] = loader.addImage("menu-bg.png");
     images["selector"] = loader.addImage("character-cursor.png");
+    images["locked_char"] = loader.addImage("lockcharbox.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {
         var x = PlayerSprites[i];
