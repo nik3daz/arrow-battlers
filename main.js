@@ -41,6 +41,7 @@ function start_game() {
         }
         if (key != -1)
             keyFocus.onKeyDown(players[i], key);
+        // TODO add help menu
     }
     
     function doKeyUp(evt){
@@ -267,7 +268,7 @@ function load_assets() {
     });
     loader.addCompletionListener(function() {
 
-        generateDoTSprites();
+        // generateDoTSprites();
 
         fadeIn(function() {
             stage.remove(loadLayer);
@@ -291,10 +292,6 @@ function generateDoTSprites() {
 }
 
 function greenify(image, key) {
-    // Comment to enable color change. Requires http:// access (not file:// access)
-    images[key] = image; return;
-
-
     var gimg = new Kinetic.Image({image:image});
     gimg.applyFilter({
         filter: function(imageData) {

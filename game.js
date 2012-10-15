@@ -36,9 +36,6 @@ function Game() {
 function Player(id, dir, udlre) {
     var curPlayer = this;
     this.opponentId = 1 - id;
-    
-    this.dotCurrent = false;
-    this.hotCurrent = false;
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
     this.reset = function() {
@@ -47,15 +44,19 @@ function Player(id, dir, udlre) {
         this.resetSkillQueue();
         this.keyLock = false;
         this.blockHp = 0;
+        this.teleported = false;
+        this.dotCurrent = false;
+        this.hotCurrent = false;
         
     };
 
     this.damage = function(damage) {
         if (this.blockHp > 0) {
-            this.blockHp -= damage;
+            this.blockHp--;
             // deanimate wall
             return;
         }
+        if (this.teleported) return;
         this.setPlayerAnimation("hurt");
         // damage the player
         this.changeHealth(-damage);
@@ -75,7 +76,7 @@ function Player(id, dir, udlre) {
     }
 
     this.dot = function(totalDamageAmount, time, numTicks) {
-        if (!this.dotCurrent && this.blockHp <= 0) {
+        if (!this.dotCurrent && this.blockHp <= 0 && !this.teleported) {
             this.dotCurrent = true;
             curPlayer.updateSprite();
             this.ot({
@@ -134,11 +135,11 @@ function Player(id, dir, udlre) {
         anim.start();
     }
 
-    this.block = function(time) {
-        this.blockHp = 15;
+    this.block = function(time, hp) {
+        this.blockHp = hp;
         setTimeout(function() {
-            this.blockHp = 0;
-        }, 10000);
+            curPlayer.blockHp = 0;
+        }, time);
         // Animate wall
     }
 
@@ -301,9 +302,9 @@ function Player(id, dir, udlre) {
         var dotSuffix = "_dot";
         if (!curPlayer.dotCurrent) dotSuffix = "";
         var skins = curPlayer.skinIndex;
-        curPlayer.head.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[0]] + "_head" + dotSuffix];
-        curPlayer.body.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[1]] + "_body" + dotSuffix];
-        curPlayer.feet.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[2]] + "_feet" + dotSuffix];
+        curPlayer.head.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[0]] + "_head"];
+        curPlayer.body.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[1]] + "_body"];
+        curPlayer.feet.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[2]] + "_feet"];
     }
 
     var setSpriteAnimation = function(sprite, animName) {

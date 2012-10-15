@@ -12,13 +12,15 @@ function getSkillList() {
                 setTimeout(function() {
                 shootSprite({
                     dir: caster.dir,
-                    image: images["tron_head"],
-                    animations: PlayerSpriteAnimations,
+                    image: images["projectile"],
+                    animations: {
+                        idle: makeSpriteAnimation(0, 160, 80, 1),
+                    },
                     animation: "idle",
-                    frameRate: 10,
+                    frameRate: 1,
                     y: Math.random() * (stage.getHeight() / 2 - 10) + 5,
-                    extraX: Math.random() * stage.getWidth() / 8,
-                });}, i * 100);
+                    extraX: 100 + Math.random() * stage.getWidth() / 8,
+                });}, i * 50);
             }
         },
 
@@ -39,11 +41,31 @@ function getSkillList() {
         sequenceLength:6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
+           var r = new Kinetic.Rect({
+                width: 40, 
+                height: 170,
+                fill: "blue",
+                x: caster.shape.getX() + caster.dir * 140,
+                y: caster.shape.getY() + 115,
+            });
+            var f = function() {
+                if (caster.blockHp > 0) {
+                    setTimeout(f, 100);
+                } else {
+                    playerLayer.remove(r);
+                }
+            };
+            setTimeout(function() {
+                centerOffset(r);
+                playerLayer.add(r); 
+                playerLayer.draw();
+                f();
+            }, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
         },
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            caster.block();
+            caster.block(10000, 2);
         },
         extraHitDelay: 0,
         arrowColor: "yellow",
@@ -58,6 +80,24 @@ function getSkillList() {
         sequenceLength:4,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
+            setTimeout(function() {
+                var r = new Kinetic.Rect({
+                    width: 50, 
+                    height: 50,
+                    fill: "green",
+                    x: caster.shape.getX() + caster.dir * 65,
+                    y: caster.shape.getY() + 180,
+                    opacity: 0.8,
+                });
+                centerOffset(r);
+                playerLayer.add(r);
+                r.transitionTo({
+                    y: r.getY() - 200,
+                    opacity: 0,
+                    duration: 1,
+                    callback: function() { playerLayer.remove(r); }
+                });
+            }, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
         },
 
         /** Does something when it's activated to a player */
@@ -77,6 +117,31 @@ function getSkillList() {
         sequenceLength:6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
+            var f = function() {
+                var opponent = players[caster.opponentId];
+                var r = new Kinetic.Rect({
+                    width: 20, 
+                    height: 20,
+                    fill: "purple",
+                    x: opponent.shape.getX() + opponent.dir * 40 + opponent.dir * 80 * Math.random(),
+                    y: opponent.shape.getY() + 180,
+                    opacity: 0.8,
+                });
+                centerOffset(r);
+                playerLayer.add(r);
+                if (Math.floor(Math.random() * 2) == 0)
+                    r.moveToBottom();
+                r.transitionTo({
+                    y: r.getY() - 200,
+                    opacity: 0,
+                    duration: 1,
+                    callback: function() { playerLayer.remove(r); }
+                });
+                if (opponent.dotCurrent) {
+                    setTimeout(f, 100 + 200 * Math.random());
+                }
+            };
+            setTimeout(f, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
         },
 
         /** Does something when it's activated to a player */
@@ -96,6 +161,30 @@ function getSkillList() {
         sequenceLength:6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
+            var f = function() {
+                var r = new Kinetic.Rect({
+                    width: 20, 
+                    height: 20,
+                    fill: "green",
+                    x: caster.shape.getX() + caster.dir * 40 + caster.dir * 80 * Math.random(),
+                    y: caster.shape.getY() + 180,
+                    opacity: 0.8,
+                });
+                centerOffset(r);
+                playerLayer.add(r);
+                if (Math.floor(Math.random() * 2) == 0)
+                    r.moveToBottom();
+                r.transitionTo({
+                    y: r.getY() - 200,
+                    opacity: 0,
+                    duration: 1,
+                    callback: function() { playerLayer.remove(r); }
+                });
+                if (caster.hotCurrent) {
+                    setTimeout(f, 100 + 200 * Math.random());
+                }
+            };
+            setTimeout(f, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
         },
 
         /** Does something when it's activated to a player */
@@ -119,6 +208,8 @@ function getSkillList() {
                 opacity: 0,
                 duration: 0.05,
                 callback: function() {
+                    console.log("tp");
+                    caster.teleported = true;
                     caster.toOpponentsFace();
                     caster.shape.transitionTo({
                         opacity: 1,
@@ -128,6 +219,8 @@ function getSkillList() {
                                 opacity: 0,
                                 duration: 0.2,
                                 callback: function() {
+                                    console.log("tpoff");
+                                    caster.teleported = false;
                                     caster.toGamePosition();
                                     caster.shape.transitionTo({
                                         opacity: 1,
@@ -143,7 +236,7 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(5);
+            players[caster.opponentId].damage(3);
         },
         arrowColor: "blue",
         iconFill: "blue", //{image: images["attack"]},

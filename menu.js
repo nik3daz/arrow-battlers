@@ -167,6 +167,8 @@ function Menu() {
             menu.reset();
             menuLayer.moveToTop();
             playerLayer.moveToTop();
+            players[0].reset();
+            players[1].reset();
             players[0].toMenuPosition();
             players[1].toMenuPosition();
             fadeLayer.moveToTop();
