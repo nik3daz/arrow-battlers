@@ -296,24 +296,13 @@ function Player(id, dir, udlre) {
     this.updateSprite = function() {
         var dotSuffix = "_dot";
         if (!curPlayer.dotCurrent) dotSuffix = "";
-        curPlayer.head.attrs.image = images[curPlayer.headSprite + "_head" + dotSuffix];
-        curPlayer.body.attrs.image = images[curPlayer.bodySprite + "_body" + dotSuffix];
-        curPlayer.feet.attrs.image = images[curPlayer.feetSprite + "_feet" + dotSuffix];
-    }
-
-    this.setHead = function(prefix) {
-        curPlayer.headSprite = prefix;
-        curPlayer.updateSprite();
-    }
-
-    this.setBody = function(prefix) {
-        curPlayer.bodySprite = prefix;
-        curPlayer.updateSprite();
-    }
-
-    this.setFeet = function(prefix) {
-        curPlayer.feetSprite = prefix;
-        curPlayer.updateSprite();
+        var skins = curPlayer.skinIndex;
+        console.log(ClassList.characters[curPlayer.selectedChar].skins[skins[0]]);
+                console.log(ClassList.characters[curPlayer.selectedChar].skins[skins[1]]);
+                        console.log(ClassList.characters[curPlayer.selectedChar].skins[skins[2]]);
+        curPlayer.head.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[0]] + "_head" + dotSuffix];
+        curPlayer.body.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[1]] + "_body" + dotSuffix];
+        curPlayer.feet.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[2]] + "_feet" + dotSuffix];
     }
 
     var setSpriteAnimation = function(sprite, animName) {
@@ -343,6 +332,15 @@ function Player(id, dir, udlre) {
     this.dir = dir;
     this.selectedChar = 0;
     this.money = 0;
+    this.skinIndex = [0,0,0];
+
+
+    this.selectChar = function(characterId) {
+        this.selectedChar = characterId;
+        this.skinIndex = [0,0,0];
+        //TODO: update the skins for the thingo'sssssss MUNDDOOOOO
+    }
+
 
     var shape = new Kinetic.Group({
         scale: [dir, 1],

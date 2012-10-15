@@ -193,6 +193,12 @@ function Menu() {
     Requires the playerId for the player selecting the skin */
 var getNextSkin = function(direction, playerId) {
     // TODO
+    var property = menu.currentSkinSelection[playerId];
+    players[playerId].skinIndex[property] += direction + ClassList.characters[players[playerId].selectedChar].skins.length;;
+    players[playerId].skinIndex[property] %= ClassList.characters[players[playerId].selectedChar].skins.length;
+
+    ClassList.characters[players[playerId].selectedChar][players[playerId].skinIndex[property]];
+    players[playerId].updateSprite();
 }
 
 /** Called when a player has changed their selection (by hovering over a character) */
@@ -289,7 +295,7 @@ function Selector(playerId, centerX) {
     this.onEnter = function() {
         if (!this.isCharSelected) {
             this.isCharSelected = true;
-            players[playerId].selectedChar = menu.currentSelection[playerId];
+            players[playerId].selectChar(menu.currentSelection[playerId]);
             this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left_sel);
         } else if (!this.isSkinSelected){
             this.isSkinSelected = true;

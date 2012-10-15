@@ -133,7 +133,7 @@ function start_game() {
 
     // Globals
     SkillList = new getSkillList();
-    ClassBuilder = new ClassBuilder();
+    ClassList = new ClassList();
 
     players = [];
     
@@ -159,19 +159,6 @@ function start_game() {
     window.addEventListener('keydown', doKeyDown, false);
     window.addEventListener('keyup',doKeyUp, false);
 };
-
-/** Uses config input
-    id: id of class
-    name: written name of class
-    spritesheet: image file for the sprite sheet */
-function Class(config) {
-    this.id = config.id;
-    this.name = config.name;
-    this.spritesheet = config.spritesheet;
-    this.sprite = new Kinetic.Sprite({
-
-    })
-}
 
 /** Create and add all layers to the stage */
 function makeLayers() {
