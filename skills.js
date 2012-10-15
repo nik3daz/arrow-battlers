@@ -1,4 +1,4 @@
-function getElementsByTagName('')SkillList() {
+function getSkillList() {
     var globalSkills = [];
     
     globalSkills["Attack"] = new Skill({
@@ -8,6 +8,18 @@ function getElementsByTagName('')SkillList() {
         sequenceLength:4,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
+            for (var i = 0; i < 10; i++) {
+                setTimeout(function() {
+                shootSprite({
+                    dir: caster.dir,
+                    image: images["tron_head"],
+                    animations: PlayerSpriteAnimations,
+                    animation: "idle",
+                    frameRate: 10,
+                    y: Math.random() * (stage.getHeight() / 2 - 10) + 5,
+                    extraX: Math.random() * stage.getWidth() / 8,
+                });}, i * 100);
+            }
         },
 
         /** Does something when it's activated to a player */
@@ -16,7 +28,7 @@ function getElementsByTagName('')SkillList() {
         },
         arrowColor: "red",
         iconFill: {image: images["attack"]},
-        extraHitDelay: 0,
+        extraHitDelay: 100,
         cooldown: 500,
     });
 
@@ -69,7 +81,7 @@ function getElementsByTagName('')SkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(20, 10000, 10);
+            players[caster.opponentId].dot(20, 5000, 10);
         },
         arrowColor: "green",
         iconFill: {image: images["dot"]},
@@ -103,6 +115,30 @@ function getElementsByTagName('')SkillList() {
         sequenceLength:2,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
+            caster.shape.transitionTo({
+                opacity: 0,
+                duration: 0.05,
+                callback: function() {
+                    caster.toOpponentsFace();
+                    caster.shape.transitionTo({
+                        opacity: 1,
+                        duration: 0.6,
+                        callback: function() {
+                            caster.shape.transitionTo({
+                                opacity: 0,
+                                duration: 0.2,
+                                callback: function() {
+                                    caster.toGamePosition();
+                                    caster.shape.transitionTo({
+                                        opacity: 1,
+                                        duration: 0.05,
+                                    });
+                                },
+                            });
+                        },
+                    });
+                }
+            });
         },
 
         /** Does something when it's activated to a player */
@@ -143,9 +179,9 @@ function Skill(config) {
         var seq = [];
         for (var i = 0; i < seqLength; i++) {
             seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1);
-                if (suffix.length == 0) {
-                    suffix = range(0, 4);
-                }
+            if (suffix.length == 0) {
+                suffix = range(0, 4);
+            }
         }
 
         // generates a sequence

@@ -24,7 +24,8 @@ function Game() {
             });
 
         });
-    }
+    };
+
 }
 
 /** Players are on a layer where 0 is the center of screen 
@@ -67,7 +68,10 @@ function Player(id, dir, udlre) {
     this.changeHealth = function(amount) {
         this.hp += amount;
         if (this.hp > 100) this.hp = 100;
-        if (this.hp <= 0) battle.gameOver(this.opponentId);
+        if (this.hp <= 0) { 
+            battle.gameOver(this.opponentId);
+            this.hp = 0;
+        }
     }
 
     this.dot = function(totalDamageAmount, time, numTicks) {
@@ -182,7 +186,7 @@ function Player(id, dir, udlre) {
                     curPlayer.cooldownAnimate(skillSequence.skill.cooldown);
                 });
                 this.setPlayerAnimation("attack");
-                skillSequence.skill.animate();
+                skillSequence.skill.animate(curPlayer);
             } else {
                 this.skillStep++;
             }
@@ -297,9 +301,6 @@ function Player(id, dir, udlre) {
         var dotSuffix = "_dot";
         if (!curPlayer.dotCurrent) dotSuffix = "";
         var skins = curPlayer.skinIndex;
-        console.log(ClassList.characters[curPlayer.selectedChar].skins[skins[0]]);
-                console.log(ClassList.characters[curPlayer.selectedChar].skins[skins[1]]);
-                        console.log(ClassList.characters[curPlayer.selectedChar].skins[skins[2]]);
         curPlayer.head.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[0]] + "_head" + dotSuffix];
         curPlayer.body.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[1]] + "_body" + dotSuffix];
         curPlayer.feet.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[2]] + "_feet" + dotSuffix];
@@ -325,6 +326,11 @@ function Player(id, dir, udlre) {
 
     this.toGamePosition = function() {
         shape.setPosition((stage.getWidth() / 2 - 40) * -dir, 
+            stage.getHeight() / 2 - 160);
+    }
+
+    this.toOpponentsFace = function() {
+        shape.setPosition((stage.getWidth() / 2 - 300) * dir, 
             stage.getHeight() / 2 - 160);
     }
     //================== PLAYER SETUP ======================

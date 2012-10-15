@@ -87,11 +87,12 @@ function shootSprite(config) {
     };*/
     var shape = new Kinetic.Sprite({
         image: config.image,
-        x: config.x,
+        x: -config.dir * (stage.getWidth() / 2 + 30 + config.extraX),
         y: config.y,
         animations: config.animations,
         animation: config.animation,
         frameRate: config.frameRate,
+        scale: [config.dir, 1],
     });
     /*
     var shape = new Kinetic.Rect({
@@ -102,12 +103,15 @@ function shootSprite(config) {
         fill: "white",
     });*/
     playerLayer.add(shape);
+    shape.start();
 
     var anim = new Kinetic.Animation({
         func: function(frame) {
             shape.setX(shape.getX() + config.dir * frame.timeDiff);
-            if (Math.abs(shape.getX()) > stage.getWidth() / 2)
+            if (Math.abs(shape.getX()) > (stage.getWidth() / 2 + 30 + config.extraX)) {
                 anim.stop();
+                playerLayer.remove(shape);
+            }
         },
         node: playerLayer,
     });
