@@ -5,7 +5,7 @@ function getSkillList() {
         name: "Attack",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:3,
+        sequenceLength:4,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -24,7 +24,7 @@ function getSkillList() {
         name: "Block",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:2,
+        sequenceLength:6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -43,7 +43,7 @@ function getSkillList() {
         name: "Heal",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:3,
+        sequenceLength:4,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -62,7 +62,7 @@ function getSkillList() {
         name: "DoT",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:4,
+        sequenceLength:6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -81,7 +81,7 @@ function getSkillList() {
         name: "HoT",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:5,
+        sequenceLength:6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
@@ -100,7 +100,7 @@ function getSkillList() {
         name: "QuickAttack",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:2,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
         },
