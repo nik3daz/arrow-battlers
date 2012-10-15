@@ -133,7 +133,7 @@ function start_game() {
 
     // Globals
     SkillList = new getSkillList();
-    ClassList = new ClassList();
+    ClassBuilder = new ClassBuilder();
 
     players = [];
     

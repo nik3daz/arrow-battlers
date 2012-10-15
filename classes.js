@@ -13,6 +13,66 @@ function ClassBuilder() {
                 skillList["QuickAttack"].sequenceLength = 2;
             },
 		});
+
+		characters[1] = new Class({
+            name:"Jedi",
+            skillModifier: function(skillList) {
+                skillList["Block"].sequenceLength = 6;
+                skillList["Attack"].sequenceLength = 4;
+                skillList["Heal"].sequenceLength = 4;
+                skillList["DoT"].sequenceLength = 6;
+                skillList["HoT"].sequenceLength = 6;
+                skillList["QuickAttack"].sequenceLength = 2;
+            },
+		});
+
+		characters[2] = new Class({
+            name:"Batman",
+            skillModifier: function(skillList) {
+                skillList["Block"].sequenceLength = 6;
+                skillList["Attack"].sequenceLength = 4;
+                skillList["Heal"].sequenceLength = 4;
+                skillList["DoT"].sequenceLength = 6;
+                skillList["HoT"].sequenceLength = 6;
+                skillList["QuickAttack"].sequenceLength = 2;
+            },
+		});
+
+		characters[3] = new Class({
+            name:"Spiderman",
+            skillModifier: function(skillList) {
+                skillList["Block"].sequenceLength = 6;
+                skillList["Attack"].sequenceLength = 4;
+                skillList["Heal"].sequenceLength = 4;
+                skillList["DoT"].sequenceLength = 6;
+                skillList["HoT"].sequenceLength = 6;
+                skillList["QuickAttack"].sequenceLength = 2;
+            },
+		});
+
+		characters[4] = new Class({
+            name:"Tappit",
+            skillModifier: function(skillList) {
+                skillList["Block"].sequenceLength = 6;
+                skillList["Attack"].sequenceLength = 4;
+                skillList["Heal"].sequenceLength = 4;
+                skillList["DoT"].sequenceLength = 6;
+                skillList["HoT"].sequenceLength = 6;
+                skillList["QuickAttack"].sequenceLength = 2;
+            },
+		});
+
+		characters[5] = new Class({
+            name:"Mr Bigglesworth",
+            skillModifier: function(skillList) {
+                skillList["Block"].sequenceLength = 6;
+                skillList["Attack"].sequenceLength = 4;
+                skillList["Heal"].sequenceLength = 4;
+                skillList["DoT"].sequenceLength = 6;
+                skillList["HoT"].sequenceLength = 6;
+                skillList["QuickAttack"].sequenceLength = 2;
+            },
+		});
 	}
 
 }
@@ -20,12 +80,9 @@ function ClassBuilder() {
 // pirate
 function Class(config) {
 	this.init = function() {
-		var skillList = globalSkillList.slice();
+		this.skillList = globalSkillList.slice();
 		skillModifier(skillList);
 	}
 
-	this.getSkillList = function() {
-
-	}
 }
 
