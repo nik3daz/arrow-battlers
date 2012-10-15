@@ -338,7 +338,7 @@ function Player(id, dir, udlre) {
     this.selectChar = function(characterId) {
         this.selectedChar = characterId;
         this.skinIndex = [0,0,0];
-        //TODO: update the skins for the thingo'sssssss MUNDDOOOOO
+        this.updateSprite();
     }
 
 

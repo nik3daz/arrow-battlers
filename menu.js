@@ -240,6 +240,7 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] + (NUM_CHARACTERS/CHAR_BOX_ROWS) < NUM_CHARACTERS) {
                 menu.currentSelection[playerId] += (NUM_CHARACTERS/CHAR_BOX_ROWS);
+                players[playerId].selectChar(menu.currentSelection[playerId]);
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -256,6 +257,7 @@ function Selector(playerId, centerX) {
             // browse characters
              if (menu.currentSelection[playerId] - (NUM_CHARACTERS/CHAR_BOX_ROWS) >= 0) {
                 menu.currentSelection[playerId] -= (NUM_CHARACTERS/CHAR_BOX_ROWS);
+                players[playerId].selectChar(menu.currentSelection[playerId]);
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -271,6 +273,7 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] - 1 >= 0) {
                 menu.currentSelection[playerId]--;    
+                players[playerId].selectChar(menu.currentSelection[playerId]);
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -283,7 +286,8 @@ function Selector(playerId, centerX) {
         if (!this.isCharSelected) {
             // browse characters
             if (menu.currentSelection[playerId] + 1 < NUM_CHARACTERS) {
-                menu.currentSelection[playerId]++;    
+                menu.currentSelection[playerId]++; 
+                players[playerId].selectChar(menu.currentSelection[playerId]);   
             }
         } else if (!this.isSkinSelected){
             getNextSkin(1,playerId);
