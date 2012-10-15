@@ -208,7 +208,6 @@ var onCharacterHover = function(playerId, charId) {
 
 /** Selector Class */
 function Selector(playerId, centerX) {
-
     var SELECTOR_ANCHOR_X = 106;
     var SELECTOR_ANCHOR_Y = 106;
     var SELECTOR_ANCHOR_Y2 = 176;
@@ -221,9 +220,9 @@ function Selector(playerId, centerX) {
             centerOffset(this.shape);
             var offset = (menu.currentSelection[playerId] % 3);
             if (menu.currentSelection[playerId] < 3) {
-                this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y);//menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
+                this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y);
             } else {
-                this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y2);//menu.charBoxes[playerId][menu.currentSelection[playerId]].getPosition());
+                this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y2);
             }
         } else if (!this.isSkinSelected){
             // skins

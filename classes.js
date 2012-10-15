@@ -3,8 +3,8 @@ function ClassList() {
 	this.init = function() {
 		var characters = [];
 		characters[0] = new Class({
-            name:"Pirate",
-            skins: ["tron", "icetron"],
+            name:"Tron",
+            skins: ["tron", "fireTron", "iceTron", "greenTron"],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -17,7 +17,7 @@ function ClassList() {
 
 		characters[1] = new Class({
             name:"Jedi",
-            skins: ["tron", "icetron"],
+            skins: ["tron", "iceTron", "fireTron"],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -30,7 +30,7 @@ function ClassList() {
 
 		characters[2] = new Class({
             name:"Batman",
-            skins: ["tron", "icetron"],
+            skins: ["tron"],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -43,7 +43,7 @@ function ClassList() {
 
 		characters[3] = new Class({
             name:"Spiderman",
-            skins: ["tron", "icetron"],
+            skins: ["tron"],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -56,7 +56,7 @@ function ClassList() {
 
 		characters[4] = new Class({
             name:"Tappit",
-            skins: ["icetron"],
+            skins: ["fireTron"],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
