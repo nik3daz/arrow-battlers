@@ -39,25 +39,38 @@ function start_game() {
             key = players[i].getUdlre(evt);
             if (key != -1) break;
         }
-        if (key != -1)
+        if (key == KEY_HELP) {
+            players[i].help.show();
+            helpLayer.draw();
+        } else if (key != -1)
             keyFocus.onKeyDown(players[i], key);
         // TODO add help menu
     }
     
     function doKeyUp(evt){
+        console.log(evt.keyCode);
+        var key = -1;
+        var i;
+        for (i = 0; i < 2; i++) {
+            key = players[i].getUdlre(evt);
+            if (key != -1) break;
+        }
+        if (key == KEY_HELP) {
+            players[i].help.hide();
+            helpLayer.draw();
+        }
     }
 
     function initLayers() {
     	var background = new Kinetic.Rect({
-                width: stage.getWidth(),
-                height: stage.getHeight(),
-                fill: {
-                    image: images.battle_bg,
-                    //offset: [-170, -50],
-                },
-            });
-            bgLayer.add(background);
-
+            width: stage.getWidth(),
+            height: stage.getHeight(),
+            fill: {
+                image: images.battle_bg,
+                //offset: [-170, -50],
+            },
+        });
+        bgLayer.add(background);
     }
     
     // Key Constants
@@ -66,6 +79,7 @@ function start_game() {
     KEY_R = 2;
     KEY_L = 3;
     KEY_E = 4;
+    KEY_HELP = 5;
 
     chars = [
         {
@@ -155,6 +169,7 @@ function start_game() {
     playerLayer.draw();
     hudLayer.draw();
     menuLayer.draw();
+    helpLayer.draw();
     
     // Attach event listeners
     window.addEventListener('keydown', doKeyDown, false);
@@ -169,6 +184,7 @@ function makeLayers() {
     playerLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
     bgLayer = new Kinetic.Layer();
     fadeLayer = new Kinetic.Layer();
+    helpLayer = new Kinetic.Layer({x: stage.getWidth() / 2});
 
     stage.add(debugLayer);
     stage.add(bgLayer);
@@ -176,6 +192,48 @@ function makeLayers() {
     stage.add(menuLayer);
     stage.add(playerLayer);
     stage.add(fadeLayer);
+    stage.add(helpLayer);
+}
+
+function makeHelpShape(centerX) {
+    var g = new Kinetic.Group({x:centerX});
+    var h = 395;
+    var size = 30;
+    var r = centerOffset(new Kinetic.Rect({
+        width: stage.getWidth() / 3,
+        height: stage.getHeight() / 2 + 10,
+        y: h,
+        fill: "#616161",
+        stroke: "black",
+    }));
+    g.add(r);
+    var x = -r.getWidth() / 2 + 10 + size / 2;
+    var y = h - r.getHeight() / 2 + 10 + size / 2;
+    for (var i in SkillList.globalSkills) {
+        var s = new Kinetic.Rect({
+            x: x, y: y,
+            fill: SkillList.globalSkills[i].iconFill,
+            width: 50, height: 50,
+            scale: [size/50, size/50],
+        });
+        centerOffset(s);
+        g.add(s);
+        var t = new Kinetic.Text({
+            text: SkillList.globalSkills[i].helpText,
+            lineHeight: 1.5,
+            align : "left",
+            x: x + size / 2 + 10,
+            y: y - size / 2,
+            width: r.getWidth() - size - 22,
+            textFill:"black",
+            fontFamily:GAME_FONT,
+            fontSize: 7,
+        });
+        g.add(t);
+        y += r.getHeight() / 6;
+    }
+    g.hide();
+    return g;
 }
 
 /** Preload all images and call start_game() when done */

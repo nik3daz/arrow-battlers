@@ -1,8 +1,8 @@
 function Game() {
     // Left Player
-    players[0] = new Player(0, 1, [87, 83, 65, 68, 32]);
+    players[0] = new Player(0, 1, [87, 83, 65, 68, 32, 90]);
     // Right Player
-    players[1] = new Player(1, -1, [38, 40, 37, 39, 13]);
+    players[1] = new Player(1, -1, [38, 40, 37, 39, 13, 222]);
     this.onKeyDown = function(player, key) {
         players[player.id].onKeyDown(key);
     };
@@ -171,6 +171,8 @@ function Player(id, dir, udlre) {
             key = KEY_R;
         } else if (udlre[4] == keyCode) {
             key = KEY_E;
+        } else if (udlre[5] == keyCode) {
+            key = KEY_HELP;
         }
         return key;
     }
@@ -395,6 +397,8 @@ function Player(id, dir, udlre) {
     this.body.start();
     this.feet.start();
     this.shape = shape;
+    this.help = makeHelpShape(-dir * 180);
+    helpLayer.add(this.help);
 
     //================== PLAYER BATTLE SETUP ======================
     this.initForBattle = function() {

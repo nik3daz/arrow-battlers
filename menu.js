@@ -147,7 +147,7 @@ function Menu() {
 
          //================== PLAYER NAME ======================
         this.playerName[playerId] = new Kinetic.Text({
-        text: "TRON",
+            text: "TRON",
             align : "center",
             x: centerX,
             y: 280,

@@ -3,6 +3,7 @@ function getSkillList() {
     
     globalSkills["Attack"] = new Skill({
         name: "Attack",
+        helpText: "basic attack - basically, it's an attack",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:4,
@@ -36,6 +37,7 @@ function getSkillList() {
 
     globalSkills["Block"] = new Skill({
         name: "Block",
+        helpText: "block - summons a shield that blocks a couple of hits",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:6,
@@ -75,6 +77,7 @@ function getSkillList() {
 
     globalSkills["Heal"] = new Skill({
         name: "Heal",
+        helpText: "heal - instantly adds health",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:4,
@@ -112,6 +115,7 @@ function getSkillList() {
 
     globalSkills["DoT"] = new Skill({
         name: "DoT",
+        helpText: "poison - do damage over time",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:6,
@@ -156,6 +160,7 @@ function getSkillList() {
 
     globalSkills["HoT"] = new Skill({
         name: "HoT",
+        helpText: "renew - regain health slowly",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:6,
@@ -199,6 +204,7 @@ function getSkillList() {
 
     globalSkills["QuickAttack"] = new Skill({
         name: "QuickAttack",
+        helpText: "flash strike - dodge an attack and weakly damage opponent",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:2,
@@ -288,4 +294,5 @@ function Skill(config) {
     this.activate = config.activate;
     this.animate = config.animate;
     this.cooldown = config.cooldown;
+    this.helpText = config.helpText;
 }
