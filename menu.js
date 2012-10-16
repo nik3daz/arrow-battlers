@@ -239,6 +239,7 @@ function Menu() {
         } else if (key == KEY_E) {
             menu.selectors[player.id].onEnter();
         }
+
         menu.selectors[player.id].update();
         menuLayer.draw();
     }
@@ -282,10 +283,12 @@ function Selector(playerId, centerX) {
             } else {
                 this.shape.setPosition(centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset], SELECTOR_ANCHOR_Y2);
             }
+
             if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
                 menu.playerName[playerId].setText(ClassList.characters[menu.currentSelection[playerId]].name);
             } else {
                 menu.playerName[playerId].setText("UNKNOWN");
+                players[playerId].updateSprite();
             }
         } else if (!this.isSkinSelected){
             // skins
@@ -302,9 +305,11 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] + (NUM_CHARACTERS/CHAR_BOX_ROWS) < NUM_CHARACTERS) {
                 menu.currentSelection[playerId] += (NUM_CHARACTERS/CHAR_BOX_ROWS);
-                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                //if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
                     players[playerId].selectChar(menu.currentSelection[playerId]);
-                }
+                //}
+                   
+                
                
             }
         } else if (!this.isSkinSelected){
@@ -322,9 +327,9 @@ function Selector(playerId, centerX) {
             // browse characters
              if (menu.currentSelection[playerId] - (NUM_CHARACTERS/CHAR_BOX_ROWS) >= 0) {
                 menu.currentSelection[playerId] -= (NUM_CHARACTERS/CHAR_BOX_ROWS);
-                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+               // if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
                     players[playerId].selectChar(menu.currentSelection[playerId]);
-                }
+                //}
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -340,9 +345,9 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] - 1 >= 0) {
                 menu.currentSelection[playerId]--;    
-                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                //if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
                     players[playerId].selectChar(menu.currentSelection[playerId]);
-                }
+                //}
             }
         } else if (!this.isSkinSelected){
             // browse different skins
@@ -356,9 +361,9 @@ function Selector(playerId, centerX) {
             // browse characters
             if (menu.currentSelection[playerId] + 1 < NUM_CHARACTERS) {
                 menu.currentSelection[playerId]++; 
-                if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
+                //if (contains(players[playerId].unlockedChars,  menu.currentSelection[playerId])) {
                     players[playerId].selectChar(menu.currentSelection[playerId]);
-                }
+                //}
             }
         } else if (!this.isSkinSelected){
             getNextSkin(1,playerId);
@@ -392,17 +397,33 @@ function Selector(playerId, centerX) {
                 );
             }
         } else if (!this.isSkinSelected){
-            this.isSkinSelected = true;
-            this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left);
+            var player = players[playerId];
+            var property = menu.currentSkinSelection[playerId];
+            if (contains(player.unlockedSkins[player.selectedChar][player.skinIndex[property]], property)) {
+                this.isSkinSelected = true;
+                this.switchArrowImage(playerId, menu.currentSkinSelection[playerId], images.arrow_left);
 
-            // fill the ready_button
-            menu.readyButtons[playerId].setFill({
-                    image: images.ready_button_red,
-                    offset: [0, 0],
-            });
-            menu.currentPlayersReady++;
-            if (menu.currentPlayersReady == 2){
-                game.show();
+                // fill the ready_button
+                menu.readyButtons[playerId].setFill({
+                        image: images.ready_button_red,
+                        offset: [0, 0],
+                });
+                menu.currentPlayersReady++;
+                if (menu.currentPlayersReady == 2){
+                    game.show();
+                }
+            } else {
+                // try to buy the skin
+                if (player.money >= ClassList.characters[player.selectedChar].skinsCost[player.skinIndex[property]]) {
+                    player.unlockedSkins[player.selectedChar][player.skinIndex[property]].push(property);
+                    player.money -= ClassList.characters[player.selectedChar].skinsCost[player.skinIndex[property]];
+                    menu.money[playerId].setText("$"+players[playerId].money);
+                    this.update();
+                    menuLayer.draw();
+                    playerLayer.draw();
+                } else {
+                    // FLASH MONEY
+                }
             }
         } 
     }

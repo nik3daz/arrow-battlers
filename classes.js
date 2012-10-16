@@ -3,8 +3,9 @@ function ClassList() {
 	this.init = function() {
 		var characters = [];
 		characters[0] = new Class({
-            name:"Tron",
+            name:"TRON",
             skins: ["tron", "fireTron", "iceTron", "greenTron"],
+            skinsCost:[0, 2, 2, 2],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -17,8 +18,9 @@ function ClassList() {
 		});
 
 		characters[1] = new Class({
-            name:"Jedi",
-            skins: ["tron", "iceTron", "fireTron"],
+            name:"LEGO",
+            skins: ["lego"],
+            skinsCost:[0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -31,8 +33,9 @@ function ClassList() {
 		});
 
 		characters[2] = new Class({
-            name:"Batman",
-            skins: ["tron"],
+            name:"BRICK MAN",
+            skins: ["brickman"],
+            skinsCost:[0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -45,8 +48,9 @@ function ClassList() {
 		});
 
 		characters[3] = new Class({
-            name:"Spiderman",
-            skins: ["tron"],
+            name:"MINECRAFT",
+            skins: ["minecraft"],
+            skinsCost:[0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -59,8 +63,9 @@ function ClassList() {
 		});
 
 		characters[4] = new Class({
-            name:"Tappit",
-            skins: ["fireTron"],
+            name:"REDDIT ALIEN",
+            skins: ["redditAlien"],
+            skinsCost:[0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -73,8 +78,9 @@ function ClassList() {
 		});
 
 		characters[5] = new Class({
-            name:"Mr Bigglesworth",
-            skins: ["tron"],
+            name:"SAMUS",
+            skins: ["samus"],
+            skinsCost:[0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -98,6 +104,7 @@ function Class(config) {
 		this.skillList = new getSkillList().globalSkills;
 		this.skins = config.skins;
 		this.config = config;
+        this.skinsCost = config.skinsCost;
         this.price = config.price;
         this.name = config.name;
 

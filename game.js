@@ -37,6 +37,21 @@ function Player(id, dir, udlre) {
     var curPlayer = this;
     this.opponentId = 1 - id;
     this.unlockedChars = [0];
+    this.unlockedSkins = [];
+    // unlock the skins that are unlocked for the character
+    for (var i = 0; i < this.unlockedChars.length; i++) {
+        // for all the skins the character has
+        this.unlockedSkins[i] = [];
+        for (var j = 0; j < ClassList.characters[i].skins.length; j++) {
+            // check if the skin is free
+            this.unlockedSkins[i][j] = [];
+            if (ClassList.characters[this.unlockedChars[i]].skinsCost[j] == 0) {
+                this.unlockedSkins[i][j].push(0);
+                this.unlockedSkins[i][j].push(1);
+                this.unlockedSkins[i][j].push(2);
+            }
+        }
+    }
     
     //================== PLAYER FUNCTIONS ======================
     /** Resets players so they are ready for battle */
@@ -58,7 +73,20 @@ function Player(id, dir, udlre) {
         if (this.money >= price) {
             this.money -= price;
             this.unlockedChars.push(characterId);
-            scb();
+
+        // claim all the free skins for this character
+        this.unlockedSkins[characterId] = [];
+        for (var j; j < ClassList.characters[characterId]; j++) {
+            // check if the skin is free
+            this.unlockedSkins[characterId][j] = [];
+            if (ClassList.characters[characterId].skinsCost[characterId] == 0) {
+                this.unlockedSkins[characterId][j].push(0);
+                this.unlockedSkins[characterId][j].push(1);
+                this.unlockedSkins[characterId][j].push(2);
+            }
+        }
+
+        scb();
         } else {
             fcb();
         }
@@ -316,9 +344,17 @@ function Player(id, dir, udlre) {
         var dotSuffix = "_dot";
         if (!curPlayer.dotCurrent) dotSuffix = "";
         var skins = curPlayer.skinIndex;
-        curPlayer.head.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[0]] + "_head"];
-        curPlayer.body.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[1]] + "_body"];
-        curPlayer.feet.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[2]] + "_feet"];
+
+        // check if the player owns the character
+        if (contains(curPlayer.unlockedChars, curPlayer.selectedChar)) {
+            curPlayer.head.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[0]] + "_head"];
+            curPlayer.body.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[1]] + "_body"];
+            curPlayer.feet.attrs.image = images[ClassList.characters[curPlayer.selectedChar].skins[skins[2]] + "_feet"];
+        } else {
+            curPlayer.head.attrs.image = images["unknown_head"];
+            curPlayer.body.attrs.image = images["unknown_body"];
+            curPlayer.feet.attrs.image = images["unknown_feet"];
+        }
     }
 
     var setSpriteAnimation = function(sprite, animName) {
@@ -352,7 +388,7 @@ function Player(id, dir, udlre) {
     this.id = id;
     this.dir = dir;
     this.selectedChar = 0;
-    this.money = 100;
+    this.money = 600;
     this.skinIndex = [0,0,0];
 
 
