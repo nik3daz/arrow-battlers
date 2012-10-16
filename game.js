@@ -240,7 +240,7 @@ function Player(id, dir, udlre) {
             if (this.activeSkills.length == 0) {
                 // TODO Punish
                 // Refresh matching skill list
-                this.resetSkillQueueAnimate(function() { curPlayer.cooldownAnimate(1500); });
+                this.resetSkillQueueAnimate(function() { curPlayer.cooldownAnimate(SkillList.failCooldown); });
             }
         }
         battle.skillQueueBoxes[id].update();
@@ -325,8 +325,8 @@ function Player(id, dir, udlre) {
 
     /** Get the next skill object that is placed in the skill list */
     this.nextSkill = function() {
-        var skill = SkillList.getRandom();
-        var sequence = skill.generateSequence(this);
+        var skill = SkillList.getRandom(ClassList.characters[curPlayer.selectedChar].skillList);
+        var sequence = skill.generateSequence(curPlayer);
         return {
             sequence: sequence,
             length: sequence.length,
