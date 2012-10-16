@@ -251,12 +251,14 @@ function Menu() {
 /** Gets the next skin for the current avatar. direction either -1 for left, 1 for right. 
     Requires the playerId for the player selecting the skin */
 var getNextSkin = function(direction, playerId) {
-    // TODO
     var property = menu.currentSkinSelection[playerId];
     players[playerId].skinIndex[property] += direction + ClassList.characters[players[playerId].selectedChar].skins.length;;
     players[playerId].skinIndex[property] %= ClassList.characters[players[playerId].selectedChar].skins.length;
 
     ClassList.characters[players[playerId].selectedChar][players[playerId].skinIndex[property]];
+
+    // TODO: check if the player owns the skin and if not display a lock and price up
+
     players[playerId].updateSprite();
 }
 
@@ -313,10 +315,16 @@ function Selector(playerId, centerX) {
                
             }
         } else if (!this.isSkinSelected){
-            // browse different skins
-            if (menu.currentSkinSelection[playerId] != NUM_SKIN_ARROWS -1) {
-                menu.currentSkinSelection[playerId]++;
+            // CHECK IF SKIN HAS BEEN BOUGHT BEFORE
+            var player = players[playerId];
+            var property = menu.currentSkinSelection[playerId];
+            if (contains(player.unlockedSkins[player.selectedChar][player.skinIndex[property]], property)) {
+                 // browse different skins
+                if (menu.currentSkinSelection[playerId] != NUM_SKIN_ARROWS -1) {
+                    menu.currentSkinSelection[playerId]++;
+                }
             }
+           
         }
     }
 
@@ -332,9 +340,14 @@ function Selector(playerId, centerX) {
                 //}
             }
         } else if (!this.isSkinSelected){
-            // browse different skins
-            if (menu.currentSkinSelection[playerId] != 0) {
-                menu.currentSkinSelection[playerId]--;
+            // CHECK IF SKIN HAS BEEN BOUGHT BEFORE
+            var player = players[playerId];
+            var property = menu.currentSkinSelection[playerId];
+            if (contains(player.unlockedSkins[player.selectedChar][player.skinIndex[property]], property)) {
+                 // browse different skins
+                if (menu.currentSkinSelection[playerId] != 0) {
+                    menu.currentSkinSelection[playerId]--;
+                }
             }
         }
     }
