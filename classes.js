@@ -59,7 +59,7 @@ function ClassList() {
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
             },
-            price:50,
+            price:150,
 		});
 
 		characters[4] = new Class({
@@ -83,7 +83,7 @@ function ClassList() {
                 },
                 skillList["QuickAttack"].sequenceLength = 3;
             },
-            price:50,
+            price:200,
 		});
 
 		characters[5] = new Class({
@@ -100,7 +100,7 @@ function ClassList() {
                 skillList["QuickAttack"].sequenceLength = 2;
                 skillList["QuickAttack"].cooldown /= 2;
             },
-            price:50,
+            price:250,
 		});
 		this.characters = characters;
 	}

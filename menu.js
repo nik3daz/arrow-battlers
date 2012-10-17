@@ -12,11 +12,14 @@ function Menu() {
 
         this.money = [];
         this.charBoxes = [];
+        this.charCostTexts = [];
         this.skillBoxes = [];
         this.cost = [];
         this.currentSelection = [];
         this.selectors = [];
         this.skinArrows = [];
+        this.skinLock = [];
+        this.skinCost = [];
         this.playerName = [];
         this.currentSkinSelection = [];
         this.readyButtons = [];
@@ -95,6 +98,9 @@ function Menu() {
         var skinArrowsLeft = [];
         var skinArrowsRight = [];
 
+        this.skinLock[playerId] = [];
+        this.skinCost[playerId] = [];
+
         this.currentSkinSelection[playerId] = 0; 
         for (var i = 0; i < NUM_SKIN_ARROWS; i++) {
             skinArrowsLeft[i] = centerOffset(new Kinetic.Rect({
@@ -124,6 +130,35 @@ function Menu() {
             skinArrowsRight[i].setScale(-1);
             menuLayer.add(skinArrowsLeft[i]);
             menuLayer.add(skinArrowsRight[i]);
+
+            // lock
+            this.skinLock[playerId][i] = centerOffset(new Kinetic.Rect({
+                width:SKIN_ARROW_SIZE + 10,
+                height:SKIN_ARROW_SIZE + 10,
+                fill: {
+                    image: images.lock,
+                    offset: [0, 0],
+                },
+                x: centerX,
+                y: SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP,
+            }));
+            playerLayer.add(this.skinLock[playerId][i]);
+            this.skinLock[playerId][i].hide();
+
+            this.skinCost[playerId][i] = centerOffset(new Kinetic.Text({
+                text: "$"+ClassList.characters[i].price,
+                align : "center",
+                x: centerX,
+                y: SKIN_ARROW_Y_ANCHOR + i*SKIN_ARROW_HEIGHT + i *SKIN_GAP + 55,
+                width: 93,
+                height: 64,
+                textFill:"yellow",
+                fontSize:7,
+                fontFamily:GAME_FONT,
+            }));
+
+            playerLayer.add(this.skinCost[playerId][i]);
+            this.skinCost[playerId][i].hide();
         }
 
         skinArrows[0] = skinArrowsLeft;
@@ -173,19 +208,20 @@ function Menu() {
         var CHAR_BOX_HEIGHT = 50;
         var CHAR_BOX_WIDTHS = [0, 106, 212.5];
         this.charBoxes[playerId] = [];
+        this.charCostTexts[playerId] = [];
         for (var i = 0; i < NUM_CHARACTERS; i++) {
             var offset = i % 3;
             var yOffset;
 
             if (i < 3) {
-                yOffset = SELECTOR_ANCHOR_Y;
+                yOffset = SELECTOR_ANCHOR_Y + 1;
             } else {
                yOffset = SELECTOR_ANCHOR_Y2;
             }
 
             this.charBoxes[playerId][i] = new Kinetic.Rect({
                 width:93,
-                height:64,
+                height:65,
                 fill: {
                     image: images.locked_char,
                     offset: [0,0],
@@ -194,12 +230,29 @@ function Menu() {
                 y:yOffset,
             });
 
+            this.charCostTexts[playerId][i] = new Kinetic.Text({
+                text: "$"+ClassList.characters[i].price,
+                align : "center",
+                x: centerX - SELECTOR_ANCHOR_X + CHAR_BOX_WIDTHS[offset],
+                y: yOffset + 28,
+                width: 93,
+                height: 64,
+                textFill:"yellow",
+                fontSize:9,
+                fontFamily:GAME_FONT,
+            });
+
             centerOffset(this.charBoxes[playerId][i]);
             menuLayer.add(this.charBoxes[playerId][i]);
             this.charBoxes[playerId][i].moveDown();
 
+
+            centerOffset(this.charCostTexts[playerId][i]);
+            menuLayer.add(this.charCostTexts[playerId][i]);
+            this.charCostTexts[playerId][i].moveDown();
             // make box invis if selected
             if (contains(players[playerId].unlockedChars, i)) {
+                this.charCostTexts[playerId][i].hide();
                 this.charBoxes[playerId][i].hide();
             }
         }
@@ -258,6 +311,19 @@ var getNextSkin = function(direction, playerId) {
     ClassList.characters[players[playerId].selectedChar][players[playerId].skinIndex[property]];
 
     // TODO: check if the player owns the skin and if not display a lock and price up
+    var player = players[playerId];
+    var property = menu.currentSkinSelection[playerId];
+    if (contains(player.unlockedSkins[player.selectedChar][player.skinIndex[property]], property)) {
+        // if unlocked
+        menu.skinCost[playerId][property].hide();
+        menu.skinLock[playerId][property].hide();
+
+    } else {
+        // if locked
+        menu.skinCost[playerId][property].setText("$"+ClassList.characters[player.selectedChar].skinsCost[player.skinIndex[property]]);
+        menu.skinCost[playerId][property].show();
+        menu.skinLock[playerId][property].show();
+    }
 
     players[playerId].updateSprite();
 }
@@ -403,13 +469,14 @@ function Selector(playerId, centerX) {
                         // success
                         // unlock
                         menu.charBoxes[playerId][menu.currentSelection[playerId]].hide();
+                        menu.charCostTexts[playerId][menu.currentSelection[playerId]].hide();
                         menu.money[playerId].setText("$"+players[playerId].money);
                         players[playerId].selectChar(menu.currentSelection[playerId]);
                         menuLayer.draw();
                     }
                 );
             }
-        } else if (!this.isSkinSelected){
+        } else if (!this.isSkinSelected) {
             var player = players[playerId];
             var property = menu.currentSkinSelection[playerId];
             if (contains(player.unlockedSkins[player.selectedChar][player.skinIndex[property]], property)) {
@@ -431,6 +498,10 @@ function Selector(playerId, centerX) {
                     player.unlockedSkins[player.selectedChar][player.skinIndex[property]].push(property);
                     player.money -= ClassList.characters[player.selectedChar].skinsCost[player.skinIndex[property]];
                     menu.money[playerId].setText("$"+players[playerId].money);
+
+                    menu.skinCost[playerId][property].hide();
+                    menu.skinLock[playerId][property].hide();
+
                     this.update();
                     menuLayer.draw();
                     playerLayer.draw();
