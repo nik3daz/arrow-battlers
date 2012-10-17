@@ -305,8 +305,9 @@ function load_assets() {
     images["arrow_yellow"] = loader.addImage("arrow-yellow.png");
     images["health_bar"] = loader.addImage("health-bar.png");
     images["attack"] = loader.addImage("abilities/attack.png");
-    images["dot"] = loader.addImage("abilities/dot.png");
-    images["magic"] = loader.addImage("abilities/magic.png");
+    images["healOverTime"] = loader.addImage("abilities/healOverTime.png");
+    images["flashstrike"] = loader.addImage("abilities/flashstrike.png");
+    images["magic1"] = loader.addImage("abilities/magic1.png");
     images["defend"] = loader.addImage("abilities/defend.png");
     images["heal"] = loader.addImage("abilities/heal.png");
     images["menu_bg"] = loader.addImage("menu-bg.png");

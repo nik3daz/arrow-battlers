@@ -159,8 +159,8 @@ function getSkillList() {
         activate: function(caster) {
             players[caster.opponentId].dot(25, 5000, 5);
         },
-        arrowColor: "green",
-        iconFill: {image: images["dot"]},
+        arrowColor: "magenta",
+        iconFill: {image: images["magic1"]},
         extraHitDelay: 0,
         cooldown: 1200,
     });
@@ -203,8 +203,8 @@ function getSkillList() {
         activate: function(caster) {
             players[caster.id].hot(25, 5000, 5);
         },
-        arrowColor: "magenta",
-        iconFill: "white", //{image: images["hot"]},
+        arrowColor: "green",
+        iconFill:{image: images["healOverTime"]},
         extraHitDelay: 0,
         cooldown: 1000,
     });
@@ -252,7 +252,7 @@ function getSkillList() {
             players[caster.opponentId].damage(6);
         },
         arrowColor: "blue",
-        iconFill: "blue", //{image: images["attack"]},
+        iconFill: {image: images["flashstrike"]},
         extraHitDelay: 0,
         cooldown: 300,
     });
