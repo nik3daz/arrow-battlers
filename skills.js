@@ -30,8 +30,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(13);
+            players[caster.opponentId].damage(this.value);
         },
+        value: 13,
         arrowColor: "red",
         iconFill: {image: images["attack"]},
         extraHitDelay: 100,
@@ -68,12 +69,14 @@ function getSkillList() {
             }, 10);
             
             // Actual activation
-            caster.block(10000, 3);
+            caster.block(this.time, this.value);
         },
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
         },
+        value: 2,
+        time: 10000,
         extraHitDelay: 0,
         arrowColor: "yellow",
         iconFill: {image: images["defend"]},
@@ -108,12 +111,13 @@ function getSkillList() {
             }, 10);
 
             // Actual activation
-            players[caster.id].heal(13);
+            players[caster.id].heal(this.value);
         },
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
         },
+        value: 13,
         arrowColor: "white",
         iconFill: {image: images["heal"]},
         extraHitDelay: 0,
@@ -157,8 +161,11 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].dot(25, 5000, 5);
+            players[caster.opponentId].dot(this.value, this.time, this.steps);
         },
+        value: 25,
+        time: 5000,
+        steps: 5,
         arrowColor: "magenta",
         iconFill: {image: images["magic1"]},
         extraHitDelay: 0,
@@ -199,10 +206,12 @@ function getSkillList() {
             setTimeout(f, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
         },
 
-        /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.id].hot(25, 5000, 5);
+            caster.hot(this.value, this.time, this.steps);
         },
+        value: 25,
+        time: 5000,
+        steps: 5,
         arrowColor: "green",
         iconFill:{image: images["healOverTime"]},
         extraHitDelay: 0,
@@ -249,8 +258,9 @@ function getSkillList() {
 
         /** Does something when it's activated to a player */
         activate: function(caster) {
-            players[caster.opponentId].damage(6);
+            players[caster.opponentId].damage(this.value);
         },
+        value: 8,
         arrowColor: "blue",
         iconFill: {image: images["flashstrike"]},
         extraHitDelay: 0,
@@ -301,5 +311,8 @@ function Skill(config) {
     this.helpText = config.helpText;
     this.sequenceLength = config.sequenceLength;
     this.sequenceDifficulty = config.sequenceDifficulty;
+    this.value = config.value;
+    this.time = config.time;
+    this.steps = config.steps;
         
 }

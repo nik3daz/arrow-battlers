@@ -96,6 +96,7 @@ function Player(id, dir, udlre) {
         if (this.blockHp > 0) {
             this.blockHp--;
             // deanimate wall
+            if (this.blockHp <= 0) clearTimeout(this.blockTimer);
             return;
         }
         if (this.teleported) return;
@@ -178,8 +179,9 @@ function Player(id, dir, udlre) {
     }
 
     this.block = function(time, hp) {
+        if (this.blockHp > 0) return;
         this.blockHp = hp;
-        setTimeout(function() {
+        this.blockTimer = setTimeout(function() {
             curPlayer.blockHp = 0;
         }, time);
         // Animate wall

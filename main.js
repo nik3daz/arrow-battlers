@@ -43,6 +43,19 @@ function start_game() {
             players[i].help.show();
             helpLayer.draw();
         } else if (key == KEY_CLASS_HELP) {
+            if (contains(players[i].unlockedChars, menu.currentSelection[i])) {
+                players[i].classHelp.setFill({
+                    image: ClassList.characters[players[i].selectedChar].greyImage,
+                    repeat: 'no-repeat',
+                });
+                players[i].classHelp.setText(ClassList.characters[players[i].selectedChar].description);
+            } else {
+                players[i].classHelp.setFill({
+                    image: images["greyUnknown"],
+                    repeat: 'no-repeat',
+                });
+                players[i].classHelp.setText("unlock this first, dunkass");
+            }
             players[i].classHelp.show();
             helpLayer.draw();
         } else if (key != -1)
@@ -245,8 +258,8 @@ function makeHelpShape(centerX) {
 function makeClassHelpShape(centerX) {
     var g = new Kinetic.Group({x:centerX});
     var h = 395;
-    var boxW = 50;
-    var boxH = 50;
+    var boxW = 100;
+    var boxH = 64;
     var r = centerOffset(new Kinetic.Rect({
         width: stage.getWidth() / 3,
         height: stage.getHeight() / 2 + 10,
@@ -270,7 +283,7 @@ function makeClassHelpShape(centerX) {
         x: 0,
         y: y + boxH / 2 + 10,
         width: r.getWidth() - 10,
-        height: r.getHeight() - 80,
+        height: r.getHeight() - 90,
         textFill:"black",
         fontFamily:GAME_FONT,
         fontSize: 7,
@@ -278,7 +291,9 @@ function makeClassHelpShape(centerX) {
     });
     t.setOffset(t.getWidth() / 2, 0);
     g.add(t);
-    //g.hide();
+    g.setFill = function(c) {s.setFill(c);};
+    g.setText = function(d) {t.setText(d);};
+    g.hide();
     return g;
 }
 
@@ -360,6 +375,13 @@ function load_assets() {
     images["selector"] = loader.addImage("character-cursor.png");
     images["projectile"] = loader.addImage("sprites/blue-projectile.png");
     images["locked_char"] = loader.addImage("lockcharbox.png");
+    images["greyTron"] = loader.addImage("greyTron.png");
+    images["greyLego"] = loader.addImage("greyLego.png");
+    images["greyBrickman"] = loader.addImage("greyBrickman.png");
+    images["greyReddit"] = loader.addImage("greyReddit.png");
+    images["greyMinecraft"] = loader.addImage("greyMinecraft.png");
+    images["greyUnknown"] = loader.addImage("greyMinecraft.png");
+    images["greySamus"] = loader.addImage("greySamus.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {
         var x = PlayerSprites[i];
