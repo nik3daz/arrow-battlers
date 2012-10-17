@@ -9,12 +9,24 @@ function ClassList() {
             skins: ["tron", "fireTron", "iceTron", "greenTron"],
             skinsCost:[0, 2, 2, 2],
             skillModifier: function(skillList) {
-                skillList["Block"].sequenceLength = 4;
+                skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
                 skillList["Heal"].sequenceLength = 4;
                 skillList["DoT"].sequenceLength = 6;
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
+                skillList["Block"].value *= 1.5;
+                skillList["Attack"].value *= 1.3;
+                skillList["Heal"].value *= 1.3;
+                skillList["DoT"].value *= 1.3;
+                skillList["HoT"].value *= 1.3;
+                skillList["QuickAttack"].value *= 1.3;
+                skillList["Block"].cooldown *= 1.5;
+                skillList["Attack"].cooldown *= 1.5;
+                skillList["Heal"].cooldown *= 1.5;
+                skillList["DoT"].cooldown *= 1.5;
+                skillList["HoT"].cooldown *= 1.5;
+                skillList["QuickAttack"].cooldown *= 1.5;
             },
             price:50,
 		});
@@ -27,11 +39,15 @@ function ClassList() {
             skinsCost:[0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
-                skillList["Attack"].sequenceLength = 4;
-                skillList["Heal"].sequenceLength = 4;
-                skillList["DoT"].sequenceLength = 6;
+                skillList["Attack"].sequenceLength = 3;
+                skillList["Heal"].sequenceLength = 6;
+                skillList["DoT"].sequenceLength = 4;
                 skillList["HoT"].sequenceLength = 6;
                 skillList["QuickAttack"].sequenceLength = 2;
+                skillList["Attack"].cooldown *= 0.8;
+                skillList["Attack"].value *= 0.8;
+                skillList["QuickAttack"].cooldown *= 0.8;
+                skillList["QuickAttack"].value *= 0.8;
             },
             price:50,
 		});
@@ -43,12 +59,14 @@ function ClassList() {
             skins: ["brickman"],
             skinsCost:[0],
             skillModifier: function(skillList) {
-                skillList["Block"].sequenceLength = 6;
-                skillList["Attack"].sequenceLength = 4;
-                skillList["Heal"].sequenceLength = 4;
-                skillList["DoT"].sequenceLength = 6;
-                skillList["HoT"].sequenceLength = 6;
-                skillList["QuickAttack"].sequenceLength = 2;
+                skillList["Block"].sequenceLength = 4;
+                skillList["Attack"].sequenceLength = 5;
+                skillList["Heal"].sequenceLength = 5;
+                skillList["DoT"].sequenceLength = 5;
+                skillList["HoT"].sequenceLength = 5;
+                skillList["QuickAttack"].sequenceLength = 3;
+                skillList["Block"].value *= 1.5;
+                skillList["Block"].tickets *= 2;
             },
             price:50,
 		});
@@ -60,7 +78,7 @@ function ClassList() {
             skins: ["minecraft"],
             skinsCost:[0],
             skillModifier: function(skillList) {
-                skillList["Block"].sequenceLength = 6;
+                skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 4;
                 skillList["Heal"].sequenceLength = 4;
                 skillList["DoT"].sequenceLength = 6;
@@ -79,34 +97,46 @@ function ClassList() {
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 6;
-                skillList["Attack"].value = 10;
                 skillList["Heal"].sequenceLength = 6;
                 skillList["DoT"].sequenceLength = 3;
-                skillList["DoT"].value = 20;
-                skillList["DoT"].time = 3000;
                 skillList["HoT"].sequenceLength = 3;
-                skillList["HoT"].value = 20;
-                skillList["HoT"].time = 3000;
                 skillList["QuickAttack"].sequenceLength = 3;
+                skillList["Attack"].value *= 2/3;
+                skillList["DoT"].value *= 4/5;
+                skillList["DoT"].time *= 3/5;
+                skillList["DoT"].tickets *= 1.5;
+                skillList["HoT"].value *= 4/5;
+                skillList["HoT"].tickets = 10;
+                skillList["HoT"].time *= 3/5;
             },
             price:50,
 		});
 
 		characters[5] = new Class({
             name:"SAMUS",
-            description: "",
+            description: "Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue,",
             greyImage: images["greySamus"],
             skins: ["samus"],
             skinsCost:[0],
             skillModifier: function(skillList) {
-                skillList["Block"].sequenceLength = 6;
-                skillList["Attack"].sequenceLength = 3;
-                skillList["Attack"].cooldown /= 2;
-                skillList["Heal"].sequenceLength = 6;
+                skillList["Block"].sequenceLength = 3;
+                skillList["Attack"].sequenceLength = 2;
+                skillList["Heal"].sequenceLength = 3;
                 skillList["DoT"].sequenceLength = 4;
-                skillList["HoT"].sequenceLength = 6;
-                skillList["QuickAttack"].sequenceLength = 2;
-                skillList["QuickAttack"].cooldown /= 2;
+                skillList["HoT"].sequenceLength = 4;
+                skillList["QuickAttack"].sequenceLength = 1;
+                skillList["Block"].value *= 0.5;
+                skillList["Attack"].value *= 0.7;
+                skillList["Heal"].value *= 0.7;
+                skillList["DoT"].value *= 0.7;
+                skillList["HoT"].value *= 0.7;
+                skillList["QuickAttack"].value *= 0.7;
+                skillList["Block"].cooldown *= 0.5;
+                skillList["Attack"].cooldown *= 0.5;
+                skillList["Heal"].cooldown *= 0.5;
+                skillList["DoT"].cooldown *= 0.5;
+                skillList["HoT"].cooldown *= 0.5;
+                skillList["QuickAttack"].cooldown *= 0.8;
             },
             price:50,
 		});
@@ -131,6 +161,12 @@ function Class(config) {
 
 		if (config.skillModifier)
 			config.skillModifier(this.skillList);
+
+        this.tickets = 0;
+        for (var x in this.skillList) {
+            this.tickets += this.skillList[x].tickets;
+            this.skillList[x].value = Math.floor(this.skillList[x].value);
+        }
 	}
 
 	this.init();

@@ -100,32 +100,11 @@ function start_game() {
     KEY_HELP = 5;
     KEY_CLASS_HELP = 6;
 
-    chars = [
-        {
-            
-        },
-        {
-            // CHAR 2
-        },
-        {
-            // CHAR 3
-        },
-        {
-            // CHAR 4
-        },
-        {
-            // CHAR 5
-        },
-        {
-            // CHAR 6
-        },
-    ];
-
     // Battle Constants
     SKILL_QUEUE_SIZE = 4;
 
     // Game Constants
-    NUM_CHARACTERS = chars.length;
+    NUM_CHARACTERS = 6;
     NUM_SKILLS = 6;
     SKILL_MAX_LENGTH = 6;
 

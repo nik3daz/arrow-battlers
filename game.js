@@ -2,7 +2,7 @@ function Game() {
     // Left Player
     players[0] = new Player(0, 1, [87, 83, 65, 68, 32, 90, 88]);
     // Right Player
-    players[1] = new Player(1, -1, [38, 40, 37, 39, 13, 222, 186]);
+    players[1] = new Player(1, -1, [38, 40, 37, 39, 13, 191, 190]);
     this.onKeyDown = function(player, key) {
         players[player.id].onKeyDown(key);
     };
@@ -74,17 +74,17 @@ function Player(id, dir, udlre) {
             this.money -= price;
             this.unlockedChars.push(characterId);
 
-        // claim all the free skins for this character
-        this.unlockedSkins[characterId] = [];
-        for (var j = 0; j < ClassList.characters[i].skins.length; j++) {
-            // check if the skin is free
-            this.unlockedSkins[characterId][j] = [];
-            if (ClassList.characters[this.unlockedChars[i]].skinsCost[j] == 0) {
-                this.unlockedSkins[characterId][j].push(0);
-                this.unlockedSkins[characterId][j].push(1);
-                this.unlockedSkins[characterId][j].push(2);
+            // claim all the free skins for this character
+            this.unlockedSkins[characterId] = [];
+            for (var j = 0; j < ClassList.characters[i].skins.length; j++) {
+                // check if the skin is free
+                this.unlockedSkins[characterId][j] = [];
+                if (ClassList.characters[this.unlockedChars[i]].skinsCost[j] == 0) {
+                    this.unlockedSkins[characterId][j].push(0);
+                    this.unlockedSkins[characterId][j].push(1);
+                    this.unlockedSkins[characterId][j].push(2);
+                }
             }
-        }
 
             scb();
         } else {
@@ -93,16 +93,17 @@ function Player(id, dir, udlre) {
     }
 
     this.damage = function(damage) {
-        if (this.blockHp > 0) {
-            this.blockHp--;
+        if (curPlayer.blockHp > 0) {
+            curPlayer.blockHp -= 1;
+            console.log(curPlayer.blockHp);
             // deanimate wall
-            if (this.blockHp <= 0) clearTimeout(this.blockTimer);
-            return;
+            if (curPlayer.blockHp <= 0) clearTimeout(curPlayer.blockTimer);
+            damage *= 0.5;
         }
-        if (this.teleported) return;
-        this.setPlayerAnimation("hurt");
+        if (curPlayer.teleported) return;
+        curPlayer.setPlayerAnimation("hurt");
         // damage the player
-        this.changeHealth(-damage);
+        curPlayer.changeHealth(-damage);
     }
 
     this.heal = function(healed) {
@@ -110,10 +111,11 @@ function Player(id, dir, udlre) {
     }
 
     this.changeHealth = function(amount) {
+        if (battle.gameOver) return;
         this.hp += amount;
         if (this.hp > 100) this.hp = 100;
         if (this.hp <= 0) { 
-            battle.gameOver(this.opponentId);
+            battle.doGameOver(this.opponentId);
             this.hp = 0;
         }
     }
@@ -135,6 +137,10 @@ function Player(id, dir, udlre) {
                     curPlayer.updateSprite();
                 },
             });
+        }
+        if (curPlayer.blockHp > 0) {
+            curPlayer.blockHp--;
+            console.log(curPlayer.blockHp);
         }
     }
 
@@ -179,9 +185,9 @@ function Player(id, dir, udlre) {
     }
 
     this.block = function(time, hp) {
-        if (this.blockHp > 0) return;
-        this.blockHp = hp;
-        this.blockTimer = setTimeout(function() {
+        if (curPlayer.blockHp > 0) return;
+        curPlayer.blockHp = hp;
+        curPlayer.blockTimer = setTimeout(function() {
             curPlayer.blockHp = 0;
         }, time);
         // Animate wall
@@ -212,40 +218,34 @@ function Player(id, dir, udlre) {
     /** Takes player keystroke, matches against skill lists */
     this.onKeyDown = function(key) {
         if (this.keyLock) return;
-        if (key == KEY_E) {
-            this.block();
-        } else {
-            var activated = false;
-            // Remove skills that don't match
-            for (var i = 0; i < this.activeSkills.length; i++) {
-                var skillSequence = this.skillQueue[this.activeSkills[i]];
-                if (skillSequence.get(this.skillStep) != key) {
-                    this.activeSkills.splice(i--, 1);
-                } else if (skillSequence.length == this.skillStep + 1) {
-                    setTimeout(function() {
-                        skillSequence.skill.activate(curPlayer);
-                    }, skillSequence.skill.hitDelay);
-                    activated = true;
-                    break;
-                } 
-            }
-            
-            if (activated) {
-                this.resetSkillQueueAnimate(function() {
-                    curPlayer.cooldownAnimate(skillSequence.skill.cooldown);
-                });
-                this.setPlayerAnimation("attack");
-                skillSequence.skill.animate(curPlayer);
-            } else {
-                this.skillStep++;
-            }
+        var activated = null;
+        // Remove skills that don't match
+        for (var i = 0; i < this.activeSkills.length; i++) {
+            var skillSequence = this.skillQueue[this.activeSkills[i]];
+            if (skillSequence.get(this.skillStep) != key) {
+                this.activeSkills.splice(i--, 1);
+            } else if (skillSequence.length == this.skillStep + 1) {
+                setTimeout(function() {
+                    skillSequence.skill.activate(curPlayer);
+                }, skillSequence.skill.hitDelay);
+                activated = skillSequence;
+            } 
+        }
+        
+        this.skillStep++;
+        if (activated) {
+            this.resetSkillQueueAnimate(function() {
+                curPlayer.cooldownAnimate(2*activated.skill.cooldown);
+            });
+            this.setPlayerAnimation("attack");
+            activated.skill.animate(curPlayer);
+        }
 
-            // Player fucked up
-            if (this.activeSkills.length == 0) {
-                // TODO Punish
-                // Refresh matching skill list
-                this.resetSkillQueueAnimate(function() { curPlayer.cooldownAnimate(SkillList.failCooldown); });
-            }
+        // Player fucked up
+        if (this.activeSkills.length == 0) {
+            // TODO Punish
+            // Refresh matching skill list
+            this.resetSkillQueueAnimate(function() { curPlayer.cooldownAnimate(1.8*SkillList.failCooldown); });
         }
         battle.skillQueueBoxes[id].update();
     }
@@ -318,25 +318,42 @@ function Player(id, dir, udlre) {
         this.skillStep = 0;
 
         // Skills that are on screen
-        this.skillQueue = [];
-        for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
-            this.skillQueue.push(this.nextSkill());
-        }
+        this.skillQueue = this.nextSkills();
 
         // Skills that the player is in the middle of activating
         this.activeSkills = range(0, SKILL_QUEUE_SIZE);
     }
 
     /** Get the next skill object that is placed in the skill list */
-    this.nextSkill = function() {
-        var skill = SkillList.getRandom(ClassList.characters[curPlayer.selectedChar].skillList);
-        var sequence = skill.generateSequence(curPlayer);
-        return {
-            sequence: sequence,
-            length: sequence.length,
-            get: function(i) { return sequence[i]; },
-            skill: skill,
-        };
+    this.nextSkills = function() {
+        var a = [];
+        for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
+            var skill = SkillList.getRandom(ClassList.characters[curPlayer.selectedChar]);
+            var sequence = skill.generateSequence(curPlayer);
+            a.push({
+                sequence: sequence,
+                length: sequence.length,
+                get: function(i) { return this.sequence[i]; },
+                skill: skill,
+            });
+        }
+        for (var i = 0; i < SKILL_QUEUE_SIZE; i++) {
+            var targetLength = a[i].sequence.length;
+            var collide = true;
+            while (collide) {
+                collide = false;
+                for (j = 0; j < SKILL_QUEUE_SIZE; j++) {
+                    if (i == j) continue;
+                    if (targetLength > a[j].sequence.length) continue;
+                    if (a[j].sequence[targetLength - 1] == a[i].sequence[targetLength - 1]) {
+                        collide = true;
+                        break;
+                    }
+                }
+                if (collide) a[i].sequence[targetLength - 1] = Math.floor(Math.random() * 4);
+            }
+        }
+        return a;
     }
 
     this.setMoney = function(value) {

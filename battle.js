@@ -1,5 +1,6 @@
 function Battle() {
 	this.initBattle = function(players) {
+		this.gameOver = false;
 		players[0].initForBattle();
 		players[1].initForBattle();
 
@@ -25,8 +26,9 @@ function Battle() {
 		this.healthBars[player.id].init();
 	}
 
-	this.gameOver = function(winnerId) {
+	this.doGameOver = function(winnerId) {
 		this.overlay.show(winnerId);
+		this.gameOver = true;
 	}
 }
 
@@ -354,7 +356,7 @@ function GameResultsOverlay() {
 		hudLayer.draw();
 	}
 
-    this.onKeyDown = function() {
-        menu.show();
+    this.onKeyDown = function(player, key) {
+    	if (key == KEY_E) menu.show();
     }
 }

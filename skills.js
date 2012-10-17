@@ -10,6 +10,7 @@ function getSkillList() {
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:4,
+        tickets: 10,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
             for (var i = 0; i < 10; i++) {
@@ -36,7 +37,7 @@ function getSkillList() {
         arrowColor: "red",
         iconFill: {image: images["attack"]},
         extraHitDelay: 100,
-        cooldown: 500,
+        cooldown: 800,
     });
 
     globalSkills["Block"] = new Skill({
@@ -45,6 +46,7 @@ function getSkillList() {
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:6,
+        tickets: 10,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
            var r = new Kinetic.Rect({
@@ -80,7 +82,7 @@ function getSkillList() {
         extraHitDelay: 0,
         arrowColor: "yellow",
         iconFill: {image: images["defend"]},
-        cooldown: 1000,
+        cooldown: 600,
     });
 
     globalSkills["Heal"] = new Skill({
@@ -89,6 +91,7 @@ function getSkillList() {
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:4,
+        tickets: 4,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
             setTimeout(function() {
@@ -121,7 +124,7 @@ function getSkillList() {
         arrowColor: "white",
         iconFill: {image: images["heal"]},
         extraHitDelay: 0,
-        cooldown: 500,
+        cooldown: 700,
     });
 
     globalSkills["DoT"] = new Skill({
@@ -130,33 +133,33 @@ function getSkillList() {
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:6,
+        tickets: 10,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
             var f = function() {
                 var opponent = players[caster.opponentId];
-                var r = new Kinetic.Rect({
-                    width: 20, 
-                    height: 20,
-                    fill: "purple",
-                    x: opponent.shape.getX() + opponent.dir * 40 + opponent.dir * 80 * Math.random(),
-                    y: opponent.shape.getY() + 180,
-                    opacity: 0.8,
-                });
-                centerOffset(r);
-                playerLayer.add(r);
-                if (Math.floor(Math.random() * 2) == 0)
-                    r.moveToBottom();
-                r.transitionTo({
-                    y: r.getY() - 200,
-                    opacity: 0,
-                    duration: 1,
-                    callback: function() { playerLayer.remove(r); }
-                });
                 if (opponent.dotCurrent) {
+                    var r = new Kinetic.Rect({
+                        width: 20, 
+                        height: 20,
+                        fill: "purple",
+                        x: opponent.shape.getX() + opponent.dir * 40 + opponent.dir * 80 * Math.random(),
+                        y: opponent.shape.getY() + 180,
+                        opacity: 0.8,
+                    });
+                    centerOffset(r);
+                    playerLayer.add(r);
+                    if (Math.floor(Math.random() * 2) == 0) r.moveToBottom();
+                    r.transitionTo({
+                        y: r.getY() - 200,
+                        opacity: 0,
+                        duration: 1,
+                        callback: function() { playerLayer.remove(r); }
+                    });
                     setTimeout(f, 100 + 200 * Math.random());
                 }
             };
-            setTimeout(f, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
+            setTimeout(f, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 100);
         },
 
         /** Does something when it's activated to a player */
@@ -169,7 +172,7 @@ function getSkillList() {
         arrowColor: "magenta",
         iconFill: {image: images["magic1"]},
         extraHitDelay: 0,
-        cooldown: 1200,
+        cooldown: 800,
     });
 
     globalSkills["HoT"] = new Skill({
@@ -177,7 +180,8 @@ function getSkillList() {
         helpText: "renew - regain health slowly",
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
-        sequenceLength:6,
+        sequenceLength:4,
+        tickets: 6,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
             var f = function() {
@@ -203,11 +207,13 @@ function getSkillList() {
                     setTimeout(f, 100 + 200 * Math.random());
                 }
             };
-            setTimeout(f, 1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
+            setTimeout(f, 10);//1000 / PLAYER_SPRITE_FPS * PlayerSpriteAnimations["attack"].length + 1);
+
+            // Actually activate
+            caster.hot(this.value, this.time, this.steps);
         },
 
         activate: function(caster) {
-            caster.hot(this.value, this.time, this.steps);
         },
         value: 25,
         time: 5000,
@@ -215,7 +221,7 @@ function getSkillList() {
         arrowColor: "green",
         iconFill:{image: images["healOverTime"]},
         extraHitDelay: 0,
-        cooldown: 1000,
+        cooldown: 800,
     });
 
     globalSkills["QuickAttack"] = new Skill({
@@ -224,14 +230,16 @@ function getSkillList() {
         /** Difficulty of the sequence, (0-5) inclusive */
         sequenceDifficulty:1, 
         sequenceLength:2,
+        tickets: 10,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
             caster.shape.transitionTo({
                 opacity: 0,
                 duration: 0.05,
                 callback: function() {
-                    console.log("tp");
+                    //console.log("tp");
                     caster.teleported = true;
+                    if (keyFocus == menu) return;
                     caster.toOpponentsFace();
                     caster.shape.transitionTo({
                         opacity: 1,
@@ -241,7 +249,8 @@ function getSkillList() {
                                 opacity: 0,
                                 duration: 0.2,
                                 callback: function() {
-                                    console.log("tpoff");
+                                    //console.log("tpoff");
+                                    if (keyFocus == menu) return;
                                     caster.teleported = false;
                                     caster.toGamePosition();
                                     caster.shape.transitionTo({
@@ -264,7 +273,7 @@ function getSkillList() {
         arrowColor: "blue",
         iconFill: {image: images["flashstrike"]},
         extraHitDelay: 0,
-        cooldown: 300,
+        cooldown: 500,
     });
     
     this.globalSkills = globalSkills;
@@ -274,9 +283,14 @@ function getSkillList() {
         this.keys.push(x);
     }
 
-    this.getRandom = function(skillList) {
-        var rand = Math.floor(Math.random() * SkillList.keys.length);
-        return skillList[SkillList.keys[rand]];
+    this.getRandom = function(character) {
+        var rand = Math.floor(Math.random() * character.tickets);
+        var sum = 0;
+        for (var i in character.skillList) {
+            sum += character.skillList[i].tickets;
+            if (sum >= rand) break;
+        }
+        return character.skillList[i];
     }
 }
 
@@ -291,7 +305,7 @@ function Skill(config) {
 
         var seq = [];
         for (var i = 0; i < this.sequenceLength; i++) {
-            seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1);
+            seq[i] = suffix.splice(Math.floor(Math.random()*suffix.length), 1)[0];
             if (suffix.length == 0) {
                 suffix = range(0, 4);
             }
@@ -314,5 +328,6 @@ function Skill(config) {
     this.value = config.value;
     this.time = config.time;
     this.steps = config.steps;
+    this.tickets = config.tickets;
         
 }

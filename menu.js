@@ -215,6 +215,7 @@ function Menu() {
             menu.reset();
             menuLayer.moveToTop();
             playerLayer.moveToTop();
+            helpLayer.moveToTop();
             players[0].reset();
             players[1].reset();
             players[0].toMenuPosition();
@@ -270,7 +271,7 @@ var onCharacterHover = function(playerId, charId) {
 /** Selector Class */
 function Selector(playerId, centerX) {
     var SELECTOR_ANCHOR_X = 106;
-    var SELECTOR_ANCHOR_Y = 106;
+    var SELECTOR_ANCHOR_Y = 107;
     var SELECTOR_ANCHOR_Y2 = 176;
     var CHAR_BOX_HEIGHT = 50;
     var CHAR_BOX_WIDTHS = [0, 106, 212.5];
@@ -464,6 +465,7 @@ function Selector(playerId, centerX) {
                 // TODO change from flashing stroke to flashing sprite
                 if (!selector.isCharSelected) {
                     selector.shape.setOpacity(0.5);
+                    selector.shape.setScale(1.1, 1.1);
                     menuLayer.draw();
                 }
                 
@@ -471,6 +473,7 @@ function Selector(playerId, centerX) {
                 setTimeout(function() {
                     if (!selector.isCharSelected) {
                         selector.shape.setOpacity(1);
+                        selector.shape.setScale(1, 1);
                         menuLayer.draw();
                         flash(selector);
                     }
