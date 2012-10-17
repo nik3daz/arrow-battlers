@@ -42,13 +42,15 @@ function start_game() {
         if (key == KEY_HELP) {
             players[i].help.show();
             helpLayer.draw();
+        } else if (key == KEY_CLASS_HELP) {
+            players[i].classHelp.show();
+            helpLayer.draw();
         } else if (key != -1)
             keyFocus.onKeyDown(players[i], key);
         // TODO add help menu
     }
     
     function doKeyUp(evt){
-        console.log(evt.keyCode);
         var key = -1;
         var i;
         for (i = 0; i < 2; i++) {
@@ -57,6 +59,9 @@ function start_game() {
         }
         if (key == KEY_HELP) {
             players[i].help.hide();
+            helpLayer.draw();
+        } else if (key == KEY_CLASS_HELP) {
+            players[i].classHelp.hide();
             helpLayer.draw();
         }
     }
@@ -80,6 +85,7 @@ function start_game() {
     KEY_L = 3;
     KEY_E = 4;
     KEY_HELP = 5;
+    KEY_CLASS_HELP = 6;
 
     chars = [
         {
@@ -233,6 +239,46 @@ function makeHelpShape(centerX) {
         y += r.getHeight() / 6;
     }
     g.hide();
+    return g;
+}
+
+function makeClassHelpShape(centerX) {
+    var g = new Kinetic.Group({x:centerX});
+    var h = 395;
+    var boxW = 50;
+    var boxH = 50;
+    var r = centerOffset(new Kinetic.Rect({
+        width: stage.getWidth() / 3,
+        height: stage.getHeight() / 2 + 10,
+        y: h,
+        fill: "#616161",
+        stroke: "black",
+    }));
+    g.add(r);
+    var y = h - r.getHeight() / 2 + 10 + boxH / 2;
+    var s = new Kinetic.Rect({
+        x: 0, y: y,
+        fill: "blue",
+        width: boxW, height: boxH,
+    });
+    centerOffset(s);
+    g.add(s);
+    var t = new Kinetic.Text({
+        text: "",
+        lineHeight: 1.5,
+        align : "left",
+        x: 0,
+        y: y + boxH / 2 + 10,
+        width: r.getWidth() - 10,
+        height: r.getHeight() - 80,
+        textFill:"black",
+        fontFamily:GAME_FONT,
+        fontSize: 7,
+        stroke: "black",
+    });
+    t.setOffset(t.getWidth() / 2, 0);
+    g.add(t);
+    //g.hide();
     return g;
 }
 
