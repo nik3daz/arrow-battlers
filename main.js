@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Christopher Lam, Nicholas Cellini, Rhys Davis, Esther Mosad
+ * Copyright (c) 2012, Christopher Lam, Nicholas Cellini, Rhys Davis
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -361,6 +361,7 @@ function load_assets() {
     images["greyMinecraft"] = loader.addImage("greyMinecraft.png");
     images["greyUnknown"] = loader.addImage("greyMinecraft.png");
     images["greySamus"] = loader.addImage("greySamus.png");
+    images["lock"] = loader.addImage("lock.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {
         var x = PlayerSprites[i];
