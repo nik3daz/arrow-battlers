@@ -15,6 +15,7 @@ function Game() {
     };
     this.show = function() {
         fadeIn(function() {
+            battle.gameOver = false;
             menuLayer.moveToBottom();
             players[0].initForBattle();
             players[1].initForBattle();
@@ -111,6 +112,7 @@ function Player(id, dir, udlre) {
     }
 
     this.changeHealth = function(amount) {
+        console.log(battle.gameOver);
         if (battle.gameOver) return;
         this.hp += amount;
         if (this.hp > 100) this.hp = 100;
@@ -419,6 +421,10 @@ function Player(id, dir, udlre) {
         this.selectedChar = characterId;
         this.skinIndex = [0,0,0];
         this.updateSprite();
+        for (var i = 0; i < 6; i++) {
+            menu.skillBoxes[id][i].setOpacity(ClassList.characters[characterId].skillShow[i]);
+        }
+        menuLayer.draw();
     }
 
 

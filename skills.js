@@ -49,24 +49,32 @@ function getSkillList() {
         tickets: 10,
         /** Animation for the skill when it's activated */
         animate: function(caster) {
-           var r = new Kinetic.Rect({
-                width: 40, 
-                height: 170,
-                fill: "blue",
+           var r = new Kinetic.Sprite({
+                image: images["shield"],
+                animations: {idle: makeSpriteAnimation(0, 40, 160, 4),},
+                animation: "idle",
                 x: caster.shape.getX() + caster.dir * 140,
-                y: caster.shape.getY() + 115,
+                y: caster.shape.getY() + 110,
+                offset: [20, 80],
+                scale: {x:caster.dir, y:1},
+                frameRate: 7,
             });
             var f = function() {
                 if (caster.blockHp > 0) {
                     setTimeout(f, 100);
                 } else {
-                    playerLayer.remove(r);
+                    r.stop();
+                    r.transitionTo({
+                        scale: {x:caster.dir * 2, y:2},
+                        opacity: 0,
+                        duration: 1,
+                        callback: function() { playerLayer.remove(r); },
+                    });
                 }
             };
             setTimeout(function() {
-                centerOffset(r);
                 playerLayer.add(r); 
-                playerLayer.draw();
+                r.start();
                 f();
             }, 10);
             

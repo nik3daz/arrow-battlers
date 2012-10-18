@@ -8,6 +8,7 @@ function ClassList() {
             greyImage: images["greyTron"],
             skins: ["tron", "fireTron", "iceTron", "greenTron"],
             skinsCost:[0, 2, 2, 2],
+            skillShow: [0, 0, 0, 0, 0, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 4;
@@ -37,6 +38,7 @@ function ClassList() {
             greyImage: images["greyLego"],
             skins: ["lego"],
             skinsCost:[0],
+            skillShow: [0, 0.5, 0.5, 0, 0.5, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
                 skillList["Attack"].sequenceLength = 3;
@@ -58,6 +60,7 @@ function ClassList() {
             greyImage: images["greyBrickman"],
             skins: ["brickman"],
             skinsCost:[0],
+            skillShow: [0.5, 0, 0, 0.5, 0, 0.5],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 5;
@@ -77,6 +80,7 @@ function ClassList() {
             greyImage: images["greyMinecraft"],
             skins: ["minecraft", "minecraftGreen", "minecraftOrange", "minecraftZombie",],
             skinsCost:[0, 0, 0, 0, 0, 0, 0],
+            skillShow: [0, 0, 0, 0, 0, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 4;
@@ -94,6 +98,7 @@ function ClassList() {
             greyImage: images["greyReddit"],
             skins: ["redditAlien", "redditAlienG", "redditAlienP", "redditAlienR", "redditAlienY"],
             skinsCost:[0, 0, 0, 0, 0, 0, 0, 0],
+            skillShow: [0.5, 0, 0.5, 0, 0, 0.5],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 6;
@@ -118,6 +123,7 @@ function ClassList() {
             greyImage: images["greySamus"],
             skins: ["samus"],
             skinsCost:[0],
+            skillShow: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 3;
                 skillList["Attack"].sequenceLength = 2;
@@ -158,6 +164,7 @@ function Class(config) {
         this.name = config.name;
         this.greyImage = config.greyImage;
         this.description = config.description;
+        this.skillShow = config.skillShow;
 
 		if (config.skillModifier)
 			config.skillModifier(this.skillList);

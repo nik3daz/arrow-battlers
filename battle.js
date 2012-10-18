@@ -1,6 +1,6 @@
 function Battle() {
 	this.initBattle = function(players) {
-		this.gameOver = false;
+
 		players[0].initForBattle();
 		players[1].initForBattle();
 
@@ -11,7 +11,6 @@ function Battle() {
 		// make a skill boxes for each player
 		this.skillQueueBoxes = [];
 		this.healthBars = [];
-
 		this.initBattleUIForPlayer(players[0], -HUD_CENTER_DISTANCE);
 		this.initBattleUIForPlayer(players[1], HUD_CENTER_DISTANCE);
 

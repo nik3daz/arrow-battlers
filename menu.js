@@ -209,6 +209,21 @@ function Menu() {
         var CHAR_BOX_WIDTHS = [0, 106, 212.5];
         this.charBoxes[playerId] = [];
         this.charCostTexts[playerId] = [];
+        this.skillBoxes[playerId] = [];
+        for (var i = 0; i < 6; i++) {
+            var w = 46;
+            var o = ClassList.characters[0].skillShow[i];
+            var r = new Kinetic.Rect({
+                width:w,
+                height:32,
+                fill: "#BDBDBD",
+                x:centerX - 140 + w * i,
+                y:215,
+                opacity: o,
+            });
+            this.skillBoxes[playerId].push(r);
+            menuLayer.add(r);
+        } 
         for (var i = 0; i < NUM_CHARACTERS; i++) {
             var offset = i % 3;
             var yOffset;
@@ -450,6 +465,22 @@ function Selector(playerId, centerX) {
         }
     }
 
+    var flashMoney = function() {
+        var flash = function(times) {
+            if (times == 0) return;
+            setTimeout(function() {
+                menu.money[playerId].setTextFill("red");
+                menuLayer.draw();
+                setTimeout(function() {
+                    menu.money[playerId].setTextFill("black");
+                    menuLayer.draw();
+                    flash(times - 1);
+                }, 100);
+
+            }, 100);
+        }
+        flash(3);
+    }
     
     /** */
     this.onEnter = function() {
@@ -464,7 +495,7 @@ function Selector(playerId, centerX) {
                 players[playerId].unlockCharacter(menu.currentSelection[playerId],
                     function() {
                         // failed
-                        // TODO: flash money
+                        flashMoney();
                     },
                     function() {
                         // success
@@ -507,7 +538,7 @@ function Selector(playerId, centerX) {
                     menuLayer.draw();
                     playerLayer.draw();
                 } else {
-                    // FLASH MONEY
+                    flashMoney();
                 }
             }
         } 
@@ -533,14 +564,12 @@ function Selector(playerId, centerX) {
         var flash = function(selector) {
             setTimeout(function() {
                 // first flash
-                // TODO change from flashing stroke to flashing sprite
                 if (!selector.isCharSelected) {
                     selector.shape.setOpacity(0.5);
                     selector.shape.setScale(1.1, 1.1);
                     menuLayer.draw();
                 }
                 
-                // TODO change from flashing stroke to flashing sprite
                 setTimeout(function() {
                     if (!selector.isCharSelected) {
                         selector.shape.setOpacity(1);

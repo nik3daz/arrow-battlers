@@ -266,7 +266,7 @@ function makeClassHelpShape(centerX) {
         textFill:"black",
         fontFamily:GAME_FONT,
         fontSize: 7,
-        stroke: "black",
+        //stroke: "black",
     });
     t.setOffset(t.getWidth() / 2, 0);
     g.add(t);
@@ -365,6 +365,7 @@ function load_assets() {
     images["greyUnknown"] = loader.addImage("grey-avatars/greyMinecraft.png");
     images["greySamus"] = loader.addImage("grey-avatars/greySamus.png");
     images["lock"] = loader.addImage("lock.png");
+    images["shield"] = loader.addImage("shield-wdth40.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {
         var x = PlayerSprites[i];
