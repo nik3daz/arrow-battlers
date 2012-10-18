@@ -332,17 +332,20 @@ function load_assets() {
     images = [];
     images["battle_bg"] = loader.addImage("battle_bg.png");
     images["ready_button_red"] = loader.addImage("ready_button_red.png");
-    images["arrow_left"] = loader.addImage("arrow_left.png");
-    images["arrow_left_sel"] = loader.addImage("arrow_left_sel.png");
     images["ready_button"] = loader.addImage("ready_button.png");
-    images["arrow"] = loader.addImage("arrow.png");
-    images["arrow_blue"] = loader.addImage("arrow-blue.png");
-    images["arrow_complete"] = loader.addImage("arrow-selected.png");
-    images["arrow_white"] = loader.addImage("arrow-white.png");
-    images["arrow_green"] = loader.addImage("arrow-green.png");
-    images["arrow_magenta"] = loader.addImage("arrow-magenta.png");
-    images["arrow_red"] = loader.addImage("arrow-red.png");
-    images["arrow_yellow"] = loader.addImage("arrow-yellow.png");
+
+    images["arrow_left"] = loader.addImage("arrows/arrow_left.png");
+    images["arrow_left_sel"] = loader.addImage("arrows/arrow_left_sel.png");
+
+    images["arrow"] = loader.addImage("arrows/arrow.png");
+    images["arrow_blue"] = loader.addImage("arrows/arrow-blue.png");
+    images["arrow_complete"] = loader.addImage("arrows/arrow-selected.png");
+    images["arrow_white"] = loader.addImage("arrows/arrow-white.png");
+    images["arrow_green"] = loader.addImage("arrows/arrow-green.png");
+    images["arrow_magenta"] = loader.addImage("arrows/arrow-magenta.png");
+    images["arrow_red"] = loader.addImage("arrows/arrow-red.png");
+    images["arrow_yellow"] = loader.addImage("arrows/arrow-yellow.png");
+
     images["health_bar"] = loader.addImage("health-bar.png");
     images["attack"] = loader.addImage("abilities/attack.png");
     images["healOverTime"] = loader.addImage("abilities/healOverTime.png");
@@ -354,13 +357,13 @@ function load_assets() {
     images["selector"] = loader.addImage("character-cursor.png");
     images["projectile"] = loader.addImage("sprites/blue-projectile.png");
     images["locked_char"] = loader.addImage("lockcharbox.png");
-    images["greyTron"] = loader.addImage("greyTron.png");
-    images["greyLego"] = loader.addImage("greyLego.png");
-    images["greyBrickman"] = loader.addImage("greyBrickman.png");
-    images["greyReddit"] = loader.addImage("greyReddit.png");
-    images["greyMinecraft"] = loader.addImage("greyMinecraft.png");
-    images["greyUnknown"] = loader.addImage("greyMinecraft.png");
-    images["greySamus"] = loader.addImage("greySamus.png");
+    images["greyTron"] = loader.addImage("grey-avatars/greyTron.png");
+    images["greyLego"] = loader.addImage("grey-avatars/greyLego.png");
+    images["greyBrickman"] = loader.addImage("grey-avatars/greyBrickman.png");
+    images["greyReddit"] = loader.addImage("grey-avatars/greyReddit.png");
+    images["greyMinecraft"] = loader.addImage("grey-avatars/greyMinecraft.png");
+    images["greyUnknown"] = loader.addImage("grey-avatars/greyMinecraft.png");
+    images["greySamus"] = loader.addImage("grey-avatars/greySamus.png");
     images["lock"] = loader.addImage("lock.png");
 
     for (var i = 0; i < PlayerSprites.length; i++) {

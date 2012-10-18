@@ -22,7 +22,13 @@ function makeSpriteAnimation(y, width, height, frames) {
 //============== SPRITE DEFINITIONS ================
 
 PlayerSprites = [
-    "tron", "fireTron", "iceTron", "greenTron", "brickman", "lego", "minecraft", "redditAlien", "samus", "unknown",
+    "tron", "fireTron", "iceTron", "greenTron",
+    "brickman",
+    "lego",
+    "minecraft", "minecraftGreen", "minecraftOrange", "minecraftZombie",
+    "redditAlien", "redditAlienG", "redditAlienP", "redditAlienR", "redditAlienY", 
+    "samus",
+    "unknown",
 ];
 var idleAnimation = makeSpriteAnimation(0, SPRITE_WIDTH, SPRITE_HEIGHT, 4);
 idleAnimation = idleAnimation.concat(idleAnimation.slice().reverse());

@@ -75,8 +75,8 @@ function ClassList() {
             name:"MINECRAFT",
             description: "",
             greyImage: images["greyMinecraft"],
-            skins: ["minecraft"],
-            skinsCost:[0],
+            skins: ["minecraft", "minecraftGreen", "minecraftOrange", "minecraftZombie",],
+            skinsCost:[0, 0, 0, 0, 0, 0, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 4;
@@ -92,8 +92,8 @@ function ClassList() {
             name:"REDDIT ALIEN",
             description: "",
             greyImage: images["greyReddit"],
-            skins: ["redditAlien"],
-            skinsCost:[0],
+            skins: ["redditAlien", "redditAlienG", "redditAlienP", "redditAlienR", "redditAlienY"],
+            skinsCost:[0, 0, 0, 0, 0, 0, 0, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
                 skillList["Attack"].sequenceLength = 6;

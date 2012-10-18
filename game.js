@@ -76,10 +76,10 @@ function Player(id, dir, udlre) {
 
             // claim all the free skins for this character
             this.unlockedSkins[characterId] = [];
-            for (var j = 0; j < ClassList.characters[i].skins.length; j++) {
+            for (var j = 0; j < ClassList.characters[characterId].skins.length; j++) {
                 // check if the skin is free
                 this.unlockedSkins[characterId][j] = [];
-                if (ClassList.characters[this.unlockedChars[i]].skinsCost[j] == 0) {
+                if (ClassList.characters[characterId].skinsCost[j] == 0) {
                     this.unlockedSkins[characterId][j].push(0);
                     this.unlockedSkins[characterId][j].push(1);
                     this.unlockedSkins[characterId][j].push(2);
