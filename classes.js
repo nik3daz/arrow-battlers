@@ -58,8 +58,8 @@ function ClassList() {
             name:"BRICK MAN",
             description: "",
             greyImage: images["greyBrickman"],
-            skins: ["brickman"],
-            skinsCost:[0],
+            skins: ["brickman", "brickmanGreen", "brickmanRed", "brickmanBW"],
+            skinsCost:[0, 2, 2, 1],
             skillShow: [0.5, 0, 0, 0.5, 0, 0.5],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
