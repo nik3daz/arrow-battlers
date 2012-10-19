@@ -6,8 +6,8 @@ function ClassList() {
             name:"TRON",
             description: "",
             greyImage: images["greyTron"],
-            skins: ["tron", "fireTron", "iceTron", "greenTron"],
-            skinsCost:[0, 2, 2, 2],
+            skins: ["tron", "tronGood", "tronEvil", "fireTron", "iceTron", "greenTron"],
+            skinsCost:[0, 0, 0, 2, 2, 2],
             skillShow: [0, 0, 0, 0, 0, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;

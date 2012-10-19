@@ -452,9 +452,9 @@ function Player(id, dir, udlre) {
     shape.add(this.head);
     shape.add(this.body);
     shape.add(this.feet);
-    this.headSprite = "tron";
-    this.bodySprite = "tron";
-    this.feetSprite = "tron";
+    this.headSprite = "tronGood";
+    this.bodySprite = "tronGood";
+    this.feetSprite = "tronGood";
     playerLayer.add(shape);
     this.head.start();
     this.body.start();

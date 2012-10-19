@@ -22,7 +22,7 @@ function makeSpriteAnimation(y, width, height, frames) {
 //============== SPRITE DEFINITIONS ================
 
 PlayerSprites = [
-    "tron", "fireTron", "iceTron", "greenTron",
+    "tron", "tronGood", "tronEvil", "fireTron", "iceTron", "greenTron",
     "brickman", "brickmanGreen", "brickmanRed", "brickmanBW",
     "lego", "legoMan", "legoMo", "legoSuit",
     "minecraft", "minecraftGreen", "minecraftOrange", "minecraftZombie",
