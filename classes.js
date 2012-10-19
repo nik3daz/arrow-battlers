@@ -36,8 +36,8 @@ function ClassList() {
             name:"LEGO",
             description: "",
             greyImage: images["greyLego"],
-            skins: ["lego"],
-            skinsCost:[0],
+            skins: ["lego", "legoMan", "legoMo", "legoSuit"],
+            skinsCost:[0, 2, 2, 5],
             skillShow: [0, 0.5, 0.5, 0, 0.5, 0],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 6;
