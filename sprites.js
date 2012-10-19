@@ -27,7 +27,7 @@ PlayerSprites = [
     "lego", "legoMan", "legoMo", "legoSuit",
     "minecraft", "minecraftGreen", "minecraftOrange", "minecraftZombie",
     "redditAlien", "redditAlienG", "redditAlienP", "redditAlienR", "redditAlienY", 
-    "samus",
+    "samus", "samusRed", "samusPurp", "samusDark",
     "unknown",
 ];
 var idleAnimation = makeSpriteAnimation(0, SPRITE_WIDTH, SPRITE_HEIGHT, 4);

@@ -97,7 +97,7 @@ function ClassList() {
             description: "",
             greyImage: images["greyReddit"],
             skins: ["redditAlien", "redditAlienG", "redditAlienP", "redditAlienR", "redditAlienY"],
-            skinsCost:[0, 0, 0, 0, 0, 0, 0, 0],
+            skinsCost:[0, 0, 0, 0, 0],
             skillShow: [0.5, 0, 0.5, 0, 0, 0.5],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 4;
@@ -121,8 +121,8 @@ function ClassList() {
             name:"SAMUS",
             description: "Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue,",
             greyImage: images["greySamus"],
-            skins: ["samus"],
-            skinsCost:[0],
+            skins: ["samus", "samusRed", "samusPurp", "samusDark"],
+            skinsCost:[0, 5, 5, 10],
             skillShow: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
             skillModifier: function(skillList) {
                 skillList["Block"].sequenceLength = 3;
