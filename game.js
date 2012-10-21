@@ -413,7 +413,7 @@ function Player(id, dir, udlre) {
     this.id = id;
     this.dir = dir;
     this.selectedChar = 0;
-    this.money = 600;
+    this.money = 500;
     this.skinIndex = [0,0,0];
 
 

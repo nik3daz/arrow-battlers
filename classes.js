@@ -4,7 +4,7 @@ function ClassList() {
 		var characters = [];
 		characters[0] = new Class({
             name:"TRON",
-            description: "",
+            description: "An easy all-rounder. Perfect for beginners!",
             greyImage: images["greyTron"],
             skins: ["tron", "tronGood", "tronEvil", "fireTron", "iceTron", "greenTron"],
             skinsCost:[0, 0, 0, 2, 2, 2],
@@ -34,7 +34,7 @@ function ClassList() {
 
 		characters[1] = new Class({
             name:"LEGO",
-            description: "",
+            description: "A solid attacker, can lay on the hits without too much of a drawback.",
             greyImage: images["greyLego"],
             skins: ["lego", "legoMan", "legoMo", "legoSuit"],
             skinsCost:[0, 2, 2, 5],
@@ -56,7 +56,7 @@ function ClassList() {
 
 		characters[2] = new Class({
             name:"BRICK MAN",
-            description: "",
+            description: "All about defense. I mean, how would you feel punching a man made of brick?",
             greyImage: images["greyBrickman"],
             skins: ["brickman", "brickmanGreen", "brickmanRed", "brickmanBW"],
             skinsCost:[0, 2, 2, 1],
@@ -76,7 +76,7 @@ function ClassList() {
 
 		characters[3] = new Class({
             name:"MINECRAFT",
-            description: "",
+            description: "A solid all rounder! ",
             greyImage: images["greyMinecraft"],
             skins: ["minecraft", "minecraftGreen", "minecraftOrange", "minecraftZombie",],
             skinsCost:[0, 0, 0, 0, 0, 0, 0],
@@ -94,7 +94,7 @@ function ClassList() {
 
 		characters[4] = new Class({
             name:"REDDIT ALIEN",
-            description: "",
+            description: "His karma brings him the power of damage and heals over time!",
             greyImage: images["greyReddit"],
             skins: ["redditAlien", "redditAlienG", "redditAlienP", "redditAlienR", "redditAlienY"],
             skinsCost:[0, 0, 0, 0, 0],
@@ -119,7 +119,7 @@ function ClassList() {
 
 		characters[5] = new Class({
             name:"SAMUS",
-            description: "Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue,",
+            description: "Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue, Please don't sue. Also she attacks fast. Real fast.",
             greyImage: images["greySamus"],
             skins: ["samus", "samusRed", "samusPurp", "samusDark"],
             skinsCost:[0, 5, 5, 10],
